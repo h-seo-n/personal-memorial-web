@@ -1,2 +1,10 @@
-# personal-memorial-web
-A web-based personal memorial space
+# 온라인 추모 공간
+
+## 설명
+개인이 자신의 살아생전 이야기를, 자신에게 맞는 방식으로 구현할 수 있는 웹 기반 추모공간.
+
+### 팀원 및 역할
+* 최목원 - PM
+* 강혜나 - UI/UX
+* 장준석 - 백엔드 개발
+* 허서연 - 프론트엔드 개발
