@@ -13,7 +13,7 @@
     "check-all": "yarn check:types && yarn check:format && yarn check:unused"
   },
   "dependencies": {
-    "react": "^19.1.0",
+    "react": "^19.2.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
