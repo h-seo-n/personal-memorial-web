@@ -1,0 +1,17 @@
+.mainLayout {
+	display: flex;
+	flex-direction: row;
+	height: calc(100vh - 70px);
+}
+
+.inventoryColumn {
+	width: 150px;
+	background-color: #ffcd8d;
+	border-right: 1px solid #e0e0e0;
+}
+
+.sceneColumn {
+	flex: 1;
+	display: flex;
+	height: 100%;
+}
