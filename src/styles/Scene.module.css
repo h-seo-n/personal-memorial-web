@@ -1,0 +1,74 @@
+.sceneContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fffaf3;
+}
+
+.room {
+  position: relative;
+  width: 600px;
+  height: 400px;
+}
+
+/* Floor */
+.floor {
+  position: absolute;
+  left: 50%;
+  bottom: 110.4%;
+  width: 540px;
+  height: 540px;
+  background: #e5c29f;
+  border: 2px solid #d1aa80;
+  transform: translate(-50%, -50%) translateY(100px) rotateX(70deg) rotateZ(45deg);
+  transform-style: preserve-3d;
+}
+
+.floorInner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* Left Wall */
+.rightWall {
+  position: absolute;
+  left:99.5%;
+  top: -16.1%;
+  width: 380px;
+  height: 350px;
+  background: #ffe4cf;
+  border: 2px solid #e0b99b;
+  transform-style: preserve-3d;
+  transform-origin: bottom right;
+  transform: translate(-50%, -50%) translateX(-106px) translateY(-100px) skewY(18.9deg); /* 30 */
+}
+
+.rightWallInner {
+  position: absolute;
+  inset: 0;
+  transform: skewY(-19deg);
+  transform-style: preserve-3d;
+}
+
+.leftWall {
+  position: absolute;
+  left: 0.5%;
+  top: 72.5%;
+  width: 380px;
+  height: 350px;
+  background: #ffe9d7;
+  border: 2px solid #e0b99b;
+  transform-style: preserve-3d;
+  transform-origin: bottom left;
+  transform: translate(-50%, -50%) translateX(106px) translateY(-100px) skewY(-18.9deg);
+}
+
+.leftWallInner {
+  position: absolute;
+  inset: 0;
+  transform: skewY(19deg);
+  transform-style: preserve-3d;
+}

@@ -1,16 +1,10 @@
 import { useState } from 'react';
+import Home from './pages/Home';
 
 const App = () => {
   const [count, setCount] = useState(0);
 
-  return (
-    <div>
-      <p>Hello World!</p>
-      <button onClick={() => setCount((count) => count + 1)}>
-        Count is {count}
-      </button>
-    </div>
-  );
+  return <Home />;
 };
 
 export default App;
