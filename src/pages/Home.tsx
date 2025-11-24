@@ -4,10 +4,11 @@ import Scene from "../widgets/Scene";
 import { DndProvider } from "react-dnd"; // Import DndProvider
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
-import type { InventoryObject, SceneObject } from "../shared/types";
+import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
 
 const Home = () => {
+	// TODO: Theme 불러오기 필요
 	const [mode, setMode] = useState<"Edit" | "View">("View");
 
 	// all objects in the room
@@ -25,20 +26,13 @@ const Home = () => {
 	 * @param item : a dropped item
 	 * @param coordinates : dragged position
 	 */
-	const dropNewObject = (
-		item: InventoryObject,
-		coordinates: [number, number],
-	) => {
-		// temporary SceneObject
+	const dropNewObject = (item: BaseObject, coordinates: [number, number]) => {
 		const newObject: SceneObject = {
-			id: crypto.randomUUID(), // create new unique ID
-			base: item,
-			data: {
-				coordinate: coordinates,
-				color: undefined,
-				description: "",
-				function: null,
-			},
+			...item,
+			coordinate: coordinates,
+			color: item.imageSets[0]?.color ?? "#ffffff",
+			itemFunction: null,
+			isReversed: false,
 		};
 		setEditingObject(newObject);
 	};
@@ -47,13 +41,12 @@ const Home = () => {
 	 * handler for moving new object
 	 * @param id : item's id
 	 * @param newCoordinates : newly dropped position
+	 * TODO : 움직였을 때 서버에도 좌표 데이터 저장하기
 	 */
 	const moveObject = (id: string, newCoordinates: [number, number]) => {
 		setSceneObjects((prevObjects) =>
 			prevObjects.map((obj) =>
-				obj.id === id
-					? { ...obj, data: { ...obj.data, coordinate: newCoordinates } }
-					: obj,
+				obj.id === id ? { ...obj, coordinate: newCoordinates } : obj,
 			),
 		);
 	};
