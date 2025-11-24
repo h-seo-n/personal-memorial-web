@@ -31,13 +31,13 @@ const SceneObjectItem = ({
 			}}
 			style={{
 				position: "absolute",
-				left: `${obj.data.coordinate[0] * 100}%`,
-				top: `${obj.data.coordinate[1] * 100}%`,
+				left: `${obj.coordinate[0] * 100}%`,
+				top: `${obj.coordinate[1] * 100}%`,
 				opacity: isDragging ? 0.4 : 1,
 				cursor: "pointer",
 			}}
 		>
-			<img src={obj.base.imgSrc} alt={obj.base.name} />
+			<img src={obj.imgSrc} alt={obj.name} />
 		</button>,
 	);
 };

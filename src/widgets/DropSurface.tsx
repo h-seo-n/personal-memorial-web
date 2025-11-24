@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { useDrop } from "react-dnd";
-import type { InventoryObject, SceneObject } from "../shared/types";
+import type { BaseObject, SceneObject } from "../shared/types";
 
 interface DropSurfaceProps {
-	onDropNew: (item: InventoryObject, coordinates: [number, number]) => void;
+	onDropNew: (item: BaseObject, coordinates: [number, number]) => void;
 	onMove: (instanceId: string, newCoordinates: [number, number]) => void;
 	children: React.ReactNode;
 	surfaceType: "Floor" | "LeftWall" | "RightWall";
@@ -22,10 +22,10 @@ const DropSurface = ({
 	const [{ isOver, canDrop }, dropRef] = useDrop(() => ({
 		accept: ["INVENTORY_ITEM", "SCENE_OBJECT"],
 
-		canDrop: (item: InventoryObject | SceneObject) => {
-			const itemType = (item as SceneObject).base
-				? (item as SceneObject).base.ontype
-				: (item as InventoryObject).ontype;
+		canDrop: (item: BaseObject | SceneObject) => {
+			// SceneObject has 'ontype' directly, BaseObject items from inventory also have 'ontype'
+			const itemType =
+				"ontype" in item ? item.ontype : (item as BaseObject).ontype;
 
 			return itemType === surfaceType;
 		},
@@ -51,7 +51,7 @@ const DropSurface = ({
 			// ------ Handle dropped item -------------------
 			if (itemType === "INVENTORY_ITEM") {
 				// new item: call handler - open modal
-				onDropNew(item as InventoryObject, coordinates);
+				onDropNew(item as BaseObject, coordinates);
 			} else {
 				const sceneItem = item as SceneObject;
 				onMove(sceneItem.id, coordinates);

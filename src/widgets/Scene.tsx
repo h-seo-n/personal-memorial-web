@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { InventoryObject, SceneObject } from "../shared/types";
+import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Scene.module.css";
 import Floor from "./Floor";
 import LeftWall from "./LeftWall";
@@ -8,19 +8,15 @@ import SceneObjectItem from "./SceneObjectItem";
 
 interface SceneProps {
 	objects: SceneObject[];
-	onDropNew: (item: InventoryObject, coordinates: [number, number]) => void;
+	onDropNew: (item: BaseObject, coordinates: [number, number]) => void;
 	onMove: (instanceId: string, newCoordinates: [number, number]) => void;
 	onClickObject: (object: SceneObject) => void;
 }
 
 const Scene = ({ objects, onDropNew, onMove, onClickObject }: SceneProps) => {
-	const floorObjects = objects.filter((obj) => obj.base.ontype === "Floor");
-	const leftWallObjects = objects.filter(
-		(obj) => obj.base.ontype === "LeftWall",
-	);
-	const rightWallObjects = objects.filter(
-		(obj) => obj.base.ontype === "RightWall",
-	);
+	const floorObjects = objects.filter((obj) => obj.ontype === "Floor");
+	const leftWallObjects = objects.filter((obj) => obj.ontype === "LeftWall");
+	const rightWallObjects = objects.filter((obj) => obj.ontype === "RightWall");
 
 	const dropHandlers = { onDropNew, onMove };
 
