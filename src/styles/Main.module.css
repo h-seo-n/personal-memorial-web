@@ -1,0 +1,65 @@
+.mainContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background: linear-gradient(135deg, #030056 0%, #462855 100%);
+	overflow: hidden;
+	padding: 0;
+}
+
+.contentWrapper {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.mainImage {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	min-width: 100vw;
+	min-height: 100vh;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+}
+
+.createButton {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 58px 32px;
+	gap: 10px;
+	position: absolute;
+	left: 64%;
+	top: 55%;
+	width: 370px;
+	height: 126px;
+	background:rgba(255, 255, 255, 0.471);
+	border-radius: 100px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: inherit;
+	font-size: 35px;
+	font-weight: 900;
+	color: black;
+}
+
+.createButton:hover {
+	background-color: rgba(255, 255, 255, 0.3);
+	transform: translateY(-2px);
+}
+
+.createButton:active {
+	transform: translateY(0);
+}
+
