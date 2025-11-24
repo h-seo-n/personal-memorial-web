@@ -1,0 +1,67 @@
+.themeContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background: linear-gradient(135deg, #030056 0%, #462855 100%);
+	overflow: hidden;
+	padding: 0;
+}
+
+.contentWrapper {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.themeImage,
+.theme1Image,
+.theme2Image,
+.theme3Image {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	min-width: 100vw;
+	min-height: 100vh;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+}
+
+.themeButton {
+    box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 50px 50px;
+	position: absolute;
+	left: 90%;
+	top: 85%;
+	width: 100px;
+	height: 80px;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 100px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: inherit;
+	font-size: 80px;
+	font-weight: 900;
+	color: rgb(131, 125, 125);
+}
+
+.themeButton:hover {
+	background-color: rgb(212, 208, 208); 
+	transform: translateY(-2px);
+}
+
+.themeButton:active {
+	transform: translateY(0);
+}
+

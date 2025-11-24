@@ -1,0 +1,136 @@
+.loginContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background: linear-gradient(135deg, #030056 0%, #462855 100%);
+	overflow: hidden;
+	padding: 0;
+}
+
+.contentWrapper {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.loginImage {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	min-width: 100vw;
+	min-height: 100vh;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+}
+
+.formWrapper {
+	position: relative;
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem;
+	width: 100%;
+	max-width: 400px;
+	padding: 2rem;
+	margin-top: 120px;
+}
+
+.input {
+	width: 150%;
+	padding: 1rem 1.5rem;
+	font-size: 20px;
+	font-family: inherit;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 8px;
+	background-color: rgba(0, 0, 0, 0.2);
+	color: #000;
+	outline: none;
+	transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.input:focus {
+	border-color: rgba(70, 27, 99, 0.2);
+	background-color: rgb(70, 27, 99, 0.2);
+}
+
+.input::placeholder {
+	color: rgb(255, 255, 255);
+}
+
+.loginButton {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 58px 32px;
+	gap: 10px;
+	position: relative;
+	width: 271px;
+	height: 92px;
+	background: linear-gradient(179.16deg, rgba(255, 255, 255, 0.2) 0.72%, rgba(255, 255, 255, 0) 99.28%), rgba(255, 255, 255, 0.45);
+	border-radius: 100px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: inherit;
+	font-size: 26px;
+	font-weight: 900;
+	color: black;
+	margin-top: 25px;
+}
+
+.loginButton:hover {
+	background-color: rgba(45, 39, 39, 0.5);
+	border-color: rgba(44, 39, 39, 0.5);
+	transform: translateY(-2px);
+}
+
+.loginButton:active {
+	transform: translateY(0);
+}
+
+.loginButton:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	background-color: rgba(255, 255, 255, 0.2);
+	border-color: rgba(255, 255, 255, 0.2);
+}
+
+.loginButton:disabled:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+	border-color: rgba(255, 255, 255, 0.2);
+	transform: none;
+}
+
+.noAccountButton {
+	width: 100%;
+	padding: 0.75rem 1.5rem;
+	font-size: 26px;
+	font-weight: 400;
+	color: rgba(255, 255, 255, 1);
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: inherit;
+}
+
+.noAccountButton:hover {
+	color: rgba(255, 255, 255, 0.5);
+	text-decoration: underline;
+}
+
+.noAccountButton:active {
+	transform: translateY(1px);
+}
+
