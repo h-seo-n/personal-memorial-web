@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import theme1Svg from "/theme1.svg";
-import theme2Svg from "/theme2.svg";
-import theme3Svg from "/theme3.svg";
+import theme1Svg from "/images/theme1.svg";
+import theme2Svg from "/images/theme2.svg";
+import theme3Svg from "/images/theme3.svg";
 import styles from "../styles/Theme.module.css";
 
 const Theme = () => {
