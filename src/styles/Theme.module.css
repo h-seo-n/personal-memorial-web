@@ -4,15 +4,23 @@
 	align-items: center;
 	width: 100vw;
 	height: 100vh;
+	min-width: 100vw;
+	min-height: 100vh;
 	background: linear-gradient(135deg, #030056 0%, #462855 100%);
 	overflow: hidden;
 	padding: 0;
+	margin: 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 .contentWrapper {
 	position: relative;
-	width: 100vw;
-	height: 100vh;
+	width: 100%;
+	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -25,43 +33,66 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100vw;
-	height: 100vh;
-	min-width: 100vw;
-	min-height: 100vh;
+	width: 100%;
+	height: 100%;
+	min-width: 100%;
+	min-height: 100%;
 	object-fit: cover;
 	object-position: center;
 	display: block;
 }
 
 .themeButton {
-    box-sizing: border-box;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	padding: 50px 50px;
+	padding: clamp(1rem, 3vw, 50px);
 	position: absolute;
-	left: 90%;
-	top: 85%;
-	width: 100px;
-	height: 80px;
+	right: clamp(1rem, 3vw, 2rem);
+	bottom: clamp(1rem, 3vw, 2rem);
+	width: clamp(60px, 8vw, 100px);
+	height: clamp(60px, 8vw, 80px);
 	background: rgba(255, 255, 255, 0.3);
 	border-radius: 100px;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	font-family: inherit;
-	font-size: 80px;
+	font-family: 'LaundryGothic', sans-serif;
+	font-size: clamp(40px, 6vw, 80px);
 	font-weight: 900;
 	color: rgb(131, 125, 125);
+	border: none;
 }
 
 .themeButton:hover {
-	background-color: rgb(212, 208, 208); 
+	background-color: rgb(212, 208, 208);
 	transform: translateY(-2px);
 }
 
 .themeButton:active {
 	transform: translateY(0);
+}
+
+/* 모바일 및 작은 화면 대응 */
+@media (max-width: 768px) {
+	.themeButton {
+		right: 1rem;
+		bottom: 1rem;
+		width: 60px;
+		height: 60px;
+		font-size: 40px;
+	}
+}
+
+@media (max-width: 480px) {
+	.themeButton {
+		right: 0.75rem;
+		bottom: 0.75rem;
+		width: 50px;
+		height: 50px;
+		font-size: 35px;
+		padding: 0.5rem;
+	}
 }
 

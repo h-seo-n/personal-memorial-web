@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import mainSvg from "/main.svg";
+import mainSvg from "/images/main.svg";
 import styles from "../styles/Main.module.css";
 
 const Main = () => {
@@ -11,8 +11,13 @@ const Main = () => {
 
 	return (
 		<main className={styles.mainContainer}>
+            <div className={styles.mainContent}>
+                <img src={mainSvg} alt="내일의 나에게" className={styles.mainImage} />
+            </div>
 			<div className={styles.contentWrapper}>
-				<img src={mainSvg} alt="내일의 나에게" className={styles.mainImage} />
+				<h1>
+                    내일의 나에게
+                </h1>
 				<button
 					type="button"
 					className={styles.createButton}
