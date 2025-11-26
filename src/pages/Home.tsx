@@ -4,18 +4,21 @@ import Scene from "../widgets/Scene";
 import { DndProvider } from "react-dnd"; // Import DndProvider
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
+import { useObjects } from "../contexts/ObjectsContext";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
+import { Sidebar } from "../widgets/Sidebar";
 
 const Home = () => {
 	// TODO: Theme 불러오기 필요
+
+	const { sceneObjects } = useObjects();
+
 	const [mode, setMode] = useState<"Edit" | "View">("View");
-
-	// all objects in the room
-	const [sceneObjects, setSceneObjects] = useState<SceneObject[]>([]);
-
 	// which sidebar tab is open
-	const [activeTab, setActiveTab] = useState("viewMyItems");
+	const [activeTab, setActiveTab] = useState<"Inventory" | "MyItem" | null>(
+		null,
+	);
 
 	// if editingObject is not in sceneObjects -> it's a new one;
 	// but if it is in sceneObjects -> it's configuring an old object
@@ -115,14 +118,17 @@ const Home = () => {
 				</div>
 				<div className={styles.mainLayout}>
 					<div className={styles.inventoryColumn}>
-						{/* sidebar : shown only in edit mode */}
-						{/* {mode === 'Edit' && (
-              <Inventory
-                activeTab={activeInventoryTab}
-                onTabChange={setActiveInventoryTab}
-              />
-            )} */}
+						<div className={styles.promptButton}>
+							<img
+								src="../../public/images/Elipse.svg"
+								alt="button to AI generation page"
+							/>
+						</div>
+						<div className={styles.balloon}>
+							어떤 아이템을 두어야 할지 고민되시나요?
+						</div>
 					</div>
+
 					<div className={styles.sceneColumn}>
 						<Scene
 							objects={sceneObjects}
@@ -131,16 +137,28 @@ const Home = () => {
 							onClickObject={clickObject}
 						/>
 					</div>
-					<div className={styles.inventoryColumn} />
+					<div className={styles.inventoryColumn}>
+						<div className={styles.filledButton}>
+							<img src="/images/open-box.svg" alt="Inventory tab button" />
+						</div>
+						<hr />
+						<div className={styles.filledButton}>
+							<img src="/images/MY.svg" alt="My item tab button" />
+						</div>
+						{/* sidebar : shown only in edit mode */}
+						{mode === "Edit" && activeTab && (
+							<Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+						)}
+					</div>
 				</div>
 				{/* modal for objects - renders when editingObject is present */}
 				{/* {editingObject && (
-          <ConfigModal
-            object={editingObject}
-            onSave={handleSaveModal}
-            onClose={() => setEditingObject(null)}
-          />
-        )} */}
+						<ConfigModal
+							object={editingObject}
+							onSave={handleSaveModal}
+							onClose={() => setEditingObject(null)}
+						/>
+        		)} */}
 			</main>
 		</DndProvider>
 	);

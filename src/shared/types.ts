@@ -19,7 +19,8 @@ export interface Theme {
 	weather: string;
 }
 
-export interface imageSet {
+export interface ImageSet {
+	_id: string;
 	name: string;
 	color: string; // e.g. #ffffff
 	src: string; // image source url
@@ -29,20 +30,22 @@ export interface imageSet {
 export interface BaseObject {
 	id: string;
 	name: string;
-	imgSrc: string; // default img
+	currentImageSet: ImageSet;
 	description?: string;
-	imageSets: imageSet[];
+	imageSets: ImageSet[];
 	isUserMade: boolean;
 	ontype: "LeftWall" | "RightWall" | "Floor";
 }
 
 // 팝업에서 받는 (유저가 결정하는) 추가적인 항목들
 export interface SceneObject extends BaseObject {
-	coordinate: [number, number]; // [x, y] coordinates
-	color: string;
 	itemFunction: ItemFunction;
 	isReversed: boolean;
 	additionalData?: string;
+	coordinate: {
+		x: number;
+		y: number;
+	}; // [x, y] coordinates
 }
 
 // // 배치한 오브젝트의 데이터

@@ -7,31 +7,21 @@ import styles from "../styles/ConfigModal.module.css";
 // Create : base + coordinates
 // Modify : added + coordinates
 interface ConfigModalProp {
-	base: BaseObject;
-	coordinate: [number, number];
-	color?: string;
-	itemFunction?: ItemFunction;
-	isReversed?: boolean;
-	additionalData?: string;
+	base: SceneObject;
 }
 
-const ConfigModal = ({
-	base,
-	coordinate,
-	color,
-	itemFunction,
-	isReversed,
-	additionalData,
-}: ConfigModalProp) => {
+const ConfigModal = ({ base }: ConfigModalProp) => {
 	const [title, setTitle] = useState<string>(base.name);
 	const [colorState, setcolorState] = useState<string>(
-		color ? color : base.imageSets[0].name,
+		base.currentImageSet.name,
 	);
-	const [src, setSrc] = useState<string>(base.imgSrc);
+	const [src, setSrc] = useState<string>(base.currentImageSet.src);
 	const [description, setDescription] = useState<string>(
 		base.description ? base.description : "",
 	);
-	const [func, setFunc] = useState<ItemFunction>(null); // 하나만 선택
+	const [func, setFunc] = useState<ItemFunction>(
+		base.itemFunction ? base.itemFunction : null,
+	); // 하나만 선택
 
 	// save the new object
 	const handleSave = () => {
@@ -40,7 +30,7 @@ const ConfigModal = ({
 			description,
 			imageSrc: src,
 			itemFunction: func,
-			coordinates: { x: coordinate[0], y: coordinate[1] },
+			coordinates: { x: base.coordinate[0], y: base.coordinate[1] },
 			imageSets: base.imageSets,
 		};
 		// do api func
@@ -61,6 +51,12 @@ const ConfigModal = ({
 			</div>
 			<div className={styles.imgWrapper}>
 				<img src={src} alt={`an ${base.name} of colorState ${colorState}`} />
+				<button type="button" className={styles.flipButton}>
+					<img
+						src="../../public/images/button-flip-horizontal.svg"
+						alt="a horizontal flip button"
+					/>
+				</button>
 			</div>
 			<div className={styles.row}>
 				<span className={styles.labelText}>색상</span>
@@ -93,26 +89,40 @@ const ConfigModal = ({
 			</div>
 			<div className={styles.row}>
 				<span className={styles.labelText}>기능</span>
-				<ul className={styles.chips}>
-					{["Link", "Gallery", "Board"].map((item: ItemFunction) => (
-						<li
-							key={item}
-							className={
-								func === item
-									? `${styles.chip} ${styles.active}`
-									: ` ${styles.chip}`
-							}
-							onKeyDown={() => {
-								func === item
-									? setFunc(null) // delete
-									: setFunc(item); // add
-							}}
-						>
-							{item}
-						</li>
-					))}
-				</ul>
+				<div className={styles.col}>
+					<ul className={styles.chips}>
+						{["Link", "Gallery", "Board"].map((item: ItemFunction) => (
+							<li
+								key={item}
+								className={
+									func === item
+										? `${styles.chip} ${styles.active}`
+										: ` ${styles.chip}`
+								}
+								onKeyDown={() => {
+									func === item
+										? setFunc(null) // delete
+										: setFunc(item); // add
+								}}
+							>
+								{item}
+							</li>
+						))}
+					</ul>
+					<input
+						type="text"
+						style={func ? {} : { visibility: "hidden" }}
+						placeholder={
+							func === "Link"
+								? "연결할 링크 주소를 입력해주세요!"
+								: func === "Board"
+									? "게시판 제목을 무엇으로 할까요?"
+									: "갤러리 제목을 무엇으로 할까요?"
+						}
+					/>
+				</div>
 			</div>
+
 			<button type="button" className={styles.delBtn} onClick={handleSave}>
 				편집 종료
 			</button>

@@ -37,7 +37,7 @@ const SceneObjectItem = ({
 				cursor: "pointer",
 			}}
 		>
-			<img src={obj.imgSrc} alt={obj.name} />
+			<img src={obj.currentImageSet.src} alt={obj.name} />
 		</button>,
 	);
 };
