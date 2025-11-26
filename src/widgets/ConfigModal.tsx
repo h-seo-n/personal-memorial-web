@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
+import { useObjects } from "../contexts/ObjectsContext";
 import type { BaseObject, ItemFunction, SceneObject } from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
 
@@ -7,48 +8,52 @@ import styles from "../styles/ConfigModal.module.css";
 // Create : base + coordinates
 // Modify : added + coordinates
 interface ConfigModalProp {
-	base: BaseObject;
-	coordinate: [number, number];
-	color?: string;
-	itemFunction?: ItemFunction;
-	isReversed?: boolean;
-	additionalData?: string;
+	base: SceneObject;
+	onSave: (updated: SceneObject) => Promise<void>;
+	onClose: () => void;
 }
 
-const ConfigModal = ({
-	base,
-	coordinate,
-	color,
-	itemFunction,
-	isReversed,
-	additionalData,
-}: ConfigModalProp) => {
+const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
+	const { updateModified } = useObjects();
+
 	const [title, setTitle] = useState<string>(base.name);
 	const [colorState, setcolorState] = useState<string>(
-		color ? color : base.imageSets[0].name,
+		base.currentImageSet.name,
 	);
-	const [src, setSrc] = useState<string>(base.imgSrc);
+	const [src, setSrc] = useState<string>(base.currentImageSet.src);
 	const [description, setDescription] = useState<string>(
 		base.description ? base.description : "",
 	);
-	const [func, setFunc] = useState<ItemFunction>(null); // 하나만 선택
+	const [func, setFunc] = useState<ItemFunction>(
+		base.itemFunction ? base.itemFunction : null,
+	); // 하나만 선택
+	const [isReversed, setIsReversed] = useState<boolean>(
+		base.isReversed ? base.isReversed : null,
+	);
 
 	// save the new object
 	const handleSave = () => {
-		const updatedObject = {
+		const updatedObject: SceneObject = {
+			id: base.id,
 			name: title,
 			description,
-			imageSrc: src,
+			currentImageSet: base.imageSets.find((i) => i.name === colorState),
 			itemFunction: func,
-			coordinates: { x: coordinate[0], y: coordinate[1] },
+			coordinate: { x: base.coordinate[0], y: base.coordinate[1] },
 			imageSets: base.imageSets,
+			isReversed: isReversed,
+			ontype: base.ontype,
+			isUserMade: base.isUserMade,
 		};
-		// do api func
+		onSave(updatedObject);
 	};
 
 	return (
 		<div className={styles.col}>
 			{/* TODO : add close button */}
+			<button type="button" className={styles.closeButton} onClick={onClose}>
+				<img src="../../public/images/x-button.svg" alt="close button" />
+			</button>
 			<div className={styles.title}>
 				<FaPen />
 				<input
@@ -61,25 +66,33 @@ const ConfigModal = ({
 			</div>
 			<div className={styles.imgWrapper}>
 				<img src={src} alt={`an ${base.name} of colorState ${colorState}`} />
+				<button type="button" className={styles.flipButton}>
+					<img
+						src="../../public/images/button-flip-horizontal.svg"
+						alt="a horizontal flip button"
+					/>
+				</button>
 			</div>
 			<div className={styles.row}>
 				<span className={styles.labelText}>색상</span>
 				<ul className={styles.chips}>
 					{base.imageSets.map((imgset) => (
-						<li
-							key={`${base.name}-${imgset.name}`}
-							id={imgset.name}
-							onKeyUp={() => {
-								setcolorState(imgset.name);
-								setSrc(imgset.src);
-							}}
-							className={
-								colorState === imgset.name
-									? `${styles.colorStateChip} ${styles.active}`
-									: `${styles.colorStateChip}`
-							}
-							style={{ backgroundColor: `${imgset.color}` }}
-						/>
+						<li key={`${base.name}-${imgset.name}`}>
+							<button
+								type="button"
+								id={imgset.name}
+								onClick={() => {
+									setcolorState(imgset.name);
+									setSrc(imgset.src);
+								}}
+								className={
+									colorState === imgset.name
+										? `${styles.colorStateChip} ${styles.active}`
+										: `${styles.colorStateChip}`
+								}
+								style={{ backgroundColor: `${imgset.color}` }}
+							/>
+						</li>
 					))}
 				</ul>
 			</div>
@@ -93,26 +106,42 @@ const ConfigModal = ({
 			</div>
 			<div className={styles.row}>
 				<span className={styles.labelText}>기능</span>
-				<ul className={styles.chips}>
-					{["Link", "Gallery", "Board"].map((item: ItemFunction) => (
-						<li
-							key={item}
-							className={
-								func === item
-									? `${styles.chip} ${styles.active}`
-									: ` ${styles.chip}`
-							}
-							onKeyDown={() => {
-								func === item
-									? setFunc(null) // delete
-									: setFunc(item); // add
-							}}
-						>
-							{item}
-						</li>
-					))}
-				</ul>
+				<div className={styles.col}>
+					<ul className={styles.chips}>
+						{["Link", "Gallery", "Board"].map((item: ItemFunction) => (
+							<li key={item}>
+								<button
+									type="button"
+									className={
+										func === item
+											? `${styles.chip} ${styles.active}`
+											: ` ${styles.chip}`
+									}
+									onClick={() => {
+										func === item
+											? setFunc(null) // delete
+											: setFunc(item); // add
+									}}
+								>
+									{item}
+								</button>
+							</li>
+						))}
+					</ul>
+					<input
+						type="text"
+						style={func ? {} : { visibility: "hidden" }}
+						placeholder={
+							func === "Link"
+								? "연결할 링크 주소를 입력해주세요!"
+								: func === "Board"
+									? "게시판 제목을 무엇으로 할까요?"
+									: "갤러리 제목을 무엇으로 할까요?"
+						}
+					/>
+				</div>
 			</div>
+
 			<button type="button" className={styles.delBtn} onClick={handleSave}>
 				편집 종료
 			</button>

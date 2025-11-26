@@ -15,3 +15,24 @@
 	display: flex;
 	height: 100%;
 }
+
+.balloon {
+	position: relative;
+	margin: 50px;
+	width: 200px;
+	height: 100px;
+	background: #fff;
+	border: 1px solid black;
+	border-radius: 10px;
+}
+
+.balloon2:after {
+	content: "";
+	border-top: 16px solid #fff;
+	border-left: 25px solid transparent;
+	border-right: 0px solid transparent;
+	border-bottom: 0px solid transparent;
+	position: absolute;
+	top: 15px;
+	left: -18px;
+}
