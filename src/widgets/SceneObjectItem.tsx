@@ -4,8 +4,8 @@ import type { SceneObject } from "../shared/types";
 
 const SceneObjectItem = ({
 	obj,
-	onClick,
-}: { obj: SceneObject; onClick: (obj: SceneObject) => void }) => {
+	onClickEdit,
+}: { obj: SceneObject; onClickEdit: (obj: SceneObject) => void }) => {
 	const [{ isDragging }, dragRef] = useDrag<
 		SceneObject,
 		void,
@@ -22,11 +22,11 @@ const SceneObjectItem = ({
 		<button
 			type="button"
 			tabIndex={0}
-			onClick={() => onClick(obj)} // Handle click to edit
+			onClick={() => onClickEdit(obj)} // Handle click to edit
 			onKeyDown={(e) => {
 				if (e.key === "Enter" || e.key === " ") {
 					e.preventDefault();
-					onClick(obj);
+					onClickEdit(obj);
 				}
 			}}
 			style={{

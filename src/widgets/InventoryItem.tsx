@@ -1,4 +1,4 @@
-import { type ConnectDragSource, useDrag } from "react-dnd";
+import { useDrag } from "react-dnd";
 import type { BaseObject, SceneObject } from "../shared/types";
 /**
  * takes both BaseObject & SceneObject; It only renders their images anyway,

@@ -26,17 +26,19 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProp) => {
 	const wallObjects = inventoryObjects.filter(
 		(obj) => obj.ontype === "LeftWall" || obj.ontype === "RightWall",
 	);
-	// furniture?
 
-	// for mapping to item cards (BaseObject type)
-	const [renderBaseObject, setRenderBaseObject] = useState<BaseObject[]>(
+	// for mapping to item cards
+	const [renderObject, setRenderObject] = useState<
+		BaseObject[] | SceneObject[]
+	>(
 		activeTab === "Inventory"
 			? tabInventory === "Floor"
 				? propObjects
 				: wallObjects
-			: generatedObjects,
+			: tabMyitem === "Generated"
+				? generatedObjects
+				: sceneObjects,
 	);
-	// renderSceneObject : use only sceneObjects
 
 	return (
 		activeTab && (
@@ -93,11 +95,9 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProp) => {
 					</ul>
 				</div>
 				<div className={styles.itemGrid}>
-					{/* only case tabMyitems === "NOW" is SceneOBject, rest render BaseObject */}
-					{activeTab === "MyItem" && tabMyitem === "NOW"
-						? sceneObjects.map((r) => ())
-                        : renderBaseObject.map((r) => <InventoryItem key={r.id} item={r} />)
-					}
+					{renderObject.map((r: SceneObject | BaseObject) => (
+						<InventoryItem key={r.id} item={r} />
+					))}
 				</div>
 			</div>
 		)

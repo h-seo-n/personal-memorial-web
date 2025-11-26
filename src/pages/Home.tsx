@@ -1,43 +1,50 @@
 import { useState } from "react";
-import Scene from "../widgets/Scene";
-
 import { DndProvider } from "react-dnd"; // Import DndProvider
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
-import { useObjects } from "../contexts/ObjectsContext";
+
+import ConfigModal from "../widgets/ConfigModal";
+import Scene from "../widgets/Scene";
+import { Sidebar } from "../widgets/Sidebar";
+
+import {
+	type ApiModifiedCreateRequest,
+	type ApiModifiedEditRequest,
+	useObjects,
+} from "../contexts/ObjectsContext";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
-import { Sidebar } from "../widgets/Sidebar";
 
 const Home = () => {
 	// TODO: Theme 불러오기 필요
 
-	const { sceneObjects } = useObjects();
+	const { sceneObjects, addModified, updateModified } = useObjects();
 
 	const [mode, setMode] = useState<"Edit" | "View">("View");
 	// which sidebar tab is open
 	const [activeTab, setActiveTab] = useState<"Inventory" | "MyItem" | null>(
 		null,
 	);
-
-	// if editingObject is not in sceneObjects -> it's a new one;
-	// but if it is in sceneObjects -> it's configuring an old object
+	// editingObject ? open ConfigModal : close ConfigModal
 	const [editingObject, setEditingObject] = useState<SceneObject | null>(null);
 
 	/**
 	 * when new item is drag & dropped from inventory -> scene
 	 * @param item : a dropped item
-	 * @param coordinates : dragged position
+	 * @param coordinate : dragged position
 	 */
-	const dropNewObject = (item: BaseObject, coordinates: [number, number]) => {
-		const newObject: SceneObject = {
+	const handleDropNewObject = async (
+		item: BaseObject,
+		[x, y]: [number, number],
+	) => {
+		// call addModified, and add placeholder object
+		const newObject = await addModified({
 			...item,
-			coordinate: coordinates,
-			color: item.imageSets[0]?.color ?? "#ffffff",
 			itemFunction: null,
 			isReversed: false,
-		};
-		setEditingObject(newObject);
+			coordinate: { x, y },
+		});
+		setEditingObject(newObject); // open modal
 	};
 
 	/**
@@ -46,38 +53,43 @@ const Home = () => {
 	 * @param newCoordinates : newly dropped position
 	 * TODO : 움직였을 때 서버에도 좌표 데이터 저장하기
 	 */
-	const moveObject = (id: string, newCoordinates: [number, number]) => {
-		setSceneObjects((prevObjects) =>
-			prevObjects.map((obj) =>
-				obj.id === id ? { ...obj, coordinate: newCoordinates } : obj,
-			),
-		);
+	const handleMoveObject = async (id: string, [x, y]: [number, number]) => {
+		const prev = sceneObjects.find((obj) => obj.id === id);
+		if (!prev) return;
+
+		const updated: SceneObject = {
+			...prev,
+			coordinate: { x, y },
+		};
+
+		// updateObject
+		await updateModified(id, updated);
 	};
 
 	/**
-	 * when an existing item is clicked -> open modal
+	 * when an existing item's 'edit button' is clicked -> open modal
+	 * -> PASS ON to SceneObjectItem as prop, not direct property
 	 */
-	const clickObject = (object: SceneObject) => {
+	const handleClickEdit = (object: SceneObject) => {
 		if (mode === "Edit") {
 			setEditingObject(object);
 		}
 	};
 
 	/**
-	 * when object 설정 완료 in modal
+	 * when ConfigModal is closed - set editingObject to null
 	 */
-	const saveModal = (updatedObject: SceneObject) => {
-		// Check if this object is already in the scene
-		const exists = sceneObjects.some((obj) => obj.id === updatedObject.id);
-		// if exists -> update
-		if (exists) {
-			setSceneObjects((prev) =>
-				prev.map((obj) => (obj.id === updatedObject.id ? updatedObject : obj)),
-			);
-		} else {
-			// if not exist -> place a new object
-			setSceneObjects((prev) => [...prev, updatedObject]);
-		}
+	const handleCloseModal = () => {
+		setEditingObject(null);
+	};
+
+	/**
+	 * when object 편집 종료 in ConfigModal -
+	 * since placeholder obj is already in handleDropNewObject,
+	 * only call updateModified with new SceneObject -> 수정 & 새로 만듦 로직 통일 가능!
+	 */
+	const handleSaveModal = async (updated: SceneObject) => {
+		await updateModified(updated.id, updated);
 		setEditingObject(null);
 	};
 
@@ -95,6 +107,7 @@ const Home = () => {
 									? `${styles.active} ${styles.btn}`
 									: `${styles.btn}`
 							}
+							onClick={() => setMode("Edit")}
 						>
 							<FaPenToSquare />
 							<span>편집 모드</span>
@@ -106,6 +119,7 @@ const Home = () => {
 									? `${styles.active} ${styles.btn}`
 									: `${styles.btn}`
 							}
+							onClick={() => setMode("View")}
 						>
 							<FaRegEye />
 							<span>관람 모드</span>
@@ -132,9 +146,9 @@ const Home = () => {
 					<div className={styles.sceneColumn}>
 						<Scene
 							objects={sceneObjects}
-							onDropNew={dropNewObject}
-							onMove={moveObject}
-							onClickObject={clickObject}
+							onDropNew={handleDropNewObject}
+							onMove={handleMoveObject}
+							onClickEdit={handleClickEdit}
 						/>
 					</div>
 					<div className={styles.inventoryColumn}>
@@ -152,13 +166,13 @@ const Home = () => {
 					</div>
 				</div>
 				{/* modal for objects - renders when editingObject is present */}
-				{/* {editingObject && (
-						<ConfigModal
-							object={editingObject}
-							onSave={handleSaveModal}
-							onClose={() => setEditingObject(null)}
-						/>
-        		)} */}
+				{editingObject && (
+					<ConfigModal
+						base={editingObject}
+						onSave={handleSaveModal}
+						onClose={handleCloseModal}
+					/>
+				)}
 			</main>
 		</DndProvider>
 	);

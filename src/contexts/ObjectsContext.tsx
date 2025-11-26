@@ -51,7 +51,7 @@ interface ApiSceneObject extends ApiBaseObject {
 	coordinates: { x: number; y: number };
 }
 
-interface ApiModifiedCreateRequest {
+export interface ApiModifiedCreateRequest {
 	name: string;
 	itemFunction: ItemFunction;
 	coordinates: { x: number; y: number };
@@ -61,7 +61,7 @@ interface ApiModifiedCreateRequest {
 	originalObjectId: string;
 	currentImageSetId: string;
 }
-interface ApiModifiedEditRequest {
+export interface ApiModifiedEditRequest {
 	name?: string;
 	description?: string;
 	itemFunction?: string;
@@ -158,6 +158,14 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 
 	const updateModified = useCallback(
 		async (id: string, object: SceneObject) => {
+			// 낙관적 업데이트 : 서버 반응 보기 전 클라이언트부터 일단 업데이트
+			const prevObject = sceneObjects.find((obj) => obj.id === id); // backup prev value (object before edit)
+			if (!prevObject) return;
+
+			setSceneObjects((prev) =>
+				prev.map((obj) => (obj.id === id ? object : obj)),
+			);
+
 			try {
 				const url = `/modified/${id}`;
 				const body: ApiModifiedEditRequest = {
@@ -171,14 +179,20 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 				};
 				const response = await apiClient.patch(url, body);
 				const updatedObject = mapApiModifiedToSceneObject(response.data);
+
+				// re-write client with server response
 				setSceneObjects((prev) =>
 					prev.map((obj) => (obj.id === id ? updatedObject : obj)),
 				);
 			} catch (error) {
 				handleAxiosError(error, "update modified object");
+				// revert back if error
+				setSceneObjects((prev) =>
+					prev.map((obj) => (obj.id === id ? prevObject : obj)),
+				);
 			}
 		},
-		[handleAxiosError],
+		[handleAxiosError, sceneObjects],
 	);
 
 	const addModified = useCallback(

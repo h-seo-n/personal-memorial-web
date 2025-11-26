@@ -10,10 +10,10 @@ interface SceneProps {
 	objects: SceneObject[];
 	onDropNew: (item: BaseObject, coordinates: [number, number]) => void;
 	onMove: (instanceId: string, newCoordinates: [number, number]) => void;
-	onClickObject: (object: SceneObject) => void;
+	onClickEdit: (object: SceneObject) => void;
 }
 
-const Scene = ({ objects, onDropNew, onMove, onClickObject }: SceneProps) => {
+const Scene = ({ objects, onDropNew, onMove, onClickEdit }: SceneProps) => {
 	const floorObjects = objects.filter((obj) => obj.ontype === "Floor");
 	const leftWallObjects = objects.filter((obj) => obj.ontype === "LeftWall");
 	const rightWallObjects = objects.filter((obj) => obj.ontype === "RightWall");
@@ -25,19 +25,19 @@ const Scene = ({ objects, onDropNew, onMove, onClickObject }: SceneProps) => {
 			<div className={styles.room}>
 				<LeftWall {...dropHandlers}>
 					{leftWallObjects.map((obj) => (
-						<SceneObjectItem key={obj.id} obj={obj} onClick={onClickObject} />
+						<SceneObjectItem key={obj.id} obj={obj} onClickEdit={onClickEdit} />
 						// key : not a prop passed, but a key used for listing
 					))}
 				</LeftWall>
 
 				<RightWall {...dropHandlers}>
 					{rightWallObjects.map((obj) => (
-						<SceneObjectItem key={obj.id} obj={obj} onClick={onClickObject} />
+						<SceneObjectItem key={obj.id} obj={obj} onClickEdit={onClickEdit} />
 					))}
 				</RightWall>
 				<Floor {...dropHandlers}>
 					{floorObjects.map((obj) => (
-						<SceneObjectItem key={obj.id} obj={obj} onClick={onClickObject} />
+						<SceneObjectItem key={obj.id} obj={obj} onClickEdit={onClickEdit} />
 					))}
 				</Floor>
 			</div>

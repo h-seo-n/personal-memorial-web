@@ -20,14 +20,11 @@ const DropSurface = ({
 	const ref = useRef<HTMLDivElement>(null); // Ref to surface dic div
 
 	const [{ isOver, canDrop }, dropRef] = useDrop(() => ({
+		// can drop items from inventory(add) & already in scene(move)
 		accept: ["INVENTORY_ITEM", "SCENE_OBJECT"],
 
 		canDrop: (item: BaseObject | SceneObject) => {
-			// SceneObject has 'ontype' directly, BaseObject items from inventory also have 'ontype'
-			const itemType =
-				"ontype" in item ? item.ontype : (item as BaseObject).ontype;
-
-			return itemType === surfaceType;
+			return item.ontype === surfaceType;
 		},
 
 		drop: (item, monitor) => {
