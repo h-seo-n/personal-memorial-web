@@ -1,10 +1,10 @@
 import { useDrag } from "react-dnd";
-import type { BaseObject, SceneObject } from "../shared/types";
+import type { BaseObject } from "../shared/types";
 /**
  * takes both BaseObject & SceneObject; It only renders their images anyway,
  * and passes the data to Home.tsx when dragged.
  */
-export const InventoryItem = ({ item }: { item: BaseObject | SceneObject }) => {
+export const InventoryItem = ({ item }: { item: BaseObject }) => {
 	const [{ isDragging }, dragRef] = useDrag<
 		BaseObject,
 		void,

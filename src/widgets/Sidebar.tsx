@@ -95,9 +95,15 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProp) => {
 					</ul>
 				</div>
 				<div className={styles.itemGrid}>
-					{renderObject.map((r: SceneObject | BaseObject) => (
-						<InventoryItem key={r.id} item={r} />
-					))}
+					{activeTab === "MyItem" && tabMyitem === "NOW"
+						? sceneObjects.map((r: SceneObject) => (
+								<div key={r.id} className={styles.previewItemCard}>
+									<img src={r.currentImageSet.src} alt={r.description} />
+								</div>
+							))
+						: renderObject.map((r: BaseObject) => (
+								<InventoryItem key={r.id} item={r} />
+							))}
 				</div>
 			</div>
 		)

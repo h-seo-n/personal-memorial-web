@@ -6,12 +6,9 @@ import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
 import ConfigModal from "../widgets/ConfigModal";
 import Scene from "../widgets/Scene";
 import { Sidebar } from "../widgets/Sidebar";
+import { ViewModal } from "../widgets/ViewModal";
 
-import {
-	type ApiModifiedCreateRequest,
-	type ApiModifiedEditRequest,
-	useObjects,
-} from "../contexts/ObjectsContext";
+import { useObjects } from "../contexts/ObjectsContext";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
 
@@ -27,7 +24,9 @@ const Home = () => {
 	);
 	// editingObject ? open ConfigModal : close ConfigModal
 	const [editingObject, setEditingObject] = useState<SceneObject | null>(null);
-
+	const [viewObject, setViewObject] = useState<SceneObject | BaseObject | null>(
+		null,
+	);
 	/**
 	 * when new item is drag & dropped from inventory -> scene
 	 * @param item : a dropped item
@@ -170,6 +169,16 @@ const Home = () => {
 					<ConfigModal
 						base={editingObject}
 						onSave={handleSaveModal}
+						onClose={handleCloseModal}
+					/>
+				)}
+				{/* modal for viewing objects */}
+				{viewObject && (
+					<ViewModal
+						name={viewObject.name}
+						currentImageSet={viewObject.currentImageSet}
+						imageSets={viewObject.imageSets}
+						description={viewObject.description}
 						onClose={handleCloseModal}
 					/>
 				)}

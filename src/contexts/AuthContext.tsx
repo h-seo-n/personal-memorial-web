@@ -30,7 +30,7 @@ interface SignupData {
 }
 
 interface AuthContextType {
-	user: User | null;
+	user: User | null; // get theme
 	isLoading: ConstrainBoolean;
 	signUp: (data: SignupData) => Promise<void>;
 	login: (data: LoginData) => Promise<void>;

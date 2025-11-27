@@ -50,7 +50,6 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 
 	return (
 		<div className={styles.col}>
-			{/* TODO : add close button */}
 			<button type="button" className={styles.closeButton} onClick={onClose}>
 				<img src="../../public/images/x-button.svg" alt="close button" />
 			</button>
