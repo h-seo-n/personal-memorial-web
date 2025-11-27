@@ -8,12 +8,14 @@ import Scene from "../widgets/Scene";
 import { Sidebar } from "../widgets/Sidebar";
 import { ViewModal } from "../widgets/ViewModal";
 
+import { useAuth } from "../contexts/AuthContext";
 import { useObjects } from "../contexts/ObjectsContext";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
 
 const Home = () => {
-	// TODO: Theme 불러오기 필요
+	// TODO: Theme 수정 기능 필요
+	const { user } = useAuth();
 
 	const { sceneObjects, addModified, updateModified } = useObjects();
 
@@ -27,6 +29,7 @@ const Home = () => {
 	const [viewObject, setViewObject] = useState<SceneObject | BaseObject | null>(
 		null,
 	);
+
 	/**
 	 * when new item is drag & dropped from inventory -> scene
 	 * @param item : a dropped item
@@ -90,6 +93,12 @@ const Home = () => {
 	const handleSaveModal = async (updated: SceneObject) => {
 		await updateModified(updated.id, updated);
 		setEditingObject(null);
+	};
+	/**
+	 *
+	 */
+	const handleClickPreview = (obj: SceneObject | BaseObject) => {
+		setViewObject(obj);
 	};
 
 	return (
@@ -160,7 +169,11 @@ const Home = () => {
 						</div>
 						{/* sidebar : shown only in edit mode */}
 						{mode === "Edit" && activeTab && (
-							<Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+							<Sidebar
+								activeTab={activeTab}
+								setActiveTab={setActiveTab}
+								onClickPreview={handleClickPreview}
+							/>
 						)}
 					</div>
 				</div>

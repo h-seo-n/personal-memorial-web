@@ -24,7 +24,10 @@ const DropSurface = ({
 		accept: ["INVENTORY_ITEM", "SCENE_OBJECT"],
 
 		canDrop: (item: BaseObject | SceneObject) => {
-			return item.ontype === surfaceType;
+			if (item.ontype === "Floor") {
+				return item.ontype === surfaceType;
+			}
+			return surfaceType === "LeftWall" || surfaceType === "RightWall";
 		},
 
 		drop: (item, monitor) => {

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
-import { useObjects } from "../contexts/ObjectsContext";
 import type { BaseObject, ItemFunction, SceneObject } from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
 
@@ -14,8 +13,6 @@ interface ConfigModalProp {
 }
 
 const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
-	const { updateModified } = useObjects();
-
 	const [title, setTitle] = useState<string>(base.name);
 	const [colorState, setcolorState] = useState<string>(
 		base.currentImageSet.name,
@@ -30,6 +27,9 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 	const [isReversed, setIsReversed] = useState<boolean>(
 		base.isReversed ? base.isReversed : null,
 	);
+	const [ontype, setOntype] = useState<"Floor" | "LeftWall" | "RightWall">(
+		base.ontype,
+	);
 
 	// save the new object
 	const handleSave = () => {
@@ -42,7 +42,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 			coordinate: { x: base.coordinate[0], y: base.coordinate[1] },
 			imageSets: base.imageSets,
 			isReversed: isReversed,
-			ontype: base.ontype,
+			ontype: ontype,
 			isUserMade: base.isUserMade,
 		};
 		onSave(updatedObject);
@@ -64,8 +64,28 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 				/>
 			</div>
 			<div className={styles.imgWrapper}>
-				<img src={src} alt={`an ${base.name} of colorState ${colorState}`} />
-				<button type="button" className={styles.flipButton}>
+				<img
+					src={src}
+					style={{
+						transform: isReversed ? "scaleX(-1)" : "scaleX(1)",
+						transition: "transform 0.3s ease-in-out",
+						maxWidth: "100%",
+						borderRadius: "8px",
+					}}
+					alt={`an ${base.name} of colorState ${colorState}`}
+				/>
+				<button
+					type="button"
+					className={styles.flipButton}
+					onClick={() => {
+						setIsReversed((prev) => !prev);
+						if (ontype === "LeftWall") {
+							setOntype("RightWall");
+						} else if (ontype === "RightWall") {
+							setOntype("LeftWall");
+						}
+					}}
+				>
 					<img
 						src="../../public/images/button-flip-horizontal.svg"
 						alt="a horizontal flip button"

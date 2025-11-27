@@ -11,7 +11,7 @@ import type { Theme } from "../shared/types";
 interface User {
 	id: string;
 	name: string;
-	email: string;
+	userId: string;
 	theme: Theme;
 	invitation?: string;
 	objectIds: string[];
@@ -20,11 +20,11 @@ interface User {
 	questionIndex: number;
 }
 interface LoginData {
-	email: string;
+	userId: string;
 	password: string;
 }
 interface SignupData {
-	email: string;
+	userId: string;
 	password: string;
 	name: string;
 }
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const signUp = async (data: SignupData) => {
 		// apiClient로 api call 보내기
 		const response = await apiClient.post("/api/auth/signup", {
-			email: data.email,
+			email: data.userId,
 			password: data.password,
 			name: data.name,
 		});
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (data: LoginData) => {
 		const response = await apiClient.post("/api/auth/login", {
-			email: data.email,
+			email: data.userId,
 			password: data.password,
 		});
 		// 로그인 상태

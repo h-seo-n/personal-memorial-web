@@ -8,9 +8,14 @@ type ActiveTab = "Inventory" | "MyItem" | null;
 interface SidebarProp {
 	activeTab: ActiveTab;
 	setActiveTab: (value: ActiveTab) => void;
+	onClickPreview: (obj: SceneObject | BaseObject) => void;
 }
 
-export const Sidebar = ({ activeTab, setActiveTab }: SidebarProp) => {
+export const Sidebar = ({
+	activeTab,
+	setActiveTab,
+	onClickPreview,
+}: SidebarProp) => {
 	const [tabInventory, setTabInventory] = useState<
 		/*"Furniture" |*/ "Floor" | "Wall"
 	>("Floor");
@@ -97,12 +102,21 @@ export const Sidebar = ({ activeTab, setActiveTab }: SidebarProp) => {
 				<div className={styles.itemGrid}>
 					{activeTab === "MyItem" && tabMyitem === "NOW"
 						? sceneObjects.map((r: SceneObject) => (
-								<div key={r.id} className={styles.previewItemCard}>
+								<button
+									key={r.id}
+									type="button"
+									className={styles.previewItemCard}
+									onClick={() => onClickPreview(r)}
+								>
 									<img src={r.currentImageSet.src} alt={r.description} />
-								</div>
+								</button>
 							))
 						: renderObject.map((r: BaseObject) => (
-								<InventoryItem key={r.id} item={r} />
+								<InventoryItem
+									key={r.id}
+									item={r}
+									onClickPreview={() => onClickPreview(r)}
+								/>
 							))}
 				</div>
 			</div>
