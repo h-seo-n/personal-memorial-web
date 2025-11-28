@@ -4,6 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
 
 import ConfigModal from "../widgets/ConfigModal";
+import { LoginPromptModal } from "../widgets/LoginPromptModal.tsx";
 import Scene from "../widgets/Scene";
 import { Sidebar } from "../widgets/Sidebar";
 import { ViewModal } from "../widgets/ViewModal";
@@ -53,7 +54,6 @@ const Home = () => {
 	 * handler for moving new object
 	 * @param id : item's id
 	 * @param newCoordinates : newly dropped position
-	 * TODO : 움직였을 때 서버에도 좌표 데이터 저장하기
 	 */
 	const handleMoveObject = async (id: string, [x, y]: [number, number]) => {
 		const prev = sceneObjects.find((obj) => obj.id === id);
@@ -133,7 +133,10 @@ const Home = () => {
 							<span>관람 모드</span>
 						</button>
 					</div>
-					<button type="button" className={styles.btn}>
+					<button
+						type="button"
+						className={styles.btn} /* TODO : onClick -> navigate to 편집종료 */
+					>
 						<FaRegFloppyDisk />
 						<span>편집 종료</span>
 					</button>
@@ -195,6 +198,8 @@ const Home = () => {
 						onClose={handleCloseModal}
 					/>
 				)}
+				{/* modal for prompting login */}
+				{!user && <LoginPromptModal />}
 			</main>
 		</DndProvider>
 	);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ImageSet } from "../shared/types";
 import type { BaseObject, SceneObject } from "../shared/types";
-import styles from "../styles/ViewModal.module.css";
+import styles from "../styles/ConfigModal.module.css";
 
 interface ViewModalProps {
 	name: string;

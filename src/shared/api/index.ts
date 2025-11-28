@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-	baseURL: "https://server-api-link.com",
+	baseURL: "https://life-death-museum-413022020522.asia-northeast3.run.app",
 });
 // 인증 토큰 필요 X인 endpoint들
 const publicPaths = [
