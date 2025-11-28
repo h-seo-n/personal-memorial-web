@@ -7,14 +7,14 @@ import styles from "../styles/Login.module.css";
 const Login = () => {
 	const { login } = useAuth();
 	const navigate = useNavigate();
-	const [userId, setUserId] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const isLoginDisabled = !userId.trim() || !password.trim();
+	const isLoginDisabled = !email.trim() || !password.trim();
 
 	const handleLogin = async () => {
 		if (isLoginDisabled) return;
 		try {
-			await login({ userId, password });
+			await login({ email: email, password });
 			navigate("/theme");
 		} catch (error) {
 			if (isAxiosError(error)) {
@@ -23,7 +23,7 @@ const Login = () => {
 						// bad request
 						alert("모든 입력란을 올바르게 입력했는지 확인해주세요.");
 					} else if (error.response.status === 401) {
-						alert("유효하지 않은 아이디 혹은 비밀번호입니다.");
+						alert("유효하지 않은 이메일 혹은 비밀번호입니다.");
 					} else if (error.response.status >= 500) {
 						alert("서버 오류가 발생했습니다. 조금 이후 다시 시도해주세요.");
 					} else {
@@ -49,11 +49,11 @@ const Login = () => {
 					<div className={styles.formWrapper}>
 						<h1 className={styles.loginTitle}>로그인하기</h1>
 						<input
-							type="text"
-							placeholder="아이디"
+							type="email"
+							placeholder="이메일"
 							className={styles.input}
-							value={userId}
-							onChange={(e) => setUserId(e.target.value)}
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 						<input
 							type="password"

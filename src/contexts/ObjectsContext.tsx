@@ -79,7 +79,7 @@ const findCurrentImageSetId = (obj: ApiBaseObject) => {
 	return id;
 };
 
-export const mapApiToBaseObject = (obj: ApiBaseObject): BaseObject => ({
+const mapApiToBaseObject = (obj: ApiBaseObject): BaseObject => ({
 	id: obj._id,
 	name: obj.name,
 	currentImageSet: {

@@ -8,13 +8,13 @@ const Signup = () => {
 	const { signUp } = useAuth();
 	const navigate = useNavigate();
 	const [name, setName] = useState("");
-	const [userId, setUserId] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	const handleSignup = async () => {
 		if (isSignupDisabled) return;
 		try {
-			await signUp({ userId, password, name });
+			await signUp({ email: email, password, name });
 			navigate("/theme");
 		} catch (error) {
 			if (error.response) {
@@ -30,7 +30,7 @@ const Signup = () => {
 						);
 					} else if (status === 409) {
 						// 409 Conflict
-						alert("이미 사용 중인 아이디입니다.");
+						alert("이미 사용 중인 이메일입니다.");
 					} else if (status >= 500) {
 						// 500 Internal server error
 						alert("서버 상 오류가 발생했습니다. 조금 이후 다시 시도해주세요.");
@@ -50,7 +50,7 @@ const Signup = () => {
 		navigate("/login");
 	};
 
-	const isSignupDisabled = !name.trim() || !userId.trim() || !password.trim();
+	const isSignupDisabled = !name.trim() || !email.trim() || !password.trim();
 
 	return (
 		<main className={styles.signupContainer}>
@@ -64,11 +64,11 @@ const Signup = () => {
 					onChange={(e) => setName(e.target.value)}
 				/>
 				<input
-					type="text"
-					placeholder="아이디"
+					type="email"
+					placeholder="이메일"
 					className={styles.input}
-					value={userId}
-					onChange={(e) => setUserId(e.target.value)}
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<input
 					type="password"

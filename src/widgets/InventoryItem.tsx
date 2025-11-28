@@ -32,9 +32,7 @@ export const InventoryItem = ({
 			onClick={() => onClickPreview(item)}
 			style={{ opacity: isDragging ? 0.5 : 1 }}
 		>
-			{item.name}
 			<img src={item.currentImageSet.src} alt={item.name} />
-			<span>{item.name}</span>
 		</button>
 	);
 };

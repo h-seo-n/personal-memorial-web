@@ -11,7 +11,7 @@ import type { Theme } from "../shared/types";
 interface User {
 	id: string;
 	name: string;
-	userId: string;
+	email: string;
 	theme: Theme;
 	invitation?: string;
 	objectIds: string[];
@@ -20,11 +20,11 @@ interface User {
 	questionIndex: number;
 }
 interface LoginData {
-	userId: string;
+	email: string;
 	password: string;
 }
 interface SignupData {
-	userId: string;
+	email: string;
 	password: string;
 	name: string;
 }
@@ -66,8 +66,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	/* 회원가입 함수 */
 	const signUp = async (data: SignupData) => {
 		// apiClient로 api call 보내기
-		const response = await apiClient.post("/api/auth/signup", {
-			email: data.userId,
+		const response = await apiClient.post("/auth/signup", {
+			email: data.email,
 			password: data.password,
 			name: data.name,
 		});
@@ -80,12 +80,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	const login = async (data: LoginData) => {
-		const response = await apiClient.post("/api/auth/login", {
-			email: data.userId,
+		const response = await apiClient.post("/auth/login", {
+			email: data.email,
 			password: data.password,
 		});
 		// 로그인 상태
-		const { token } = response.data.token;
+		const { token } = response.data;
+		console.log(token);
 		localStorage.setItem("authToken", token);
 
 		// 유저 정보

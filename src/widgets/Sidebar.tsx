@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useObjects } from "../contexts/ObjectsContext";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Sidebar.module.css";

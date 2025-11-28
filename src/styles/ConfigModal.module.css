@@ -1,0 +1,213 @@
+/* ConfigModal.module.css */
+
+.modalWrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 460px;
+  max-width: 90vw;
+  padding: 28px 32px 32px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- close button (X) --- */
+
+.closeButton {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.closeButton img {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- title row --- */
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.title svg {
+  flex-shrink: 0;
+}
+
+.title input {
+  border: none;
+  border-bottom: 2px solid #000000;
+  padding: 4px 0;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  width: 70%;
+}
+
+/* --- image preview --- */
+
+.imgWrapper {
+  position: relative;
+  width: 100%;
+  padding: 24px 0 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgWrapper img {
+  display: block;
+}
+
+.flipButton {
+  position: absolute;
+  right: 55px;
+  bottom: 20px;
+
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+/* --- rows (label + control) --- */
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.labelText {
+  min-width: 48px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+/* --- color chips --- */
+
+.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.colorStateChip {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.colorStateChip.active {
+  border-color: #000000;
+}
+
+/* --- textarea & 기능 input --- */
+
+.row textarea {
+  flex: 1;
+  min-height: 96px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #000000;
+  resize: none;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 기능 선택 칩 */
+
+.chip {
+  padding: 6px 20px;
+  border-radius: 999px;
+  border: 1.5px solid #000000;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.chip.active {
+  background: #222222;
+  color: #ffffff;
+}
+
+/* 기능 입력창 */
+
+.col input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #000000;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* --- bottom button --- */
+
+.delBtn {
+  align-self: center;
+  margin-top: 12px;
+
+  padding: 10px 32px;
+  border-radius: 999px;
+  border: 1.5px solid #000000;
+  background: #ffffff;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+}
