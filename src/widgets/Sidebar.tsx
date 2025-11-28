@@ -8,7 +8,6 @@ type ActiveTab = "Inventory" | "MyItem" | null;
 interface SidebarProp {
 	activeTab: ActiveTab;
 	setActiveTab: (value: ActiveTab) => void;
-	onClose: () => void;
 	onClickPreview: (obj: SceneObject | BaseObject) => void;
 }
 
