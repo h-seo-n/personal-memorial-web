@@ -11,15 +11,37 @@
   box-sizing: border-box;
 }
 
+
+/* Define the floating/breathing animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    /* Move up slightly and grow a little */
+    transform: translateY(-20px) scale(1.1); 
+    opacity: 1; /* Pulse brightness slightly */
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.8;
+  }
+}
 /* 상단 보라색 블러 효과 */
 .blob {
   width: 120px;
   height: 120px;
   background: radial-gradient(circle, #D8B4FE 0%, #C084FC 100%);
   border-radius: 50%;
-  filter: blur(40px); /* 흐림 효과 */
+  filter: blur(30px); /* 흐림 효과 */
   opacity: 0.8;
   margin-bottom: 20px; /* 제목과의 간격 */
+/* Add the animation here */
+  animation: float 3s ease-in-out infinite;
+  
+  /* Optional: smoother rendering */
+  will-change: transform, opacity;
 }
 
 /* 제목 텍스트 */
