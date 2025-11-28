@@ -7,33 +7,39 @@ interface Question {
 	question: string;
 	example1: string;
 	example2: string;
+	headerText: string;
 }
 
 const questions: Question[] = [
 	{
-		question: "어떤 칭찬을 들으면 기분이 좋나요?",
+		question: "어떤 칭찬을 들으면 기분이 좋던가요?",
 		example1: "일 처리 방식이 깔끔하고 멋있다.",
 		example2: "깊이가 있음.",
+		headerText: "당신에게 어울리는 벽지는 뭘까요?",
 	},
 	{
 		question: "평소에 무엇을 기대하며 살고 있나요?",
 		example1: "새로운 도전과 성취감",
 		example2: "감동적인 순간",
+		headerText: "바닥재를 고르고 있어요!",
 	},
 	{
-		question: "주변 사람들에게 어떻게 기억되고 싶나요?",
+		question: "주변 사람들에게 어떻게 기억되고 싶은가요?",
 		example1: "편안하고 자연스러운 사람",
 		example2: "매력 있는 사람",
+		headerText: "당신의 공간에 딱 맞는 가구를 준비할게요!",
 	},
 	{
 		question: "나의 삶을 한 문장으로 정리하자면?",
 		example1: "과정 안에서 의미를 수집하는 삶",
 		example2: "소소한 행복을 소중히 여긴다",
+		headerText: "소품은 어떤 걸 둘까요?",
 	},
 	{
 		question: "당신의 장례식은 분위기가 어땠으면 하나요?",
 		example1: "나에 대한 기억을 나누는 차분한 자리",
 		example2: "숲 속 느낌",
+		headerText: "주변 풍경도 생각해볼게요!",
 	},
 ];
 
@@ -85,7 +91,7 @@ const ThemeQ = () => {
 			<div className={styles.header}>
 				<div className={styles.headerLeft}>
 					<div className={styles.icon}>💭</div>
-					<div className={styles.headerText}>날씨를 고르고 있어요!</div>
+					<div className={styles.headerText}>{currentQuestion.headerText}</div>
 				</div>
 				<div className={styles.progressBar}>
 					<div 
