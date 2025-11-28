@@ -8,6 +8,7 @@ type ActiveTab = "Inventory" | "MyItem" | null;
 interface SidebarProp {
 	activeTab: ActiveTab;
 	setActiveTab: (value: ActiveTab) => void;
+	onClose: () => void;
 	onClickPreview: (obj: SceneObject | BaseObject) => void;
 }
 
@@ -20,13 +21,8 @@ export const Sidebar = ({
 		/*"Furniture" |*/ "Floor" | "Wall"
 	>("Floor");
 	const [tabMyitem, setTabMyItem] = useState<"NOW" | "Generated">("NOW");
-	const {
-		inventoryObjects,
-		sceneObjects,
-		generatedObjects,
-		userObjects,
-		isLoading,
-	} = useObjects();
+	const { inventoryObjects, sceneObjects, generatedObjects, isLoading } =
+		useObjects();
 	const propObjects = inventoryObjects.filter((obj) => obj.ontype === "Floor");
 	const wallObjects = inventoryObjects.filter(
 		(obj) => obj.ontype === "LeftWall" || obj.ontype === "RightWall",
@@ -49,18 +45,31 @@ export const Sidebar = ({
 		activeTab && (
 			<div className={styles.main}>
 				<div className={styles.titleRow}>
-					<h1 className={styles.titleText}>인벤토리</h1>
-					<img
-						src="../../public/images/button-minimize-ui.svg"
-						alt="sidebar minimize button"
-						onKeyUp={() => setActiveTab(null)}
-					/>
+					<h1 className={styles.titleText}>
+						{activeTab === "Inventory" ? "인벤토리" : "내 아이템"}
+					</h1>
+					<button
+						type="button"
+						className={styles.closeBtn}
+						onClick={() => setActiveTab(null)}
+					>
+						<img
+							src="../../public/images/button-minimize-ui.svg"
+							alt="sidebar minimize button"
+						/>
+					</button>
 				</div>
 				<div>
 					<ul className={styles.tabChip}>
-						<li
-							className={styles.tabChips}
-							onKeyUp={() => {
+						<button
+							type="button"
+							className={
+								(activeTab === "Inventory" && tabInventory === "Floor") ||
+								(activeTab === "MyItem" && tabMyitem === "NOW")
+									? `${styles.tabChips} ${styles.activeTab}`
+									: styles.tabChips
+							}
+							onClick={() => {
 								if (activeTab === "Inventory") {
 									setTabInventory("Floor");
 								} else {
@@ -69,10 +78,16 @@ export const Sidebar = ({
 							}}
 						>
 							{activeTab === "Inventory" ? "바닥" : "NOW"}
-						</li>
-						<li
-							className={styles.tabChips}
-							onKeyUp={() => {
+						</button>
+						<button
+							type="button"
+							className={
+								(activeTab === "Inventory" && tabInventory === "Wall") ||
+								(activeTab === "MyItem" && tabMyitem === "Generated")
+									? `${styles.tabChips} ${styles.activeTab}`
+									: styles.tabChips
+							}
+							onClick={() => {
 								if (activeTab === "Inventory") {
 									setTabInventory("Wall");
 								} else {
@@ -81,22 +96,24 @@ export const Sidebar = ({
 							}}
 						>
 							{activeTab === "Inventory" ? "벽걸이" : "생성"}
-						</li>
+						</button>
 					</ul>
+				</div>
+				<div className={styles.explanationGrid}>
 					<ul className={styles.explanationList}>
-						<ol
+						<li
 							className={styles.explanationBullet}
-							style={activeTab === "Inventory" ? {} : { visibility: "hidden" }}
+							style={activeTab === "Inventory" ? {} : { display: "none" }}
 						>
 							아래 아이템을 끌어 추모관에 배치해보세요.
-						</ol>
-						<ol className={styles.explanationBullet}>
+						</li>
+						<li className={styles.explanationBullet}>
 							{activeTab === "Inventory"
 								? "아이템을 클릭하면 변경 가능한 색상을 확인할 수 있어요."
 								: tabMyitem === "NOW"
 									? "배치된 아이템을 모아볼 수 있어요."
 									: "내가 생성했던 아이템을 모두 모아볼 수 있어요."}
-						</ol>
+						</li>
 					</ul>
 				</div>
 				<div className={styles.itemGrid}>

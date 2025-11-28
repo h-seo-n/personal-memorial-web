@@ -30,7 +30,12 @@ export const End = () => {
 					<h1 className={styles.title}>
 						보러올 이들에게 하고 싶은 말이 있나요?
 					</h1>
-					<textarea placeholder="내 공간을 소개하는 초대장을 작성해주세요!" />
+					<textarea
+						className={styles.textarea}
+						value={invite}
+						onChange={(e) => setInvite(e.target.value)}
+						placeholder="내 공간을 소개하는 초대장을 작성해주세요!"
+					/>
 				</>
 			)}
 			<button

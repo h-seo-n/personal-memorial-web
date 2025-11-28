@@ -66,6 +66,11 @@
 /* ------------------------------------------------ */
 /* 좌/우측 컬럼 공통 (기본은 투명) */
 .inventoryColumn {
+  position:relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   width: min-content;
   z-index: 10; /* Scene보다 위에 표시 */
   pointer-events: auto; /* 클릭 가능하도록 */
@@ -207,4 +212,13 @@
   border: 0;
   border-top: 1px solid #ddd;
   margin: 5px 0;
+}
+
+.SidebarWrapper {
+	position: absolute;
+	top: -90%;
+	right: -100%;
+	margin-right: 0px;
+	z-index: 10;
+	height: 60%;
 }

@@ -196,11 +196,13 @@ const Home = () => {
 
 						{/* sidebar : shown only in edit mode */}
 						{activeTab && (
-							<Sidebar
-								activeTab={activeTab}
-								setActiveTab={setActiveTab}
-								onClickPreview={handleClickPreview}
-							/>
+							<div className={styles.SidebarWrapper}>
+								<Sidebar
+									activeTab={activeTab}
+									setActiveTab={setActiveTab}
+									onClickPreview={handleClickPreview}
+								/>
+							</div>
 						)}
 					</div>
 				</div>
