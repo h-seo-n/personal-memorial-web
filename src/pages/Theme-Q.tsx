@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import theme4Svg from "/images/theme4.svg";
 import styles from "../styles/Theme-Q.module.css";
 
 interface Question {
@@ -40,6 +41,7 @@ const ThemeQ = () => {
 	const navigate = useNavigate();
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [answer, setAnswer] = useState("");
+	const [isAnalyzing, setIsAnalyzing] = useState(false);
 
 	const currentQuestion = questions[currentQuestionIndex];
 	const isLastQuestion = currentQuestionIndex === questions.length - 1;
@@ -48,8 +50,12 @@ const ThemeQ = () => {
 	const handleNext = () => {
 		if (answer.trim()) {
 			if (isLastQuestion) {
-				// 마지막 질문이면 홈으로 이동
-				navigate("/home");
+				// 마지막 질문이면 분석 중 화면 표시
+				setIsAnalyzing(true);
+				// 3초 후 홈으로 이동
+				setTimeout(() => {
+					navigate("/home");
+				}, 3000);
 			} else {
 				// 다음 질문으로 이동
 				setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -57,6 +63,21 @@ const ThemeQ = () => {
 			}
 		}
 	};
+
+	// 분석 중 화면
+	if (isAnalyzing) {
+		return (
+			<main className={styles.analyzingContainer}>
+				<div className={styles.analyzingWrapper}>
+					<img
+						src={theme4Svg}
+						alt="Theme 4"
+						className={styles.analyzingImage}
+					/>
+				</div>
+			</main>
+		);
+	}
 
 	return (
 		<main className={styles.themeQContainer}>
