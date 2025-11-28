@@ -4,19 +4,20 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
 
 import ConfigModal from "../widgets/ConfigModal";
+import { LoginPromptModal } from "../widgets/LoginPromptModal.tsx";
 import Scene from "../widgets/Scene";
 import { Sidebar } from "../widgets/Sidebar";
+import { ViewModal } from "../widgets/ViewModal";
 
-import {
-	type ApiModifiedCreateRequest,
-	type ApiModifiedEditRequest,
-	useObjects,
-} from "../contexts/ObjectsContext";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { useObjects } from "../contexts/ObjectsContext";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
 
 const Home = () => {
-	// TODO: Theme 불러오기 필요
+	// TODO: Theme 수정 기능 필요
+	const { user } = useAuth();
 
 	const { sceneObjects, addModified, updateModified } = useObjects();
 
@@ -27,6 +28,11 @@ const Home = () => {
 	);
 	// editingObject ? open ConfigModal : close ConfigModal
 	const [editingObject, setEditingObject] = useState<SceneObject | null>(null);
+	const [viewObject, setViewObject] = useState<SceneObject | BaseObject | null>(
+		null,
+	);
+
+	const navigate = useNavigate();
 
 	/**
 	 * when new item is drag & dropped from inventory -> scene
@@ -51,7 +57,6 @@ const Home = () => {
 	 * handler for moving new object
 	 * @param id : item's id
 	 * @param newCoordinates : newly dropped position
-	 * TODO : 움직였을 때 서버에도 좌표 데이터 저장하기
 	 */
 	const handleMoveObject = async (id: string, [x, y]: [number, number]) => {
 		const prev = sceneObjects.find((obj) => obj.id === id);
@@ -92,13 +97,19 @@ const Home = () => {
 		await updateModified(updated.id, updated);
 		setEditingObject(null);
 	};
+	/**
+	 *
+	 */
+	const handleClickPreview = (obj: SceneObject | BaseObject) => {
+		setViewObject(obj);
+	};
 
 	return (
 		// wrap the app in DnDProvider to enable drag & drop
 		<DndProvider backend={HTML5Backend}>
 			<main>
 				{/* bar with all the buttons */}
-				<div className="row nowrap">
+				<div className={styles.headerRow}>
 					<div className="row">
 						<button
 							type="button"
@@ -115,7 +126,7 @@ const Home = () => {
 						<button
 							type="button"
 							className={
-								mode === "Edit"
+								mode === "View"
 									? `${styles.active} ${styles.btn}`
 									: `${styles.btn}`
 							}
@@ -125,16 +136,24 @@ const Home = () => {
 							<span>관람 모드</span>
 						</button>
 					</div>
-					<button type="button" className={styles.btn}>
+					<button
+						type="button"
+						id={styles.endBtn}
+						className={styles.btn}
+						onClick={() => navigate("/end")}
+					>
 						<FaRegFloppyDisk />
 						<span>편집 종료</span>
 					</button>
 				</div>
 				<div className={styles.mainLayout}>
-					<div className={styles.inventoryColumn}>
+					<div
+						className={styles.inventoryColumn}
+						style={mode === "View" ? { visibility: "hidden" } : {}}
+					>
 						<div className={styles.promptButton}>
 							<img
-								src="../../public/images/Elipse.svg"
+								src="../../public/images/Ellipse.svg"
 								alt="button to AI generation page"
 							/>
 						</div>
@@ -151,17 +170,39 @@ const Home = () => {
 							onClickEdit={handleClickEdit}
 						/>
 					</div>
-					<div className={styles.inventoryColumn}>
-						<div className={styles.filledButton}>
+					<div
+						className={styles.inventoryColumn}
+						style={mode === "View" ? { visibility: "hidden" } : {}}
+					>
+						<button
+							type="button"
+							className={styles.filledButton}
+							onClick={() => {
+								setActiveTab("Inventory");
+							}}
+						>
 							<img src="/images/open-box.svg" alt="Inventory tab button" />
-						</div>
+						</button>
 						<hr />
-						<div className={styles.filledButton}>
+						<button
+							type="button"
+							className={styles.filledButton}
+							onClick={() => {
+								setActiveTab("MyItem");
+							}}
+						>
 							<img src="/images/MY.svg" alt="My item tab button" />
-						</div>
+						</button>
+
 						{/* sidebar : shown only in edit mode */}
-						{mode === "Edit" && activeTab && (
-							<Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+						{activeTab && (
+							<div className={styles.SidebarWrapper}>
+								<Sidebar
+									activeTab={activeTab}
+									setActiveTab={setActiveTab}
+									onClickPreview={handleClickPreview}
+								/>
+							</div>
 						)}
 					</div>
 				</div>
@@ -173,6 +214,20 @@ const Home = () => {
 						onClose={handleCloseModal}
 					/>
 				)}
+				{/* modal for viewing objects */}
+				{viewObject && (
+					<ViewModal
+						name={viewObject.name}
+						currentImageSet={viewObject.currentImageSet}
+						imageSets={viewObject.imageSets}
+						description={viewObject.description}
+						onClose={() => {
+							setViewObject(null);
+						}}
+					/>
+				)}
+				{/* modal for prompting login */}
+				{!user && <LoginPromptModal />}
 			</main>
 		</DndProvider>
 	);

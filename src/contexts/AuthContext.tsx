@@ -30,7 +30,7 @@ interface SignupData {
 }
 
 interface AuthContextType {
-	user: User | null;
+	user: User | null; // get theme
 	isLoading: ConstrainBoolean;
 	signUp: (data: SignupData) => Promise<void>;
 	login: (data: LoginData) => Promise<void>;
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	/* 회원가입 함수 */
 	const signUp = async (data: SignupData) => {
 		// apiClient로 api call 보내기
-		const response = await apiClient.post("/api/auth/signup", {
+		const response = await apiClient.post("/auth/signup", {
 			email: data.email,
 			password: data.password,
 			name: data.name,
@@ -80,12 +80,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	const login = async (data: LoginData) => {
-		const response = await apiClient.post("/api/auth/login", {
+		const response = await apiClient.post("/auth/login", {
 			email: data.email,
 			password: data.password,
 		});
 		// 로그인 상태
-		const { token } = response.data.token;
+		const { token } = response.data;
+		console.log(token);
 		localStorage.setItem("authToken", token);
 
 		// 유저 정보

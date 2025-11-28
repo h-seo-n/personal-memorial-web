@@ -4,7 +4,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #fffaf3;
 }
 
 .room {
@@ -17,20 +16,25 @@
 .floor {
 	position: absolute;
 	left: 50%;
-	bottom: 110.4%;
+	bottom: 103.4%;
 	width: 540px;
 	height: 540px;
+	border-bottom: 1px solid #000000;
+	border-right: 1px solid #000000;
 	background: #e5c29f;
-	border: 2px solid #d1aa80;
-	transform: translate(-50%, -50%) translateY(100px) rotateX(70deg)
+	transform: translate(-70%, -50%) translateY(100px) rotateX(60deg)
 		rotateZ(45deg);
 	transform-style: preserve-3d;
 }
 
+
 .floorInner {
 	position: absolute;
 	inset: 0;
+	transform: rotateZ(-45deg) rotateX(-70deg) translate(-50%, -100%);
 	transform-style: preserve-3d;
+	transform-origin: bottom center;
+	pointer-events: none;
 }
 
 /* Left Wall */
@@ -38,20 +42,20 @@
 	position: absolute;
 	left: 99.5%;
 	top: -16.1%;
-	width: 380px;
-	height: 350px;
+	width: 382px;
+	height: 330px;
 	background: #ffe4cf;
-	border: 2px solid #e0b99b;
+	border: 0.5px solid #000000;
 	transform-style: preserve-3d;
 	transform-origin: bottom right;
-	transform: translate(-50%, -50%) translateX(-106px) translateY(-100px)
-		skewY(18.9deg); /* 30 */
+	transform: translate(-70%, -50%) translateX(-138px) translateY(-83.8px)
+		skewY(26.6deg); /* 30 */
 }
 
 .rightWallInner {
 	position: absolute;
 	inset: 0;
-	transform: skewY(-19deg);
+	transform: skewY(26.3deg);
 	transform-style: preserve-3d;
 }
 
@@ -59,19 +63,19 @@
 	position: absolute;
 	left: 0.5%;
 	top: 72.5%;
-	width: 380px;
-	height: 350px;
+	width: 382px;
+	height: 330px;
 	background: #ffe9d7;
-	border: 2px solid #e0b99b;
+	border: 0.5px solid #000000;
 	transform-style: preserve-3d;
 	transform-origin: bottom left;
-	transform: translate(-50%, -50%) translateX(106px) translateY(-100px)
-		skewY(-18.9deg);
+	transform: translate(-70%, -50%) translateX(74px) translateY(-108.5px)
+		skewY(-26.6deg);
 }
 
 .leftWallInner {
 	position: absolute;
 	inset: 0;
-	transform: skewY(19deg);
+	transform: skewY(26.3deg);
 	transform-style: preserve-3d;
 }

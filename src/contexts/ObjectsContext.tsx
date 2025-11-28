@@ -15,6 +15,7 @@ import type {
 	ItemFunction,
 	SceneObject,
 } from "../shared/types";
+import { useAuth } from "./AuthContext";
 
 interface ObjectContextType {
 	inventoryObjects: BaseObject[];
@@ -107,6 +108,8 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+
+	const { user } = useAuth();
 
 	const handleAxiosError = useCallback((error: unknown, context: string) => {
 		if (isAxiosError(error)) {
@@ -227,6 +230,11 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 
 	// 앱 렌더 시 서버에서 받아올 아이템들 업데이트
 	useEffect(() => {
+		const loadNull = () => {
+			setSceneObjects([]);
+			setUserObjects([]);
+			setGeneratedObjects([]);
+		};
 		const loadAll = async () => {
 			setIsLoading(true);
 			try {
@@ -240,8 +248,9 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 				setIsLoading(false);
 			}
 		};
-		loadAll();
-	}, [fetchInventory, fetchGenerated, fetchModified, fetchUserObject]);
+		if (!user) loadNull();
+		else loadAll();
+	}, [user, fetchInventory, fetchGenerated, fetchModified, fetchUserObject]);
 
 	const value = useMemo(
 		() => ({

@@ -1,0 +1,159 @@
+/* Sidebar.module.css */
+
+.main {
+  width: 360px;
+  height: 85vh;
+  padding: 30px 24px;
+  box-sizing: border-box;
+
+  background: #FFF9EF; /* 이미지와 유사한 연한 베이지색 */
+  border: 1px solid #000; /* 왼쪽 경계선 (필요 시) */
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif; /* 기본 폰트 설정 */
+  color: #000;
+}
+
+/* 상단 제목 영역 */
+.titleRow {
+  position: relative; /* 자식 요소 절대 위치 배치를 위해 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 제목 중앙 정렬 */
+  margin-bottom: 24px;
+  height: 40px;
+}
+
+* {
+    font-weight: 500;
+}
+
+.titleText {
+  margin: 0;
+  font-size: 28px;
+  color: #000;
+  text-align: center;
+}
+
+.closeBtn {
+  position: absolute;
+  right: 0; /* 우측 끝으로 배치 */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.closeBtn img {
+  width: 28px;
+  height: 28px;
+}
+
+/* 탭 영역 (바닥 / 벽걸이) */
+.tabChip {
+  display: flex;
+  justify-content: center; /* 탭 중앙 정렬 */
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+/* 탭 버튼 공통 스타일 */
+.tabChips {
+  padding: 8px 28px;
+  border-radius: 50px; /* 캡슐 모양 */
+  border: 1px solid #000;
+  background: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* 활성화된 탭 스타일 (회색 배경) */
+.activeTab {
+  background: #E5E5E5; /* 활성화 시 회색 */
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1); /* 살짝 눌린 효과 */
+}
+
+/* 비활성화 탭 hover 효과 */
+.tabChips:hover {
+  background-color: #f4f4f4;
+}
+
+.explanationGrid {
+    width: 100%;
+}
+
+/* 설명 텍스트 리스트 */
+.explanationList {
+  margin: 0 0 20px;
+  padding-left: 20px; /* 불릿 포인트 여백 */
+  list-style-type: disc; /* 점 모양 불릿 */
+  color: #000;
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.explanationBullet {
+  margin-bottom: 4px;
+}
+
+/* 아이템 그리드 */
+.itemGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열 고정 */
+  align-content: start; /* 아이템이 위에서부터 채워지도록 */
+  gap: 16px; /* 카드 사이 간격 */
+  overflow-y: auto;
+  padding: 4px; /* 스크롤바와 겹치지 않게 여백 */
+}
+
+/* 스크롤바 숨김 (선택 사항) */
+.itemGrid::-webkit-scrollbar {
+  width: 6px;
+}
+.itemGrid::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+/* 아이템 카드 스타일 */
+.previewItemCard {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+  border-radius: 12px;
+  border: 1px solid #000;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: transform 0.1s;
+}
+
+.previewItemCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+}
+
+.previewItemCard img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  pointer-events: none;
+}
