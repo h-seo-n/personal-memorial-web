@@ -1,7 +1,6 @@
 const DEG_TO_RAD = Math.PI / 180;
-const ROTATE_X_DEG = 60;
+const ROTATE_X_DEG = 55;
 const ROTATE_Z_DEG = 45;
-const FLOOR_SIZE = 540;
 const COS_X = Math.cos(ROTATE_X_DEG * DEG_TO_RAD);
 const SIN_Z = Math.sin(-ROTATE_Z_DEG * DEG_TO_RAD);
 const COS_Z = Math.cos(-ROTATE_Z_DEG * DEG_TO_RAD);

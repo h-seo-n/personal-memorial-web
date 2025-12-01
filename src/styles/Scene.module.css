@@ -16,14 +16,13 @@
 .floor {
 	position: absolute;
 	left: 50%;
-	bottom: 103.4%;
+	bottom: 108%;
 	width: 540px;
 	height: 540px;
 	border-bottom: 1px solid #000000;
 	border-right: 1px solid #000000;
 	background: #e5c29f;
-	transform: translate(-70%, -50%) translateY(100px) rotateX(60deg)
-		rotateZ(45deg);
+	transform: translate(-70%, -50%) translateY(100px) rotateX(55deg) rotateZ(45deg);
 	transform-style: preserve-3d;
 }
 
@@ -40,15 +39,15 @@
 .rightWall {
 	position: absolute;
 	left: 99.5%;
-	top: -16.1%;
+	top: -20.5%;
 	width: 382px;
 	height: 330px;
 	background: #ffe4cf;
 	border: 0.5px solid #000000;
 	transform-style: preserve-3d;
 	transform-origin: bottom right;
-	transform: translate(-70%, -50%) translateX(-138px) translateY(-83.8px)
-		skewY(26.6deg); /* 30 */
+	transform: translate(-70%, -50%) translateX(-137px) translateY(-85px)
+		skewY(29.8deg);
 }
 
 .rightWallInner {
@@ -60,15 +59,15 @@
 .leftWall {
 	position: absolute;
 	left: 0.5%;
-	top: 72.5%;
+	top: 68.1%;
 	width: 382px;
 	height: 330px;
 	background: #ffe9d7;
 	border: 0.5px solid #000000;
 	transform-style: preserve-3d;
 	transform-origin: bottom left;
-	transform: translate(-70%, -50%) translateX(74px) translateY(-108.5px)
-		skewY(-26.6deg);
+	transform: translate(-70%, -50%) translateX(75px) translateY(-110px)
+		skewY(-29.8deg);
 }
 
 .leftWallInner {
