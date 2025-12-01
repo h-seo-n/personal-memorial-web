@@ -23,7 +23,7 @@ export const ViewModal = ({
 	return (
 		<div className={styles.modalWrapper}>
 			<button type="button" className={styles.closeButton} onClick={onClose}>
-				<img src="../../public/images/x-button.svg" alt="close button" />
+				<img src="/images/x-button.svg" alt="close button" />
 			</button>
 			<h1 className={styles.title}>{name}</h1>
 			<div className={styles.imgWrapper}>

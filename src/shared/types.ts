@@ -7,6 +7,8 @@
 // 상호작용 종류 - 넷 중 하나
 export type ItemFunction = "Gallery" | "Link" | "Board" | null;
 
+export type OnType = "Floor" | "LeftWall" | "RightWall";
+
 export interface DropHandler {
 	onDropNew: (item: BaseObject, coordinates: [number, number]) => void;
 	onMove: (instanceId: string, newCoordinates: [number, number]) => void;
@@ -34,7 +36,7 @@ export interface BaseObject {
 	description?: string;
 	imageSets: ImageSet[];
 	isUserMade: boolean;
-	ontype: "LeftWall" | "RightWall" | "Floor";
+	ontype: OnType;
 }
 
 // 팝업에서 받는 (유저가 결정하는) 추가적인 항목들
