@@ -1,0 +1,404 @@
+/* src/styles/GratitudeDiary.module.css */
+
+.diaryPage {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	background-color: #fffaf2; /* 크림색 배경 */
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	box-sizing: border-box;
+	padding: 40px 24px;
+	overflow: hidden;
+  }
+
+  /* Back to Home Button - Top Right */
+  .backButton {
+	position: fixed;
+	top: clamp(30px, 100vw, 30px);
+	right: clamp(30px, 100vw, 30px);
+	width: 214px;
+	height: 50px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+	padding: 0;
+  }
+
+  .backButtonImage {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	pointer-events: none;
+  }
+
+  .backButton:hover {
+	transform: scale(1.05);
+  }
+
+  .backButton:active {
+	transform: scale(0.95);
+  }
+  
+  .inner {
+	width: 100%;
+	max-width: 1080px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 32px;
+  }
+  
+  /* ===== 제목 영역 ===== */
+  
+  .header {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+  }
+  
+  .titleRow {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	position: relative;
+  }
+  
+  /* 작은 종이 아이콘 */
+  .paperIcon {
+	width: 48px;
+	height: 24px;
+	border-radius: 6px;
+	background: linear-gradient(135deg, #ffffff 0%, #f5f7ff 100%);
+	box-shadow: 0 4px 0 #b07a46; /* 종이 밑에 나무색 그림자 느낌 */
+	transform: translateY(6px);
+  }
+  
+  /* 제목 텍스트 */
+  .titleText {
+	font-family: "LaundryGothic", system-ui, -apple-system, BlinkMacSystemFont,
+	  "Segoe UI", sans-serif;
+	font-size: 32px;
+	font-weight: 700;
+	color: #111111;
+	margin: 0;
+  }
+
+  /* 제목 입력 필드 */
+  .titleInput {
+	font-family: "LaundryGothic", system-ui, -apple-system, BlinkMacSystemFont,
+	  "Segoe UI", sans-serif;
+	font-size: 32px;
+	font-weight: 700;
+	color: #111111;
+	margin: 0;
+	border: 2px solid rgba(123, 92, 157, 0.5);
+	border-radius: 4px;
+	padding: 4px 8px;
+	background-color: #fffaf2;
+	outline: none;
+	box-sizing: border-box;
+	min-width: 200px;
+  }
+
+  .titleInput:focus {
+	border-color: rgba(123, 92, 157, 0.8);
+	box-shadow: 0 0 0 3px rgba(123, 92, 157, 0.2);
+  }
+  
+  /* 연필 아이콘 */
+  .pencilIcon {
+	font-size: 20px;
+	transform: translateY(2px);
+	user-select: none;
+  }
+  
+  /* 제목 밑줄 */
+  .titleUnderline {
+	width: 260px;
+	height: 2px;
+	background-color: #191919;
+  }
+  
+  /* ===== 설명 카드 ===== */
+  
+  .descriptionSection {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+  }
+  
+  .descriptionCard {
+	position: relative;
+	max-width: 1000px;
+	width: 100%;
+	background-color: #ffffff;
+	border-radius: 8px;
+	border: 1px solid #111111;
+	padding: 16px 24px;
+	box-sizing: border-box;
+  }
+  
+  .descriptionCard p {
+	margin: 0;
+	font-family: "LaundryGothic", system-ui, -apple-system, BlinkMacSystemFont,
+	  "Segoe UI", sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #222222;
+	text-align: center;
+  }
+
+  /* 설명 입력 필드 */
+  .descriptionInput {
+	width: 100%;
+	margin: 0;
+	font-family: "LaundryGothic", system-ui, -apple-system, BlinkMacSystemFont,
+	  "Segoe UI", sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #222222;
+	text-align: center;
+	border: 2px solid rgba(123, 92, 157, 0.5);
+	border-radius: 4px;
+	padding: 8px;
+	background-color: #ffffff;
+	outline: none;
+	resize: vertical;
+	min-height: 80px;
+	box-sizing: border-box;
+  }
+
+  .descriptionInput:focus {
+	border-color: rgba(123, 92, 157, 0.8);
+	box-shadow: 0 0 0 3px rgba(123, 92, 157, 0.2);
+  }
+  
+  .smallPencil {
+	position: absolute;
+	top: 10px;
+	right: 8px;
+	font-size: 16px;
+	user-select: none;
+  }
+  
+  /* ===== 감사일기 작성 영역 ===== */
+  
+  .journalSection {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin-top: 8px;
+  }
+  
+  .journalArea {
+	position: relative;
+	width: 100%;
+	max-width: 1080px;
+	height: 60vh;
+	background-color: #f9dfc7; /* 연살구색 */
+	border-radius: 12px;
+	box-sizing: border-box;
+	padding: 24px;
+  }
+  
+  /* 실제 입력창 (원본 이미지에는 없지만 쓰기 쉽게 추가) */
+  .journalTextarea {
+	width: 100%;
+	height: 100%;
+	border: 2px solid #111111;
+	border-radius: 8px;
+	outline: none;
+	resize: none;
+	background: #ffffff;
+	font-family: "LaundryGothic", system-ui, -apple-system, BlinkMacSystemFont,
+	  "Segoe UI", sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	color: #3a2a18;
+	padding: 16px;
+	box-sizing: border-box;
+	overflow-y: auto;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+  }
+
+  .journalTextarea:empty::before {
+	content: attr(data-placeholder);
+	color: #999999;
+	font-style: italic;
+  }
+
+  .journalTextarea:focus {
+	border-color: rgba(123, 92, 157, 0.8);
+	box-shadow: 0 0 0 3px rgba(123, 92, 157, 0.2);
+  }
+
+  /* + 버튼 */
+  .addButton {
+	position: absolute;
+	bottom: 16px;
+	right: 16px;
+	width: 78px;
+	height: 78px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+	z-index: 10;
+	padding: 0;
+  }
+
+  .addButtonImage {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	pointer-events: none;
+  }
+
+  .addButton:hover {
+	transform: scale(1.1);
+  }
+
+  .addButton:active {
+	transform: scale(0.95);
+  }
+
+  /* 팝업 오버레이 */
+  .popupOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	backdrop-filter: blur(4px);
+  }
+
+  /* 팝업 내용 */
+  .popupContent {
+	position: relative;
+	background-color: #ffffff;
+	border-radius: 16px;
+	padding: 32px;
+	max-width: 500px;
+	width: 90%;
+	max-height: 80vh;
+	overflow-y: auto;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	box-sizing: border-box;
+  }
+
+  .popupContent h2 {
+	margin: 0 0 16px 0;
+	font-family: "LaundryGothic", system-ui, -apple-system, BlinkMacSystemFont,
+	  "Segoe UI", sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+	color: #111111;
+  }
+
+  .popupContent p {
+	margin: 0;
+	font-family: "LaundryGothic", system-ui, -apple-system, BlinkMacSystemFont,
+	  "Segoe UI", sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	color: #222222;
+  }
+
+  /* 닫기 버튼 */
+  .closeButton {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background-color: #f0f0f0;
+	border: none;
+	font-size: 24px;
+	color: #666666;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s ease;
+  }
+
+  .closeButton:hover {
+	background-color: #e0e0e0;
+	color: #333333;
+  }
+  
+  /* ===== 반응형 ===== */
+  
+  @media (max-width: 768px) {
+	.diaryPage {
+	  padding: 24px 16px;
+	}
+  
+	.titleText {
+	  font-size: 24px;
+	}
+
+	.titleInput {
+	  font-size: 24px;
+	  min-width: 150px;
+	}
+  
+	.titleUnderline {
+	  width: 200px;
+	}
+  
+	.descriptionCard {
+	  padding: 12px 16px;
+	}
+  
+	.journalArea {
+	  height: 50vh;
+	  padding: 16px;
+	}
+
+	.addButton {
+	  width: 60px;
+	  height: 60px;
+	  bottom: 12px;
+	  right: 12px;
+	}
+
+	.backButton {
+	  width: 160px;
+	  height: 60px;
+	  top: 1rem;
+	  right: 1rem;
+	}
+
+	.popupContent {
+	  padding: 24px;
+	  max-width: 90%;
+	}
+
+	.popupContent h2 {
+	  font-size: 20px;
+	}
+
+	.popupContent p {
+	  font-size: 14px;
+	}
+  }
+  
