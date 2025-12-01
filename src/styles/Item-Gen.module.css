@@ -198,6 +198,48 @@
 	cursor: not-allowed;
 	background-color: #e0e0e0;
 	color: rgba(0, 0, 0, 0.5);
+	font-size: clamp(14px, 1.8vw, 18px);
+}
+
+/* Input Button - 입력칸 오른쪽 안쪽에 위치 */
+.inputButton {
+	position: absolute;
+	right: clamp(0.75rem, 1.5vw, 1rem);
+	top: 50%;
+	transform: translateY(-50%);
+	padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem);
+	font-size: clamp(14px, 1.8vw, 18px);
+	font-family: "LaundryGothic", sans-serif;
+	font-weight: 700;
+	color: #000;
+	background-color: #ffffff;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 999px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.inputButton:hover:not(:disabled) {
+	background-color: #f4f4f4;
+	transform: translateY(-50%) translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.inputButton:active:not(:disabled) {
+	transform: translateY(-50%);
+	box-shadow: none;
+}
+
+.inputButton:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+	background-color: #e0e0e0;
+	color: rgba(0, 0, 0, 0.5);
 }
 
 /* 모바일 및 작은 화면 대응 */

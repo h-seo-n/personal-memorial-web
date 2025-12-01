@@ -68,6 +68,13 @@ const ItemGen = () => {
 		setSecondAnswer("");
 	};
 
+	// 답변이 변경될 때마다 스크롤을 맨 아래로
+	useEffect(() => {
+		if (textareaRef.current) {
+			textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+		}
+	}, [answer]);
+
 	return (
 		<main className={styles.itemGenContainer}>
 			{/* Background blob */}
