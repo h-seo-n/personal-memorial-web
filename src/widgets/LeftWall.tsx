@@ -6,11 +6,12 @@ import DropSurface from "./DropSurface/DropSurface";
 
 const LeftWall = (props: PropsWithChildren<DropHandler>) => {
 	const { user } = useAuth();
+
 	return (
 		<DropSurface {...props} surfaceType="LeftWall" className={styles.leftWall}>
 			<div
 				className={styles.wallInner}
-				// style={{ backgroundColor: `${user.theme.floorColor}` }}
+				style={user ? { backgroundColor: `${user.theme.leftWallColor}` } : {}}
 			>
 				{props.children}
 			</div>

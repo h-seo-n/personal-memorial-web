@@ -18,30 +18,30 @@
 }
 
 .mainContent {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .contentWrapper {
 	width: 100%;
 	height: 100%;
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }
 
 .contentWrapper h1 {
-    font-size: 48px;
-    font-weight: 400;
-    color: white;
-    margin: 0;
-    margin-bottom: 2rem;
-    font-family: 'LaundryGothic', sans-serif;
+	font-size: 48px;
+	font-weight: 400;
+	color: white;
+	margin: 0;
+	margin-bottom: 2rem;
+	font-family: "LaundryGothic", sans-serif;
 }
 
 .mainImage {
@@ -57,7 +57,7 @@
 	justify-content: center;
 	align-items: center;
 	padding: 35px 60.5px;
-    flex-direction: column;
+	flex-direction: column;
 	width: 60%;
 	height: auto;
 	min-height: 60px;
@@ -65,7 +65,7 @@
 	border-radius: 100px;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	font-family: 'LaundryGothic', sans-serif;
+	font-family: "LaundryGothic", sans-serif;
 	font-size: clamp(20px, 3vw, 35px);
 	font-weight: 900;
 	color: black;
@@ -95,4 +95,3 @@
 		font-size: clamp(18px, 4vw, 24px);
 	}
 }
-

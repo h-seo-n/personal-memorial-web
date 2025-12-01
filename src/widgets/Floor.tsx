@@ -13,7 +13,7 @@ const Floor = (props: PropsWithChildren<DropHandler>) => {
 		<DropSurface {...props} surfaceType="Floor" className={styles.floor}>
 			<div
 				className={styles.floorInner}
-				// style={{ backgroundColor: `${user.theme.floorColor}` }}
+				style={user ? { backgroundColor: `${user.theme.floorColor}` } : {}}
 			>
 				{props.children}
 			</div>

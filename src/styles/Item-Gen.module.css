@@ -1,32 +1,62 @@
 .itemGenContainer {
+	width: 100%;
+	height: 100vh;
+	background-color: #fffbf2; /* 따뜻한 크림색 */
 	display: flex;
 	flex-direction: column;
-	width: 100vw;
-	height: 100vh;
-	min-width: 100vw;
-	min-height: 100vh;
+	align-items: center;
+	justify-content: center;
+	position: relative;
 	overflow: hidden;
-	padding: 0;
-	margin: 0;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+}
+
+.itemGenContainer::before {
+	content: "";
+	position: absolute;
+	width: 600px;
+	height: 600px;
+	background: radial-gradient(
+		circle,
+		rgba(215, 126, 255, 0.6) 0%,
+		rgba(255, 126, 179, 0.4) 50%,
+		rgba(255, 255, 255, 0) 70%
+	);
+	border-radius: 50%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	filter: blur(60px);
+	z-index: 0;
+	animation: blobMove 8s infinite ease-in-out alternate;
+}
+
+@keyframes blobMove {
+	0% {
+		transform: translate(-50%, -50%) scale(1);
+	}
+	50% {
+		transform: translate(-45%, -55%) scale(1.1);
+	}
+	100% {
+		transform: translate(-55%, -45%) scale(0.95);
+	}
 }
 
 .backgroundImage {
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	min-width: 100%;
-	min-height: 100%;
+	top: 0%;
+	left: 0%;
+	width: 120%;
+	height: 120%;
 	object-fit: cover;
-	object-position: center;
-	display: block;
 	z-index: 0;
+	opacity: 0.9;
+	animation: moveBlob 20s infinite ease-in-out;
+	pointer-events: none;
+}
+
+.imgWrapper {
+	max-width: 50%;
 }
 
 /* End Generation Button - Top Right */
@@ -36,27 +66,21 @@
 	right: clamp(1rem, 3vw, 2rem);
 	z-index: 10;
 	padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
-	font-size: clamp(16px, 2vw, 20px);
-	font-family: 'LaundryGothic', sans-serif;
-	font-weight: 700;
+	font-size: clamp(13px, 2vw, 16px);
+	font-family: "LaundryGothic", sans-serif;
+	font-weight: 600;
 	color: rgb(0, 0, 0);
-	background-color: rgba(255, 255, 255, 0.8);
-	border: 2px solid #000000;
-	border-radius: 100px;
+	background-color: rgb(255, 255, 255);
+	border: 1px solid #000000;
+	border-radius: 50px;
 	cursor: pointer;
-	transition: all 0.3s ease;
-	box-sizing: border-box;
-	backdrop-filter: blur(4px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: all 0.2s ease;
 }
 
 .endButton:hover {
-	background-color: rgba(123, 92, 157, 0.9);
+	background-color: #f0f0f0;
 	transform: translateY(-2px);
-	box-shadow: 0 4px 12px rgba(107, 78, 142, 0.4);
-}
-
-.endButton:active {
-	transform: translateY(0);
 }
 
 /* Content Wrapper */
@@ -74,45 +98,39 @@
 
 /* Center Container - Semi-transparent Gray */
 .centerContainer {
-	position: relative;
 	width: 100%;
-	max-width: 800px;
-	min-width: 320px;
-	background: rgba(255, 255, 255, 0.3);
-	border-radius: clamp(20px, 4vw, 30px);
-	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+	max-width: 600px;
+	background: rgba(255, 255, 255, 0.4);
+	backdrop-filter: blur(20px);
+	border-radius: 20px;
+	box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.05);
 	display: flex;
 	flex-direction: column;
-	padding: clamp(2rem, 4vw, 3rem);
+	padding: 3rem 2rem;
 	box-sizing: border-box;
-	backdrop-filter: blur(8px);
-	gap: clamp(1.5rem, 3vw, 2rem);
+	text-align: center;
+	gap: 2rem;
+	min-height: 400px;
+	justify-content: space-around;
 }
 
 /* Question Area - Top */
 .questionArea {
 	width: 100%;
-	padding: clamp(1.5rem, 3vw, 2rem);
-	background: rgba(255, 255, 255, 0.1);
-	border-radius: 12px;
-	box-sizing: border-box;
+	margin-bottom: 1rem;
 }
 
 .questionText {
-	font-size: clamp(20px, 3vw, 28px);
-	font-weight: 700;
-	color: white;
-	margin: 0;
-	font-family: 'LaundryGothic', sans-serif;
-	text-align: center;
-	line-height: 1.5;
-	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	font-size: 24px;
+	font-weight: 600;
+	color: rgb(0, 0, 0);
+	line-height: 1.4;
+	word-break: keep-all;
 }
 
 /* Answer Area - Bottom */
 .answerArea {
 	width: 100%;
-	box-sizing: border-box;
 	position: relative;
 }
 
@@ -120,28 +138,65 @@
 	width: 100%;
 	padding: clamp(1rem, 2vw, 1.25rem) clamp(1.5rem, 2vw, 2rem);
 	padding-right: clamp(6rem, 10vw, 8rem); /* 오른쪽 버튼 자리 확보 */
-	font-size: clamp(14px, 1.8vw, 18px);
-	font-family: "LaundryGothic", sans-serif;
-	border: none;
+	font-size: clamp(14px, 1.8vw, 16px);
+	font-family: inherit;
+	border: 1px solid #000;
 	border-radius: 12px;
 	background-color: white;
 	color: #000;
 	outline: none;
-	transition: all 0.3s ease;
-	box-sizing: border-box;
-	height: 70px;
-	overflow-y: auto;
-	overflow-x: hidden;
 	resize: none;
-	line-height: 1.5;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	min-height: 60px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .answerInput:focus {
-	box-shadow: 0 0 0 3px rgba(123, 92, 157, 0.3);
+	background-color: #fafafa;
 }
 
 .answerInput::placeholder {
+	color: #999;
+}
+
+/* Input Button - 입력칸 오른쪽 안쪽에 위치 */
+.inputButton {
+	position: absolute;
+	right: clamp(0.75rem, 1.5vw, 1rem);
+	top: 50%;
+	transform: translateY(-50%);
+	padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem);
+	font-size: clamp(14px, 1.8vw, 18px);
+	font-family: "LaundryGothic", sans-serif;
+	font-weight: 700;
+	color: #000;
+	background-color: #ffffff;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 999px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.inputButton:hover:not(:disabled) {
+	background-color: #f4f4f4;
+	transform: translateY(-50%) translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.inputButton:active:not(:disabled) {
+	transform: translateY(-50%);
+	box-shadow: none;
+}
+
+.inputButton:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+	background-color: #e0e0e0;
 	color: rgba(0, 0, 0, 0.5);
 	font-size: clamp(14px, 1.8vw, 18px);
 }
@@ -260,4 +315,3 @@
 		font-size: 14px;
 	}
 }
-

@@ -38,51 +38,46 @@ const SceneObjectItem = ({
 	};
 
 	return dragRef(
-		<button
-			type="button"
-			tabIndex={0}
+		<img
+			src={obj.currentImageSet.src}
+			alt={obj.name}
 			onClick={() => onClickEdit(obj)} // Handle click to edit
+			onKeyDown={(e) => {
+				e.preventDefault();
+				if (e.key === "Enter") onClickEdit(obj);
+			}}
+			onLoad={(e) => {
+				const naturalWidth = Math.min(e.currentTarget.naturalWidth, 160);
+				const naturalHeight = Math.min(e.currentTarget.naturalHeight, 160);
+				setImgSize({
+					w: naturalWidth * SCALE_RATIO,
+					h: naturalHeight * SCALE_RATIO,
+				});
+			}}
 			style={{
-				background: "none",
-				borderWidth: 0,
-				padding: 0,
-				margin: 0,
+				// display: "block",
+
+				width: imgSize ? `${imgSize.w}px` : "auto",
+				height: imgSize ? `${imgSize.h}px` : "auto",
+				visibility: imgSize ? "visible" : "hidden",
+
+				// button -> img
 				position: "absolute",
 				left: `${obj.coordinate.x * 100}%`,
 				top: `${obj.coordinate.y * 100}%`,
 
 				transformOrigin:
 					obj.ontype === "Floor" ? "bottom center" : "center center",
-				transform: getTransformStyle(),
+				transform: obj.isReversed
+					? `${getTransformStyle()} scaleX(-1) `
+					: getTransformStyle(),
 
 				opacity: isDragging ? 0.4 : 1,
 				cursor: "pointer",
 				transformStyle: "preserve-3d",
 				pointerEvents: "auto",
-				width: "fit-content",
-				height: "fit-content",
 			}}
-		>
-			<img
-				src={obj.currentImageSet.src}
-				alt={obj.name}
-				onLoad={(e) => {
-					const naturalWidth = e.currentTarget.naturalWidth;
-					const naturalHeight = e.currentTarget.naturalHeight;
-					setImgSize({
-						w: naturalWidth * SCALE_RATIO,
-						h: naturalHeight * SCALE_RATIO,
-					});
-				}}
-				style={{
-					display: "block",
-					pointerEvents: "none",
-					width: imgSize ? `${imgSize.w}px` : "auto",
-					height: imgSize ? `${imgSize.h}px` : "auto",
-					visibility: imgSize ? "visible" : "hidden",
-				}}
-			/>
-		</button>,
+		/>,
 	);
 };
 export default SceneObjectItem;

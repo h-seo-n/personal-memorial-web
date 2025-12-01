@@ -78,8 +78,8 @@ const DropSurface = ({
 			},
 
 			collect: (monitor) => ({
-				isOver: !!monitor.isOver(),
-				canDrop: !!monitor.canDrop,
+				isOver: monitor.isOver(),
+				canDrop: monitor.canDrop(),
 			}),
 		}),
 		[surfaceType, onDropNew, onMove],

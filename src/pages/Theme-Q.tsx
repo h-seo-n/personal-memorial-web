@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme4Svg from "/images/theme4.svg";
 import themeGenSvg from "/images/themeGen.svg";
-import apiClient from "../shared/api";
+import { useAuth } from "../contexts/AuthContext";
+import { type QA, useTheme } from "../contexts/ThemeContext";
 import styles from "../styles/Theme-Q.module.css";
 
 interface Question {
@@ -12,7 +13,7 @@ interface Question {
 	headerText: string;
 }
 
-const questions: Question[] = [
+const QUESTIONS: Question[] = [
 	{
 		question: "어떤 칭찬을 들으면 기분이 좋던가요?",
 		example1: "일 처리 방식이 깔끔하고 멋있다.",
@@ -46,20 +47,22 @@ const questions: Question[] = [
 ];
 
 const ThemeQ = () => {
+	const { analyzeTheme, themeLoading } = useTheme();
+	const { fetchUser, user } = useAuth();
+
 	const navigate = useNavigate();
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [answer, setAnswer] = useState("");
 	const [answers, setAnswers] = useState<string[]>([]);
-	const [isAnalyzing, setIsAnalyzing] = useState(false);
+
 	const [showResult, setShowResult] = useState(false);
-	const [resultDescription, setResultDescription] = useState("");
+	const [resultReason, setResultReason] = useState("");
 	const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
-	const [isLoadingResult, setIsLoadingResult] = useState(false);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-	const currentQuestion = questions[currentQuestionIndex];
-	const isLastQuestion = currentQuestionIndex === questions.length - 1;
-	const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+	const currentQuestion = QUESTIONS[currentQuestionIndex];
+	const isLastQuestion = currentQuestionIndex === QUESTIONS.length - 1;
+	const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
 
 	const handleAnswerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setAnswer(e.target.value);
@@ -77,36 +80,14 @@ const ThemeQ = () => {
 			setAnswers(updatedAnswers);
 
 			if (isLastQuestion) {
-				// 마지막 질문이면 분석 중 화면 표시
-				setIsAnalyzing(true);
-				
-				// API 호출하여 결과 가져오기
-				try {
-					setIsLoadingResult(true);
-					// TODO: 실제 API 엔드포인트로 교체 필요
-					// const response = await apiClient.post("/theme/generate", {
-					// 	answers: updatedAnswers,
-					// });
-					// setResultDescription(response.data.description);
-					// setResultImageUrl(response.data.imageUrl);
-					
-					// 임시로 답변 기반 설명 생성
-					const description = `당신의 답변을 바탕으로 특별한 공간을 준비했습니다. ${updatedAnswers.join(", ")}`;
-					setResultDescription(description);
-					setResultImageUrl(null); // 실제 이미지 URL로 교체 필요
-					
-					// 3초 후 결과 페이지 표시
-					setTimeout(() => {
-						setIsAnalyzing(false);
-						setShowResult(true);
-						setIsLoadingResult(false);
-					}, 3000);
-				} catch (error) {
-					console.error("Theme generation error:", error);
-					setIsAnalyzing(false);
-					setIsLoadingResult(false);
-					alert("테마 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
-				}
+				const query: QA[] = QUESTIONS.map((q, idx) => ({
+					question: q.question,
+					answer: updatedAnswers[idx],
+				}));
+				const { themeMeta, reason } = await analyzeTheme(query);
+				setResultReason(reason);
+				setResultImageUrl(`/images/theme${themeMeta.id}.png`);
+				setShowResult(true);
 			} else {
 				// 다음 질문으로 이동
 				setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -115,24 +96,23 @@ const ThemeQ = () => {
 		}
 	};
 
-	// 답변이 변경되거나 질문이 바뀔 때마다 스크롤을 맨 아래로
-	useEffect(() => {
-		if (textareaRef.current) {
-			textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
-		}
-	}, [answer, currentQuestionIndex]);
-
 	// 결과 페이지가 표시되면 3초 후 자동으로 Home으로 이동
 	useEffect(() => {
-		if (showResult) {
-			const timer = setTimeout(() => {
-				navigate("/home");
-			}, 3000);
+		const run = async () => {
+			if (showResult) {
+				await fetchUser();
+				console.log(user.theme);
 
-			return () => clearTimeout(timer);
-		}
-	}, [showResult, navigate]);
+				const timer = setTimeout(() => {
+					navigate("/home");
+				}, 3000);
 
+				return () => clearTimeout(timer);
+			}
+		};
+
+		run();
+	}, [showResult, navigate, fetchUser, user]);
 	// 결과 페이지
 	if (showResult) {
 		return (
@@ -148,22 +128,16 @@ const ThemeQ = () => {
 				<div className={styles.resultContentWrapper}>
 					{/* Description Section */}
 					<div className={styles.resultDescription}>
-						<p>{resultDescription}</p>
+						<p>{resultReason}</p>
 					</div>
 
 					{/* Generated Image Section */}
 					<div className={styles.resultImageContainer}>
-						{resultImageUrl ? (
-							<img
-								src={resultImageUrl}
-								alt="Generated Theme"
-								className={styles.resultImage}
-							/>
-						) : (
-							<div className={styles.resultImagePlaceholder}>
-								생성된 이미지가 여기에 표시됩니다
-							</div>
-						)}
+						<img
+							src={resultImageUrl}
+							alt="Generated Theme"
+							className={styles.resultImage}
+						/>
 					</div>
 				</div>
 			</main>
@@ -171,13 +145,13 @@ const ThemeQ = () => {
 	}
 
 	// 분석 중 화면
-	if (isAnalyzing) {
+	if (themeLoading) {
 		return (
 			<main className={styles.analyzingContainer}>
 				<div className={styles.analyzingWrapper}>
 					<img
 						src={theme4Svg}
-						alt="Theme 4"
+						alt="loading page for analyzing theme"
 						className={styles.analyzingImage}
 					/>
 				</div>
@@ -190,14 +164,14 @@ const ThemeQ = () => {
 			{/* Header Section */}
 			<div className={styles.header}>
 				<div className={styles.headerLeft}>
-					<div className={styles.icon}></div>
+					<div className={styles.icon} />
 					<div className={styles.headerText}>{currentQuestion.headerText}</div>
 				</div>
 				<div className={styles.progressBar}>
-					<div 
+					<div
 						className={styles.progressFill}
 						style={{ width: `${progress}%` }}
-					></div>
+					/>
 				</div>
 			</div>
 
@@ -206,10 +180,12 @@ const ThemeQ = () => {
 				{/* Question Box */}
 				<div className={styles.questionBox}>
 					<h1 className={styles.questionTitle}>
-						{currentQuestion.question.split('\n').map((line, index) => (
-							<span key={index}>
+						{currentQuestion.question.split("\n").map((line, index) => (
+							<span key={`${currentQuestion.question}-${line}-${index}`}>
 								{line}
-								{index < currentQuestion.question.split('\n').length - 1 && <br />}
+								{index < currentQuestion.question.split("\n").length - 1 && (
+									<br />
+								)}
 							</span>
 						))}
 					</h1>
@@ -217,12 +193,8 @@ const ThemeQ = () => {
 
 				{/* Example Answers */}
 				<div className={styles.examplesWrapper}>
-					<div className={styles.exampleText}>
-						{currentQuestion.example1}
-					</div>
-					<div className={styles.exampleText}>
-						{currentQuestion.example2}
-					</div>
+					<div className={styles.exampleText}>{currentQuestion.example1}</div>
+					<div className={styles.exampleText}>{currentQuestion.example2}</div>
 				</div>
 
 				{/* Answer Input */}
@@ -250,4 +222,3 @@ const ThemeQ = () => {
 };
 
 export default ThemeQ;
-

@@ -22,10 +22,10 @@
 	border-bottom: 1px solid #000000;
 	border-right: 1px solid #000000;
 	background: #e5c29f;
-	transform: translate(-70%, -50%) translateY(100px) rotateX(55deg) rotateZ(45deg);
+	transform: translate(-70%, -50%) translateY(100px) rotateX(55deg)
+		rotateZ(45deg);
 	transform-style: preserve-3d;
 }
-
 
 .floorInner {
 	position: absolute;

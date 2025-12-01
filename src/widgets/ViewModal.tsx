@@ -25,7 +25,7 @@ export const ViewModal = ({
 			<button type="button" className={styles.closeButton} onClick={onClose}>
 				<img src="/images/x-button.svg" alt="close button" />
 			</button>
-			<h1 className={styles.title}>{name}</h1>
+			<h2 className={styles.title}>{name}</h2>
 			<div className={styles.imgWrapper}>
 				<img
 					src={imageSets.find((i) => i.name === color).src}

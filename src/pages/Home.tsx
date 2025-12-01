@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd"; // Import DndProvider
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
-
+import apiClient from "../shared/api/index.ts";
 import ConfigModal from "../widgets/ConfigModal";
 import { LoginPromptModal } from "../widgets/LoginPromptModal.tsx";
 import Scene from "../widgets/Scene";
@@ -21,7 +21,19 @@ const Home = () => {
 
 	const { sceneObjects, addModified, updateModified } = useObjects();
 
-	const [mode, setMode] = useState<"Edit" | "View">("View");
+	const [mode, setMode] = useState<"Edit" | "View">(() => {
+		const stored = localStorage.getItem("mode");
+		return stored === "Edit" || stored === "View" ? stored : "View";
+	});
+
+	useEffect(() => {
+		try {
+			localStorage.setItem("mode", mode);
+		} catch (e) {
+			console.error("Failed to access localStorage:", e);
+		}
+	}, [mode]);
+
 	// which sidebar tab is open
 	const [activeTab, setActiveTab] = useState<"Inventory" | "MyItem" | null>(
 		null,
@@ -151,7 +163,14 @@ const Home = () => {
 						className={styles.inventoryColumn}
 						style={mode === "View" ? { visibility: "hidden" } : {}}
 					>
-						<div className={styles.promptButton}>
+						<div
+							className={styles.promptButton}
+							onClick={() => navigate("/item-gen")}
+							onKeyUp={(e) => {
+								e.preventDefault();
+								navigate("/item/gen");
+							}}
+						>
 							<img
 								src="/images/Ellipse.svg"
 								alt="button to AI generation page"
@@ -206,7 +225,7 @@ const Home = () => {
 						)}
 					</div>
 				</div>
-				{/* modal for objects - renders when editingObject is present */}
+				{/* modal for objects - renders when editingObject is present, and deletingObject is null */}
 				{editingObject && (
 					<ConfigModal
 						base={editingObject}
@@ -214,6 +233,7 @@ const Home = () => {
 						onClose={handleCloseModal}
 					/>
 				)}
+
 				{/* modal for viewing objects */}
 				{viewObject && (
 					<ViewModal
