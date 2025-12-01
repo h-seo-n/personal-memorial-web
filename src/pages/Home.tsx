@@ -153,7 +153,7 @@ const Home = () => {
 					>
 						<div className={styles.promptButton}>
 							<img
-								src="../../public/images/Ellipse.svg"
+								src="/images/Ellipse.svg"
 								alt="button to AI generation page"
 							/>
 						</div>

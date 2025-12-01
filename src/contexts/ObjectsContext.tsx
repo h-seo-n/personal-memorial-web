@@ -13,6 +13,7 @@ import type {
 	BaseObject,
 	ImageSet,
 	ItemFunction,
+	OnType,
 	SceneObject,
 } from "../shared/types";
 import { useAuth } from "./AuthContext";
@@ -21,11 +22,11 @@ interface ObjectContextType {
 	inventoryObjects: BaseObject[];
 	generatedObjects: BaseObject[];
 	sceneObjects: SceneObject[];
-	userObjects: SceneObject[];
 
 	isLoading: boolean;
 	error: string | null;
 
+	fetchModified: () => Promise<void>;
 	updateModified: (id: string, object: SceneObject) => Promise<void>;
 	addModified: (object: SceneObject) => Promise<SceneObject>;
 }
@@ -43,7 +44,7 @@ interface ApiBaseObject {
 	description?: string;
 	imageSets: ImageSet[];
 	isUserMade: boolean;
-	onType: "LeftWall" | "RightWall" | "Floor";
+	onType: OnType;
 }
 interface ApiSceneObject extends ApiBaseObject {
 	itemFunction: ItemFunction;
@@ -57,10 +58,11 @@ export interface ApiModifiedCreateRequest {
 	itemFunction: ItemFunction;
 	coordinates: { x: number; y: number };
 	isReversed: boolean;
-	description?: string;
-	additionalData?: string;
+	description?: string | null;
+	additionalData?: string | null;
 	originalObjectId: string;
 	currentImageSetId: string;
+	onType: OnType;
 }
 export interface ApiModifiedEditRequest {
 	name?: string;
@@ -70,6 +72,7 @@ export interface ApiModifiedEditRequest {
 	isReversed?: boolean;
 	coordinates?: { x: number; y: number };
 	currentImageSetId?: string;
+	onType: OnType;
 }
 
 const ObjectsContext = createContext<ObjectContextType | undefined>(undefined);
@@ -104,7 +107,6 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 	const [inventoryObjects, setInventoryObjects] = useState<BaseObject[]>([]);
 	const [generatedObjects, setGeneratedObjects] = useState<BaseObject[]>([]);
 	const [sceneObjects, setSceneObjects] = useState<SceneObject[]>([]);
-	const [userObjects, setUserObjects] = useState<SceneObject[]>([]);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -145,20 +147,6 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 		setSceneObjects(modified);
 	}, []);
 
-	const fetchSceneObjects = useCallback(async () => {
-		const response = await apiClient.get("/");
-	}, []);
-
-	// get all objects once placed by user
-	// TODO: 확인 필요한 부분
-	const fetchUserObject = useCallback(async () => {
-		const response = await apiClient.get("/TODO; edit url");
-		const modified: SceneObject[] = response.data.map(
-			mapApiModifiedToSceneObject,
-		);
-		setUserObjects(modified);
-	}, []);
-
 	const updateModified = useCallback(
 		async (id: string, object: SceneObject) => {
 			// 낙관적 업데이트 : 서버 반응 보기 전 클라이언트부터 일단 업데이트
@@ -171,15 +159,38 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 
 			try {
 				const url = `/modified/${id}`;
+
 				const body: ApiModifiedEditRequest = {
-					name: object.name,
-					description: object.description,
-					itemFunction: object.itemFunction,
-					additionalData: object.additionalData,
-					coordinates: object.coordinate,
-					isReversed: object.isReversed,
-					currentImageSetId: object.currentImageSet._id,
+					onType: object.ontype,
 				};
+
+				if (object.name) body.name = object.name;
+				if (object.description) body.description = object.description;
+				if (object.additionalData) body.additionalData = object.additionalData;
+
+				if (object.itemFunction !== undefined && object.itemFunction !== null) {
+					body.itemFunction = object.itemFunction;
+				}
+				if (typeof object.isReversed === "boolean") {
+					body.isReversed = object.isReversed;
+				}
+
+				if (
+					object.coordinate &&
+					typeof object.coordinate.x === "number" &&
+					typeof object.coordinate.y === "number"
+				) {
+					body.coordinates = {
+						x: object.coordinate.x,
+						y: object.coordinate.y,
+					};
+				}
+
+				if (object.currentImageSet?._id) {
+					body.currentImageSetId = object.currentImageSet._id;
+				}
+
+				console.log("PATCH body", body);
 				const response = await apiClient.patch(url, body);
 				const updatedObject = mapApiModifiedToSceneObject(response.data);
 
@@ -205,14 +216,18 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 				const url = "/modified";
 				const body: ApiModifiedCreateRequest = {
 					name: object.name,
-					description: object.description,
 					itemFunction: object.itemFunction,
-					additionalData: object.additionalData,
-					isReversed: object.isReversed,
 					coordinates: object.coordinate,
+					isReversed: object.isReversed,
+					// description: object.description ? object.description : null,
+					// additionalData: object.additionalData ? object.additionalData : null,
 					originalObjectId: object.id,
 					currentImageSetId: object.currentImageSet._id,
+					onType: object.ontype,
 				};
+				if (object.description) body.description = object.description;
+				if (object.additionalData) body.additionalData = object.additionalData;
+
 				const response = await apiClient.post(url, body);
 				const addedObject: SceneObject = mapApiModifiedToSceneObject(
 					response.data,
@@ -231,9 +246,9 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 	// 앱 렌더 시 서버에서 받아올 아이템들 업데이트
 	useEffect(() => {
 		const loadNull = () => {
-			setSceneObjects([]);
-			setUserObjects([]);
-			setGeneratedObjects([]);
+			// 인벤토리 : 기본적으로 존재
+			setSceneObjects([]); // 내아이템 > NOW
+			setGeneratedObjects([]); // 내아이템 > 생성
 		};
 		const loadAll = async () => {
 			setIsLoading(true);
@@ -242,7 +257,6 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 					fetchInventory(),
 					fetchGenerated(),
 					fetchModified(),
-					fetchUserObject(),
 				]);
 			} finally {
 				setIsLoading(false);
@@ -250,16 +264,16 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 		};
 		if (!user) loadNull();
 		else loadAll();
-	}, [user, fetchInventory, fetchGenerated, fetchModified, fetchUserObject]);
+	}, [user, fetchInventory, fetchGenerated, fetchModified]);
 
 	const value = useMemo(
 		() => ({
 			inventoryObjects,
 			generatedObjects,
 			sceneObjects,
-			userObjects,
 			isLoading,
 			error,
+			fetchModified,
 			updateModified,
 			addModified,
 		}),
@@ -267,9 +281,9 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 			inventoryObjects,
 			generatedObjects,
 			sceneObjects,
-			userObjects,
 			isLoading,
 			error,
+			fetchModified,
 			updateModified,
 			addModified,
 		],

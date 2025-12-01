@@ -31,9 +31,8 @@
 .floorInner {
 	position: absolute;
 	inset: 0;
-	transform: rotateZ(-45deg) rotateX(-70deg) translate(-50%, -100%);
 	transform-style: preserve-3d;
-	transform-origin: bottom center;
+	transform-origin: center;
 	pointer-events: none;
 }
 
@@ -55,7 +54,6 @@
 .rightWallInner {
 	position: absolute;
 	inset: 0;
-	transform: skewY(26.3deg);
 	transform-style: preserve-3d;
 }
 
@@ -76,6 +74,5 @@
 .leftWallInner {
 	position: absolute;
 	inset: 0;
-	transform: skewY(26.3deg);
 	transform-style: preserve-3d;
 }

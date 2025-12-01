@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
-import type { BaseObject, ItemFunction, SceneObject } from "../shared/types";
+import type { ItemFunction, OnType, SceneObject } from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
 
 // works as both modifying object & creating a new one
@@ -27,9 +27,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 	const [isReversed, setIsReversed] = useState<boolean>(
 		base.isReversed ? base.isReversed : null,
 	);
-	const [ontype, setOntype] = useState<"Floor" | "LeftWall" | "RightWall">(
-		base.ontype,
-	);
+	const [ontype, setOntype] = useState<OnType>(base.ontype);
 
 	// save the new object
 	const handleSave = () => {
@@ -39,7 +37,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 			description,
 			currentImageSet: base.imageSets.find((i) => i.name === colorState),
 			itemFunction: func,
-			coordinate: { x: base.coordinate[0], y: base.coordinate[1] },
+			coordinate: { x: base.coordinate.x, y: base.coordinate.y },
 			imageSets: base.imageSets,
 			isReversed: isReversed,
 			ontype: ontype,
@@ -51,7 +49,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 	return (
 		<div className={styles.modalWrapper}>
 			<button type="button" className={styles.closeButton} onClick={onClose}>
-				<img src="../../public/images/x-button.svg" alt="close button" />
+				<img src="/images/x-button.svg" alt="close button" />
 			</button>
 			<div className={styles.title}>
 				<FaPen />
@@ -87,7 +85,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 					}}
 				>
 					<img
-						src="../../public/images/button-flip-horizontal.svg"
+						src="/images/button-flip-horizontal.svg"
 						alt="a horizontal flip button"
 					/>
 				</button>

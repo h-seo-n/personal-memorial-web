@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import { type XYCoord, useDrop } from "react-dnd";
-import type { BaseObject, SceneObject } from "../../shared/types";
+import { useDrop } from "react-dnd";
+import type { BaseObject, OnType, SceneObject } from "../../shared/types";
 import {
 	getIsometricCoordinates,
 	getStandardCoordinates,
@@ -10,7 +10,7 @@ interface DropSurfaceProps {
 	onDropNew: (item: BaseObject, coordinates: [number, number]) => void;
 	onMove: (instanceId: string, newCoordinates: [number, number]) => void;
 	children: React.ReactNode;
-	surfaceType: "Floor" | "LeftWall" | "RightWall";
+	surfaceType: OnType;
 	className?: string;
 }
 

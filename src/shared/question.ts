@@ -31,4 +31,5 @@ export const answerSecondQ = async (
 		content: query,
 	});
 	const generatedObject = mapApiToBaseObject(response.data);
+	return generatedObject;
 };
