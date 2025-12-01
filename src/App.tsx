@@ -3,6 +3,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ObjectsProvider } from "./contexts/ObjectsContext";
 import { End } from "./pages/End";
 import Home from "./pages/Home";
+import ItemGen from "./pages/Item-Gen";
 import Login from "./pages/Login";
 import Main from "./pages/Main";
 import Signup from "./pages/Signup";
@@ -19,6 +20,7 @@ const App = () => {
 					<Route path="/home" element={<Home />} />
 					<Route path="/theme" element={<Theme />} />
 					<Route path="/theme-q" element={<ThemeQ />} />
+					<Route path="/item-gen" element={<ItemGen />} />
 					<Route path="/signup" element={<Signup />} />
 					<Route path="/end" element={<End />} />
 				</Routes>
