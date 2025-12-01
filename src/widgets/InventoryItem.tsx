@@ -1,5 +1,6 @@
 import { useDrag } from "react-dnd";
 import type { BaseObject, SceneObject } from "../shared/types";
+import styles from "../styles/Sidebar.module.css";
 /**
  * takes both BaseObject & SceneObject; It only renders their images anyway,
  * and passes the data to Home.tsx when dragged.
@@ -30,7 +31,8 @@ export const InventoryItem = ({
 			ref={dragSourceRef}
 			type="button"
 			onClick={() => onClickPreview(item)}
-			style={{ opacity: isDragging ? 0.5 : 1 }}
+			style={isDragging ? { opacity: 0.5 } : {}}
+			className={styles.previewItemCard}
 		>
 			<img src={item.currentImageSet.src} alt={item.name} />
 		</button>

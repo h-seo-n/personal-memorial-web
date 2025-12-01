@@ -21,9 +21,27 @@ const Theme = () => {
 		<main className={styles.themeContainer}>
 			<div className={styles.contentWrapper}>
 				<img
-					src={currentTheme === 1 ? theme1Svg : currentTheme === 2 ? theme2Svg : theme3Svg}
-					alt={currentTheme === 1 ? "Theme 1" : currentTheme === 2 ? "Theme 2" : "Theme 3"}
-					className={currentTheme === 1 ? styles.theme1Image : currentTheme === 2 ? styles.theme2Image : styles.theme3Image}
+					src={
+						currentTheme === 1
+							? theme1Svg
+							: currentTheme === 2
+								? theme2Svg
+								: theme3Svg
+					}
+					alt={
+						currentTheme === 1
+							? "Theme 1"
+							: currentTheme === 2
+								? "Theme 2"
+								: "Theme 3"
+					}
+					className={
+						currentTheme === 1
+							? styles.theme1Image
+							: currentTheme === 2
+								? styles.theme2Image
+								: styles.theme3Image
+					}
 				/>
 				<button
 					type="button"
@@ -38,4 +56,3 @@ const Theme = () => {
 };
 
 export default Theme;
-

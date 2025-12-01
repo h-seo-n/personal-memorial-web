@@ -1,59 +1,82 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import itemGen1Svg from "/images/item-gen1.svg";
+import { useAuth } from "../contexts/AuthContext";
+import { useObjects } from "../contexts/ObjectsContext";
+import { getQuestionByIndex, getSecondQ } from "../shared/itemGeneration";
+import type { BaseObject } from "../shared/types";
 import styles from "../styles/Item-Gen.module.css";
+import { LoginPromptModal } from "../widgets/LoginPromptModal";
 
 const ItemGen = () => {
 	const navigate = useNavigate();
-	const [answer, setAnswer] = useState("");
-	const [question] = useState("질문이 여기에 표시됩니다."); // TODO: 실제 질문으로 교체
-	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const [firstAnswer, setFirstAnswer] = useState("");
+	const [secondAnswer, setSecondAnswer] = useState("");
+	const { user } = useAuth();
 
-	const handleAnswerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setAnswer(e.target.value);
-		// 입력 후 스크롤을 맨 아래로 이동 (마지막 줄만 보이게)
-		setTimeout(() => {
-			if (textareaRef.current) {
-				textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
-			}
-		}, 0);
+	if (!user) {
+		return (
+			<main className={styles.itemGenContainer}>
+				<LoginPromptModal />
+			</main>
+		);
+	}
+
+	const { addGenerated, generateObject, generateLoading } = useObjects();
+	const [questionIndex, setQuestionIndex] = useState(
+		() => user?.questionIndex ?? 0,
+	);
+	const [firstQuestion, setFirstQuestion] = useState(
+		getQuestionByIndex(questionIndex),
+	);
+	const [secondQuestion, setSecondQuestion] = useState("");
+	const [generatedObject, setGeneratedObject] = useState<BaseObject | null>(
+		null,
+	);
+
+	const textRef = useRef<HTMLTextAreaElement>(null);
+
+	useEffect(() => {
+		setFirstQuestion(getQuestionByIndex(questionIndex));
+	}, [questionIndex]);
+
+	const handleFirstSubmit = async () => {
+		// get second question
+		const secondQ = await getSecondQ(firstAnswer, questionIndex);
+		setSecondQuestion(secondQ);
 	};
 
-	const handleSubmit = () => {
-		if (answer.trim()) {
-			// TODO: 다음 질문으로 이동하거나 결과 처리 로직 구현
-			// 예: setCurrentQuestionIndex(currentQuestionIndex + 1);
-			// setAnswer("");
-			console.log("답변 제출:", answer);
-		}
+	const handleSecondSubmit = async () => {
+		// generate object
+		const obj = await generateObject(
+			firstQuestion,
+			firstAnswer,
+			secondQuestion,
+			secondAnswer,
+		);
+		setGeneratedObject(obj);
 	};
 
-	const handleEndGeneration = () => {
-		// TODO: 생성 종료 로직 구현
+	const handleAddItem = async () => {
+		if (!generatedObject) return;
+		await addGenerated(generatedObject.id);
 		navigate("/home");
 	};
-
-	// 답변이 변경될 때마다 스크롤을 맨 아래로
-	useEffect(() => {
-		if (textareaRef.current) {
-			textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
-		}
-	}, [answer]);
+	const handleRegenerate = () => {
+		setSecondQuestion("");
+		setGeneratedObject(null);
+		setSecondAnswer("");
+	};
 
 	return (
 		<main className={styles.itemGenContainer}>
-			{/* Background Image */}
-			<img
-				src={itemGen1Svg}
-				alt="Item Generation Background"
-				className={styles.backgroundImage}
-			/>
+			{/* Background blob */}
 
 			{/* End Generation Button - Top Right */}
 			<button
 				type="button"
 				className={styles.endButton}
-				onClick={handleEndGeneration}
+				onClick={() => navigate("/home")}
 			>
 				생성 종료
 			</button>
@@ -62,30 +85,79 @@ const ItemGen = () => {
 			<div className={styles.contentWrapper}>
 				<div className={styles.centerContainer}>
 					{/* Question Display Area */}
-					<div className={styles.questionArea}>
-						<h1 className={styles.questionText}>{question}</h1>
-					</div>
-
-					{/* Answer Input Area */}
-					<div className={styles.answerArea}>
-						<textarea
-							ref={textareaRef}
-							placeholder="답변을 입력해주세요!"
-							className={styles.answerInput}
-							value={answer}
-							onChange={handleAnswerChange}
-							rows={1}
-						/>
-						{/* Input Button */}
-						<button
-							type="button"
-							className={styles.inputButton}
-							onClick={handleSubmit}
-							disabled={!answer.trim()}
-						>
-							입력
-						</button>
-					</div>
+					{generatedObject ? (
+						<div>
+							<h1 className={styles.titleText}>{generatedObject.name}</h1>
+							<img
+								className={styles.imgWrapper}
+								src={generatedObject.currentImageSet.src}
+								alt={`a ${generatedObject.name} with color ${generatedObject.currentImageSet.name}`}
+							/>
+							<p className={styles.bodyText}>{generatedObject.description}</p>
+							<div className={styles.buttonRow}>
+								<button
+									type="button"
+									className={styles.modalButton}
+									onClick={handleAddItem}
+								>
+									내 아이템에 추가
+								</button>
+								<button
+									type="button"
+									className={styles.modalButton}
+									onClick={handleRegenerate}
+								>
+									다시 생성하기
+								</button>
+							</div>
+						</div>
+					) : (
+						<>
+							{generateLoading ? (
+								<h1 className={styles.questionText}>답변을 분석 중이에요</h1>
+							) : (
+								<div className={styles.questionArea}>
+									<h1 className={styles.questionText}>
+										{secondQuestion ? secondQuestion : firstQuestion}
+									</h1>
+								</div>
+							)}
+							{/* Answer Input Area */}
+							{!generateLoading && (
+								<div className={styles.answerArea}>
+									<textarea
+										ref={textRef}
+										placeholder="답변을 입력해주세요!"
+										className={styles.answerInput}
+										value={secondQuestion ? secondAnswer : firstAnswer}
+										onChange={(e) => {
+											if (secondQuestion) {
+												setSecondAnswer(e.target.value);
+											} else {
+												setFirstAnswer(e.target.value);
+											}
+										}}
+										rows={1}
+									/>
+									{/* Input Button */}
+									<button
+										type="button"
+										className={styles.inputButton}
+										onClick={
+											secondQuestion ? handleSecondSubmit : handleFirstSubmit
+										}
+										disabled={
+											secondQuestion
+												? !secondAnswer.trim()
+												: !firstAnswer.trim()
+										}
+									>
+										입력
+									</button>
+								</div>
+							)}
+						</>
+					)}
 				</div>
 			</div>
 		</main>
@@ -93,4 +165,3 @@ const ItemGen = () => {
 };
 
 export default ItemGen;
-

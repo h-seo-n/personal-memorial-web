@@ -1,6 +1,7 @@
 import {
 	type ReactNode,
 	createContext,
+	useCallback,
 	useContext,
 	useEffect,
 	useState,
@@ -29,12 +30,22 @@ interface SignupData {
 	name: string;
 }
 
+interface VerifyResponse {
+	valid: boolean;
+	user: {
+		id: string;
+		name: string;
+		email: string;
+	};
+}
+
 interface AuthContextType {
 	user: User | null; // get theme
-	isLoading: ConstrainBoolean;
+	isLoading: boolean;
 	signUp: (data: SignupData) => Promise<void>;
 	login: (data: LoginData) => Promise<void>;
 	logout: () => void;
+	fetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,25 +54,50 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// 앱 렌더 시 저장된 토큰 있는지 확인
+	const fetchUser = useCallback(async () => {
+		const token = localStorage.getItem("authToken");
+		if (!token) {
+			setUser(null);
+			return;
+		}
+
+		try {
+			const response = await apiClient.get<User>("/auth/profile");
+			setUser(response.data);
+		} catch (error) {
+			console.error(error);
+			localStorage.removeItem("authToken");
+			setUser(null);
+		}
+	}, []);
+
+	// 앱 렌더 시 저장된 토큰 있는지 확인, 있으면 user 불러옴
 	useEffect(() => {
-		const checkLogined = async () => {
+		const checkLoggedIn = async () => {
 			// 저장된 인증 토큰 있는지 확인 (있으면 로그인 유지)
 			const token = localStorage.getItem("authToken");
 
 			if (token) {
 				try {
-					const response = await apiClient.get<User>("/auth/verify");
-					setUser(response.data);
+					const response = await apiClient.get<VerifyResponse>("/auth/verify");
+
+					if (response.data.valid) {
+						await fetchUser();
+					} else {
+						localStorage.removeItem("authToken");
+						setUser(null);
+					}
 				} catch (error) {
 					localStorage.removeItem("authToken");
+					setUser(null);
 				}
+			} else {
+				setUser(null);
 			}
 			setIsLoading(false);
-			// end of checkLogined()
 		};
-		checkLogined();
-	}, []);
+		void checkLoggedIn();
+	}, [fetchUser]);
 
 	/* 회원가입 함수 */
 	const signUp = async (data: SignupData) => {
@@ -71,12 +107,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			password: data.password,
 			name: data.name,
 		});
-		const { token } = response.data.token;
+		const { token } = response.data;
 		localStorage.setItem("authToken", token);
 
-		// signup 후 자동 로그인
-		const userResponse = await apiClient.get<User>("/auth/profile");
-		setUser(userResponse.data);
+		await fetchUser();
 	};
 
 	const login = async (data: LoginData) => {
@@ -86,12 +120,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		});
 		// 로그인 상태
 		const { token } = response.data;
-		console.log(token);
 		localStorage.setItem("authToken", token);
 
 		// 유저 정보
-		const userResponse = await apiClient.get<User>("/auth/profile");
-		setUser(userResponse.data);
+		await fetchUser();
 	};
 
 	/* 로그아웃 함수 */
@@ -102,7 +134,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, isLoading, signUp, login, logout }}>
+		<AuthContext.Provider
+			value={{ user, isLoading, signUp, login, logout, fetchUser }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);

@@ -28,17 +28,14 @@ export const Sidebar = ({
 	);
 
 	// for mapping to item cards
-	const [renderObject, setRenderObject] = useState<
-		BaseObject[] | SceneObject[]
-	>(
+	const renderObject: (BaseObject | SceneObject)[] =
 		activeTab === "Inventory"
 			? tabInventory === "Floor"
 				? propObjects
 				: wallObjects
 			: tabMyitem === "Generated"
 				? generatedObjects
-				: sceneObjects,
-	);
+				: sceneObjects;
 
 	return (
 		activeTab && (
@@ -127,13 +124,15 @@ export const Sidebar = ({
 									<img src={r.currentImageSet.src} alt={r.description} />
 								</button>
 							))
-						: renderObject.map((r: BaseObject) => (
-								<InventoryItem
-									key={r.id}
-									item={r}
-									onClickPreview={() => onClickPreview(r)}
-								/>
-							))}
+						: renderObject.map((r: BaseObject) =>
+								activeTab === "MyItem" && tabMyitem === "NOW" ? null : (
+									<InventoryItem
+										key={r.id}
+										item={r}
+										onClickPreview={() => onClickPreview(r)}
+									/>
+								),
+							)}
 				</div>
 			</div>
 		)

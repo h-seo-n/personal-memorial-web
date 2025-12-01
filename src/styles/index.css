@@ -1,14 +1,14 @@
 @font-face {
-	font-family: 'LaundryGothic';
-	src: url('/fonts/LaundryGothic-Regular.woff') format('woff');
+	font-family: "LaundryGothic";
+	src: url("/fonts/LaundryGothic-Regular.woff") format("woff");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'LaundryGothic';
-	src: url('/fonts/LaundryGothic-Bold.woff') format('woff');
+	font-family: "LaundryGothic";
+	src: url("/fonts/LaundryGothic-Bold.woff") format("woff");
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
@@ -16,7 +16,7 @@
 
 * {
 	box-sizing: border-box;
-	font-family: 'LaundryGothic', sans-serif;
+	font-family: "LaundryGothic", sans-serif;
 }
 
 html,

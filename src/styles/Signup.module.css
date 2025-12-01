@@ -38,9 +38,8 @@
 	color: white;
 	margin: 0;
 	margin-bottom: 5px;
-	font-family: 'LaundryGothic', sans-serif;
+	font-family: "LaundryGothic", sans-serif;
 }
-
 
 .formWrapper {
 	position: relative;
@@ -59,7 +58,7 @@
 	width: 100%;
 	padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 2vw, 1.5rem);
 	font-size: clamp(16px, 2vw, 20px);
-	font-family: 'LaundryGothic', sans-serif;
+	font-family: "LaundryGothic", sans-serif;
 	border: 2px solid rgba(0, 0, 0, 0.2);
 	border-radius: 8px;
 	background-color: rgba(0, 0, 0, 0.2);
@@ -91,7 +90,7 @@
 	border-radius: 100px;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	font-family: 'LaundryGothic', sans-serif;
+	font-family: "LaundryGothic", sans-serif;
 	margin-top: 25px;
 	box-sizing: border-box;
 }
@@ -129,7 +128,7 @@
 	border: none;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	font-family: 'LaundryGothic', sans-serif;
+	font-family: "LaundryGothic", sans-serif;
 	box-sizing: border-box;
 }
 
@@ -172,4 +171,3 @@
 		margin-top: 12px;
 	}
 }
-

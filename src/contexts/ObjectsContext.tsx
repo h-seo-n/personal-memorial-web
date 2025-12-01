@@ -24,11 +24,23 @@ interface ObjectContextType {
 	sceneObjects: SceneObject[];
 
 	isLoading: boolean;
+	delLoading: boolean;
+	generateLoading: boolean;
 	error: string | null;
+	handleAxiosError: (error: unknown, context: string) => void;
 
 	fetchModified: () => Promise<void>;
 	updateModified: (id: string, object: SceneObject) => Promise<void>;
 	addModified: (object: SceneObject) => Promise<SceneObject>;
+
+	generateObject: (
+		q1: string,
+		a1: string,
+		q2: string,
+		a2: string,
+	) => Promise<BaseObject>;
+	addGenerated: (id: string) => Promise<void>;
+	deleteModified: (id: string, isUserMade: boolean) => Promise<void>;
 }
 
 interface CurrentImageSet {
@@ -53,7 +65,7 @@ interface ApiSceneObject extends ApiBaseObject {
 	coordinates: { x: number; y: number };
 }
 
-export interface ApiModifiedCreateRequest {
+interface ApiModifiedCreateRequest {
 	name: string;
 	itemFunction: ItemFunction;
 	coordinates: { x: number; y: number };
@@ -64,7 +76,7 @@ export interface ApiModifiedCreateRequest {
 	currentImageSetId: string;
 	onType: OnType;
 }
-export interface ApiModifiedEditRequest {
+interface ApiModifiedEditRequest {
 	name?: string;
 	description?: string;
 	itemFunction?: string;
@@ -74,8 +86,6 @@ export interface ApiModifiedEditRequest {
 	currentImageSetId?: string;
 	onType: OnType;
 }
-
-const ObjectsContext = createContext<ObjectContextType | undefined>(undefined);
 
 const findCurrentImageSetId = (obj: ApiBaseObject) => {
 	const id = obj.imageSets.find((i) => i.name === obj.currentImageSet.name)._id;
@@ -103,15 +113,19 @@ const mapApiModifiedToSceneObject = (obj: ApiSceneObject): SceneObject => ({
 	additionalData: obj.additionalData ?? undefined,
 });
 
+const ObjectsContext = createContext<ObjectContextType | undefined>(undefined);
+
 export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 	const [inventoryObjects, setInventoryObjects] = useState<BaseObject[]>([]);
 	const [generatedObjects, setGeneratedObjects] = useState<BaseObject[]>([]);
 	const [sceneObjects, setSceneObjects] = useState<SceneObject[]>([]);
 
 	const [isLoading, setIsLoading] = useState(true);
+	const [generateLoading, setGenerateLoading] = useState(false);
+	const [delLoading, setDelLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const { user } = useAuth();
+	const { user, fetchUser } = useAuth();
 
 	const handleAxiosError = useCallback((error: unknown, context: string) => {
 		if (isAxiosError(error)) {
@@ -243,6 +257,73 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 		[handleAxiosError],
 	);
 
+	/**
+	 * 1차/2차 질문 & 답변을 모두 이용해
+	 * 백엔드에서 객체를 생성하고, mapApiToBaseObject로 변환해서 돌려줍니다.
+	 */
+	const generateObject = useCallback(
+		async (
+			question1: string,
+			answer1: string,
+			question2: string,
+			answer2: string,
+		) => {
+			setGenerateLoading(true);
+			try {
+				const query = `Q1:${question1}, A1:${answer1} / Q2:${question2}, A2:${answer2}`;
+				const response = await apiClient.post("/object", {
+					content: query,
+				});
+
+				const generatedObject = mapApiToBaseObject(response.data);
+				return generatedObject;
+			} catch (error) {
+				handleAxiosError(error, "object generation");
+			} finally {
+				setGenerateLoading(false);
+			}
+		},
+		[handleAxiosError],
+	);
+
+	/**
+	 * 팝업에서 "내 아이템에 추가" -> generated에 저장.(내아이템>생성)
+	 */
+	const addGenerated = useCallback(
+		async (id: string) => {
+			setGenerateLoading(true);
+			try {
+				const response = await apiClient.post("/object/add", {
+					objectId: id,
+				});
+				await fetchGenerated(); // 내 아이템 > 생성 목록
+				await fetchUser(); // 다음 questionIndex
+			} catch (error) {
+				handleAxiosError(error, "add generated object");
+			} finally {
+				setGenerateLoading(false);
+			}
+		},
+		[fetchGenerated, handleAxiosError, fetchUser],
+	);
+
+	const deleteModified = useCallback(
+		async (id: string, isUserMade: boolean) => {
+			setDelLoading(true);
+			try {
+				await apiClient.delete(`/modified/${id}`);
+				if (isUserMade) await fetchGenerated();
+				await fetchModified();
+				await fetchUser();
+			} catch (error) {
+				handleAxiosError(error, "delete modified object");
+			} finally {
+				setDelLoading(false);
+			}
+		},
+		[fetchModified, fetchUser, handleAxiosError, fetchGenerated],
+	);
+
 	// 앱 렌더 시 서버에서 받아올 아이템들 업데이트
 	useEffect(() => {
 		const loadNull = () => {
@@ -273,9 +354,15 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 			sceneObjects,
 			isLoading,
 			error,
+			handleAxiosError,
 			fetchModified,
 			updateModified,
 			addModified,
+			generateObject,
+			addGenerated,
+			generateLoading,
+			delLoading,
+			deleteModified,
 		}),
 		[
 			inventoryObjects,
@@ -283,9 +370,15 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 			sceneObjects,
 			isLoading,
 			error,
+			handleAxiosError,
 			fetchModified,
 			updateModified,
 			addModified,
+			generateObject,
+			addGenerated,
+			generateLoading,
+			delLoading,
+			deleteModified,
 		],
 	);
 

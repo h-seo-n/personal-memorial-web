@@ -15,7 +15,7 @@ const QUESTIONS = [
  * 주어진 questionIndex에 해당하는 질문을 돌려줍니다.
  * index 범위를 벗어나면 0번째 질문을 사용합니다.
  */
-const getQuestionByIndex = (questionIndex: number): string => {
+export const getQuestionByIndex = (questionIndex: number): string => {
 	if (questionIndex < 0 || questionIndex >= QUESTIONS.length) {
 		return QUESTIONS[0];
 	}
@@ -30,28 +30,11 @@ export const getSecondQ = async (answer1: string, questionIndex: number) => {
 	const question1 = getQuestionByIndex(questionIndex);
 	const query = `Q1:${question1}, A1:${answer1}`;
 
-	const response = await apiClient.post("/second-question", {
+	const response = await apiClient.post("/object/followup", {
 		content: query,
 	});
-
-	return response.data;
+	const { question } = response.data;
+	return question;
 };
 
-/**
- * 1차/2차 질문 & 답변을 모두 이용해
- * 백엔드에서 객체를 생성하고, mapApiToBaseObject로 변환해서 돌려줍니다.
- */
-export const answerSecondQ = async (
-	answer1: string,
-	question1: string,
-	question2: string,
-	answer2: string,
-) => {
-	const query = `Q1:${question1}, A1:${answer1} / Q2:${question2}, A2:${answer2}`;
-	const response = await apiClient.post("/object", {
-		content: query,
-	});
-
-	const generatedObject = mapApiToBaseObject(response.data);
-	return generatedObject;
-};
+// generateObject, addGenerated : inside ObjectContext

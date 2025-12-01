@@ -58,7 +58,7 @@
 	border-radius: 100px;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	font-family: 'LaundryGothic', sans-serif;
+	font-family: "LaundryGothic", sans-serif;
 	font-size: clamp(40px, 6vw, 80px);
 	font-weight: 900;
 	color: rgb(131, 125, 125);
@@ -95,4 +95,3 @@
 		padding: 0.5rem;
 	}
 }
-
