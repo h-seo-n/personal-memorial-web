@@ -96,7 +96,7 @@ const DropSurface = ({
 			return { backgroundColor: "rgba(0,255,0,0.1)" }; // green hue for available
 		}
 		if (isOver && !canDrop) {
-			return { backgroundColor: "rgba(255,0,0,0.1)" }; // red hue for not available
+			return { backgroundColor: "rgba(237, 0, 0, 0.1)" }; // red hue for not available
 		}
 		return {};
 	};
