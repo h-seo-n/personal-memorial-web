@@ -53,7 +53,7 @@ export const Sidebar = ({
 						onClick={() => setActiveTab(null)}
 					>
 						<img
-							src="../../public/images/button-minimize-ui.svg"
+							src="/images/button-minimize-ui.svg"
 							alt="sidebar minimize button"
 						/>
 					</button>

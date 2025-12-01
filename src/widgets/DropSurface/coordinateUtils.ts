@@ -1,5 +1,5 @@
 const DEG_TO_RAD = Math.PI / 180;
-const ROTATE_X_DEG = 70;
+const ROTATE_X_DEG = 60;
 const ROTATE_Z_DEG = 45;
 const FLOOR_SIZE = 540;
 const COS_X = Math.cos(ROTATE_X_DEG * DEG_TO_RAD);
@@ -42,7 +42,7 @@ export const getStandardCoordinates = (
 	rect: DOMRect,
 ): [number, number] => {
 	const x = (clientX - rect.left) / rect.width;
-	const y = (clientX - rect.top) / rect.height;
+	const y = (clientY - rect.top) / rect.height;
 
 	return [x, y];
 };
