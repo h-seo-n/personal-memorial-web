@@ -39,9 +39,9 @@
 	font-size: clamp(16px, 2vw, 20px);
 	font-family: 'LaundryGothic', sans-serif;
 	font-weight: 700;
-	color: white;
-	background-color: rgba(107, 78, 142, 0.8);
-	border: none;
+	color: rgb(0, 0, 0);
+	background-color: rgba(255, 255, 255, 0.8);
+	border: 2px solid #000000;
 	border-radius: 100px;
 	cursor: pointer;
 	transition: all 0.3s ease;
@@ -78,7 +78,7 @@
 	width: 100%;
 	max-width: 800px;
 	min-width: 320px;
-	background: rgba(128, 128, 128, 0.3);
+	background: rgba(255, 255, 255, 0.3);
 	border-radius: clamp(20px, 4vw, 30px);
 	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 	display: flex;
@@ -113,13 +113,15 @@
 .answerArea {
 	width: 100%;
 	box-sizing: border-box;
+	position: relative;
 }
 
 .answerInput {
 	width: 100%;
 	padding: clamp(1rem, 2vw, 1.25rem) clamp(1.5rem, 2vw, 2rem);
-	font-size: clamp(16px, 2vw, 20px);
-	font-family: 'LaundryGothic', sans-serif;
+	padding-right: clamp(6rem, 10vw, 8rem); /* 오른쪽 버튼 자리 확보 */
+	font-size: clamp(14px, 1.8vw, 18px);
+	font-family: "LaundryGothic", sans-serif;
 	border: none;
 	border-radius: 12px;
 	background-color: white;
@@ -127,8 +129,11 @@
 	outline: none;
 	transition: all 0.3s ease;
 	box-sizing: border-box;
-	resize: vertical;
-	min-height: 120px;
+	height: 70px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	resize: none;
+	line-height: 1.5;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -137,6 +142,48 @@
 }
 
 .answerInput::placeholder {
+	color: rgba(0, 0, 0, 0.5);
+	font-size: clamp(14px, 1.8vw, 18px);
+}
+
+/* Input Button - 입력칸 오른쪽 안쪽에 위치 */
+.inputButton {
+	position: absolute;
+	right: clamp(0.75rem, 1.5vw, 1rem);
+	top: 50%;
+	transform: translateY(-50%);
+	padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem);
+	font-size: clamp(14px, 1.8vw, 18px);
+	font-family: "LaundryGothic", sans-serif;
+	font-weight: 700;
+	color: #000;
+	background-color: #ffffff;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 999px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.inputButton:hover:not(:disabled) {
+	background-color: #f4f4f4;
+	transform: translateY(-50%) translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.inputButton:active:not(:disabled) {
+	transform: translateY(-50%);
+	box-shadow: none;
+}
+
+.inputButton:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+	background-color: #e0e0e0;
 	color: rgba(0, 0, 0, 0.5);
 }
 
@@ -161,8 +208,15 @@
 	}
 
 	.answerInput {
-		min-height: 100px;
+		height: 70px;
 		padding: 1rem 1.25rem;
+		padding-right: 6rem;
+	}
+
+	.inputButton {
+		right: 0.75rem;
+		padding: 0.5rem 1rem;
+		font-size: 14px;
 	}
 }
 
@@ -194,9 +248,16 @@
 	}
 
 	.answerInput {
-		min-height: 90px;
+		height: 64px;
 		padding: 0.75rem 1rem;
+		padding-right: 5.5rem;
 		font-size: 16px;
+	}
+
+	.inputButton {
+		right: 0.5rem;
+		padding: 0.4rem 0.8rem;
+		font-size: 14px;
 	}
 }
 

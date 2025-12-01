@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme4Svg from "/images/theme4.svg";
+import themeGenSvg from "/images/themeGen.svg";
+import apiClient from "../shared/api";
 import styles from "../styles/Theme-Q.module.css";
 
 interface Question {
@@ -47,21 +49,64 @@ const ThemeQ = () => {
 	const navigate = useNavigate();
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [answer, setAnswer] = useState("");
+	const [answers, setAnswers] = useState<string[]>([]);
 	const [isAnalyzing, setIsAnalyzing] = useState(false);
+	const [showResult, setShowResult] = useState(false);
+	const [resultDescription, setResultDescription] = useState("");
+	const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
+	const [isLoadingResult, setIsLoadingResult] = useState(false);
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	const currentQuestion = questions[currentQuestionIndex];
 	const isLastQuestion = currentQuestionIndex === questions.length - 1;
 	const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
-	const handleNext = () => {
+	const handleAnswerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setAnswer(e.target.value);
+		// 입력 후 스크롤을 맨 아래로 이동 (마지막 줄만 보이게)
+		setTimeout(() => {
+			if (textareaRef.current) {
+				textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+			}
+		}, 0);
+	};
+
+	const handleNext = async () => {
 		if (answer.trim()) {
+			const updatedAnswers = [...answers, answer.trim()];
+			setAnswers(updatedAnswers);
+
 			if (isLastQuestion) {
 				// 마지막 질문이면 분석 중 화면 표시
 				setIsAnalyzing(true);
-				// 3초 후 홈으로 이동
-				setTimeout(() => {
-					navigate("/home");
-				}, 3000);
+				
+				// API 호출하여 결과 가져오기
+				try {
+					setIsLoadingResult(true);
+					// TODO: 실제 API 엔드포인트로 교체 필요
+					// const response = await apiClient.post("/theme/generate", {
+					// 	answers: updatedAnswers,
+					// });
+					// setResultDescription(response.data.description);
+					// setResultImageUrl(response.data.imageUrl);
+					
+					// 임시로 답변 기반 설명 생성
+					const description = `당신의 답변을 바탕으로 특별한 공간을 준비했습니다. ${updatedAnswers.join(", ")}`;
+					setResultDescription(description);
+					setResultImageUrl(null); // 실제 이미지 URL로 교체 필요
+					
+					// 3초 후 결과 페이지 표시
+					setTimeout(() => {
+						setIsAnalyzing(false);
+						setShowResult(true);
+						setIsLoadingResult(false);
+					}, 3000);
+				} catch (error) {
+					console.error("Theme generation error:", error);
+					setIsAnalyzing(false);
+					setIsLoadingResult(false);
+					alert("테마 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
+				}
 			} else {
 				// 다음 질문으로 이동
 				setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -69,6 +114,61 @@ const ThemeQ = () => {
 			}
 		}
 	};
+
+	// 답변이 변경되거나 질문이 바뀔 때마다 스크롤을 맨 아래로
+	useEffect(() => {
+		if (textareaRef.current) {
+			textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+		}
+	}, [answer, currentQuestionIndex]);
+
+	// 결과 페이지가 표시되면 3초 후 자동으로 Home으로 이동
+	useEffect(() => {
+		if (showResult) {
+			const timer = setTimeout(() => {
+				navigate("/home");
+			}, 3000);
+
+			return () => clearTimeout(timer);
+		}
+	}, [showResult, navigate]);
+
+	// 결과 페이지
+	if (showResult) {
+		return (
+			<main className={styles.resultContainer}>
+				{/* Background Image */}
+				<img
+					src={themeGenSvg}
+					alt="Theme Generation Background"
+					className={styles.resultBackgroundImage}
+				/>
+
+				{/* Content Wrapper */}
+				<div className={styles.resultContentWrapper}>
+					{/* Description Section */}
+					<div className={styles.resultDescription}>
+						<p>{resultDescription}</p>
+					</div>
+
+					{/* Generated Image Section */}
+					<div className={styles.resultImageContainer}>
+						{resultImageUrl ? (
+							<img
+								src={resultImageUrl}
+								alt="Generated Theme"
+								className={styles.resultImage}
+							/>
+						) : (
+							<div className={styles.resultImagePlaceholder}>
+								생성된 이미지가 여기에 표시됩니다
+							</div>
+						)}
+					</div>
+				</div>
+			</main>
+		);
+	}
 
 	// 분석 중 화면
 	if (isAnalyzing) {
@@ -90,7 +190,7 @@ const ThemeQ = () => {
 			{/* Header Section */}
 			<div className={styles.header}>
 				<div className={styles.headerLeft}>
-					<div className={styles.icon}>💭</div>
+					<div className={styles.icon}></div>
 					<div className={styles.headerText}>{currentQuestion.headerText}</div>
 				</div>
 				<div className={styles.progressBar}>
@@ -127,11 +227,12 @@ const ThemeQ = () => {
 
 				{/* Answer Input */}
 				<textarea
+					ref={textareaRef}
 					placeholder="답변을 입력해주세요!"
 					className={styles.answerInput}
 					value={answer}
-					onChange={(e) => setAnswer(e.target.value)}
-					rows={4}
+					onChange={handleAnswerChange}
+					rows={1}
 				/>
 
 				{/* Next Button */}
@@ -141,7 +242,7 @@ const ThemeQ = () => {
 					onClick={handleNext}
 					disabled={!answer.trim()}
 				>
-					{isLastQuestion ? "완료" : "다음"}
+					입력
 				</button>
 			</div>
 		</main>
