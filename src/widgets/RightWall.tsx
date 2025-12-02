@@ -14,7 +14,7 @@ const RightWall = (props: PropsWithChildren<DropHandler>) => {
 			className={styles.rightWall}
 		>
 			<div
-				className={styles.wallInner}
+				className={styles.rightWallInner}
 				style={user ? { backgroundColor: `${user.theme.rightWallColor}` } : {}}
 			>
 				{props.children}
