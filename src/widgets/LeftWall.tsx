@@ -10,7 +10,7 @@ const LeftWall = (props: PropsWithChildren<DropHandler>) => {
 	return (
 		<DropSurface {...props} surfaceType="LeftWall" className={styles.leftWall}>
 			<div
-				className={styles.wallInner}
+				className={styles.leftWallInner}
 				style={user ? { backgroundColor: `${user.theme.leftWallColor}` } : {}}
 			>
 				{props.children}
