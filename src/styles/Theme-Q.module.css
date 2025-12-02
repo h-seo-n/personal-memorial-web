@@ -156,13 +156,12 @@
 .exampleText:nth-child(2) {
 	border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
-/* Answer Input – 아래 검은 바 느낌 */
 .answerInput {
 	position: fixed;
 	left: 50%;
 	transform: translateX(-50%);
 
-	bottom: 8rem;
+	bottom: 8rem; /* default */
 
 	width: min(900px, 100% - 3rem);
 	padding: 1rem 1.5rem;
@@ -181,6 +180,43 @@
 	overflow-x: hidden;
 	resize: none;
 	line-height: 1.5;
+}
+
+/* --- media queries must come AFTER --- */
+
+@media (max-height: 600px) {
+	.answerInput {
+		bottom: 1rem;
+	}
+	.nextButton {
+		bottom: 1.8rem;
+	}
+}
+
+@media (min-height: 601px) and (max-height: 700px) {
+	.answerInput {
+		bottom: 2rem;
+	}
+
+	.nextButton {
+		bottom: 2.8rem;
+	}
+
+}
+
+@media (min-height: 701px) and (max-height: 770px) {
+	.answerInput {
+		bottom: 4rem;
+	}
+	.nextButton {
+		bottom: 0rem;
+	}
+
+}
+
+.answerInput::placeholder {
+	color: rgba(255, 255, 255, 0.7);
+	font-size: clamp(14px, 1.8vw, 18px);
 }
 
 /* 입력 내용 흐릿 안내 텍스트 */
