@@ -76,9 +76,6 @@
 	background-color: rgba(255, 255, 255, 0.3);
 }
 
-.createButton:active {
-	transform: translate(-50%, -50%);
-}
 
 /* 모바일 및 작은 화면 대응 */
 @media (max-width: 768px) {
