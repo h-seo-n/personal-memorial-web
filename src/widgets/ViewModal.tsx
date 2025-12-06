@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { ImageSet } from "../shared/types";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
@@ -9,6 +10,7 @@ interface ViewModalProps {
 	currentImageSet: ImageSet;
 	imageSets: ImageSet[];
 	onClose: () => void;
+	itemFunction?: "Gallery" | "Link" | "Board" | null;
 }
 
 export const ViewModal = ({
@@ -17,8 +19,17 @@ export const ViewModal = ({
 	imageSets,
 	description,
 	onClose,
+	itemFunction,
 }: ViewModalProps) => {
 	const [color, setColor] = useState(currentImageSet.name);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (itemFunction === "Gallery") {
+			navigate("/gallery");
+			onClose();
+		}
+	}, [itemFunction, navigate, onClose]);
 
 	return (
 		<div className={styles.modalWrapper}>
