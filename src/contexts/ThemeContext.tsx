@@ -17,11 +17,13 @@ export interface QA {
 
 interface ThemeContextType {
 	themeLoading: boolean;
+	analysisLoading: boolean;
 	fetchThemeQuestions: () => Promise<QA[] | undefined>;
 	fetchThemeList: () => Promise<ThemeMetadata[] | undefined>;
 	analyzeTheme: (
 		responses: QA[],
 	) => Promise<{ themeMeta: ThemeMetadata; reason: string } | undefined>;
+	saveTheme: (themeId: string) => Promise<void>;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -33,6 +35,7 @@ export const ThemeContextProvider = ({
 
 	const [theme, setTheme] = useState<Theme | null>(null);
 
+	const [analysisLoading, setAnalysisLoading] = useState<boolean>(false);
 	const [themeLoading, setThemeLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -62,9 +65,10 @@ export const ThemeContextProvider = ({
 		}
 	}, [handleAxiosError]);
 
+	// gets analyzed theme; doesn't include save
 	const analyzeTheme = useCallback(
 		async (responses: QA[]) => {
-			setThemeLoading(true);
+			setAnalysisLoading(true);
 			try {
 				const response = await apiClient.post("/onboarding/theme/analyze", {
 					responses,
@@ -73,12 +77,27 @@ export const ThemeContextProvider = ({
 				const themeMeta = theme;
 				const reason = analysis.reason;
 
-				setThemeLoading(false);
+				setAnalysisLoading(false);
 
 				return { themeMeta, reason };
 			} catch (error) {
 				handleAxiosError(error, "analyze theme");
-				setThemeLoading(false);
+				setAnalysisLoading(false);
+			}
+		},
+		[handleAxiosError],
+	);
+
+	// saves final selected theme to user -> 부르고 나서 다시 user fetch
+	const saveTheme = useCallback(
+		async (themeId: string) => {
+			setThemeLoading(true);
+			try {
+				await apiClient.put(`/users/theme/${themeId}`);
+			} catch (error) {
+				handleAxiosError(error, "save theme to user");
+			} finally {
+				setAnalysisLoading(false);
 			}
 		},
 		[handleAxiosError],
@@ -87,10 +106,12 @@ export const ThemeContextProvider = ({
 	return (
 		<ThemeContext.Provider
 			value={{
+				analysisLoading,
 				themeLoading,
 				fetchThemeQuestions,
 				fetchThemeList,
 				analyzeTheme,
+				saveTheme,
 			}}
 		>
 			{children}

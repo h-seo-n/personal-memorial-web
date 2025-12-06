@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme4Svg from "/images/theme4.svg";
-import themeGenSvg from "/images/themeGen.svg";
 import { useAuth } from "../contexts/AuthContext";
 import { type QA, useTheme } from "../contexts/ThemeContext";
 import styles from "../styles/Theme-Q.module.css";
@@ -46,8 +45,10 @@ const QUESTIONS: Question[] = [
 	},
 ];
 
+const THEMES: string[] = ["young", "romantic", "city", "nature", "memory"];
+
 const ThemeQ = () => {
-	const { analyzeTheme, themeLoading } = useTheme();
+	const { analyzeTheme, saveTheme, themeLoading, analysisLoading } = useTheme();
 	const { fetchUser, user } = useAuth();
 
 	const navigate = useNavigate();
@@ -55,9 +56,10 @@ const ThemeQ = () => {
 	const [answer, setAnswer] = useState("");
 	const [answers, setAnswers] = useState<string[]>([]);
 
-	const [showResult, setShowResult] = useState(false);
+	// theme selection
+	const [theme, setTheme] = useState<number | null>(null);
+
 	const [resultReason, setResultReason] = useState("");
-	const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	const currentQuestion = QUESTIONS[currentQuestionIndex];
@@ -86,8 +88,7 @@ const ThemeQ = () => {
 				}));
 				const { themeMeta, reason } = await analyzeTheme(query);
 				setResultReason(reason);
-				setResultImageUrl(`/images/theme${themeMeta.id}.png`);
-				setShowResult(true);
+				setTheme(themeMeta.id);
 			} else {
 				// 다음 질문으로 이동
 				setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -96,33 +97,19 @@ const ThemeQ = () => {
 		}
 	};
 
-	// 결과 페이지가 표시되면 3초 후 자동으로 Home으로 이동
-	useEffect(() => {
-		const run = async () => {
-			if (showResult) {
-				await fetchUser();
-				console.log(user.theme);
+	const handleSave = async () => {
+		await saveTheme(theme.toString());
+		await fetchUser();
+		navigate("/home");
+	};
 
-				const timer = setTimeout(() => {
-					navigate("/home");
-				}, 3000);
-
-				return () => clearTimeout(timer);
-			}
-		};
-
-		run();
-	}, [showResult, navigate, fetchUser, user]);
 	// 결과 페이지
-	if (showResult) {
+	if (theme) {
 		return (
 			<main className={styles.resultContainer}>
-				{/* Background Image */}
-				<img
-					src={themeGenSvg}
-					alt="Theme Generation Background"
-					className={styles.resultBackgroundImage}
-				/>
+				<button type="button" className={styles.finishBtn} onClick={handleSave}>
+					선택 완료
+				</button>
 
 				{/* Content Wrapper */}
 				<div className={styles.resultContentWrapper}>
@@ -134,10 +121,38 @@ const ThemeQ = () => {
 					{/* Generated Image Section */}
 					<div className={styles.resultImageContainer}>
 						<img
-							src={resultImageUrl}
+							src={`/images/theme${theme}.png`}
 							alt="Generated Theme"
 							className={styles.resultImage}
 						/>
+					</div>
+				</div>
+
+				{/* 다른 테마도 선택 */}
+				<div className={styles.themeListWrapper}>
+					<span className={styles.smallText}>
+						다른 테마도 선택할 수 있어요!
+					</span>
+
+					<div className={styles.themeList}>
+						{[1, 2, 3, 4, 5].map((i) => (
+							<button
+								type="button"
+								key={i}
+								className={
+									theme === i
+										? `${styles.themeListCard} ${styles.activeCard}`
+										: styles.themeListCard
+								}
+								onClick={() => setTheme(i)}
+							>
+								<img
+									className={styles.themeOptionImg}
+									alt={`preview for the ${THEMES[i - 1]} theme option.`}
+									src={`/images/theme${i}.png`}
+								/>
+							</button>
+						))}
 					</div>
 				</div>
 			</main>
@@ -145,7 +160,7 @@ const ThemeQ = () => {
 	}
 
 	// 분석 중 화면
-	if (themeLoading) {
+	if (analysisLoading) {
 		return (
 			<main className={styles.analyzingContainer}>
 				<div className={styles.analyzingWrapper}>
@@ -157,6 +172,9 @@ const ThemeQ = () => {
 				</div>
 			</main>
 		);
+	}
+	// 저장 중 화면
+	if (themeLoading) {
 	}
 
 	return (
@@ -193,8 +211,34 @@ const ThemeQ = () => {
 
 				{/* Example Answers */}
 				<div className={styles.examplesWrapper}>
-					<div className={styles.exampleText}>{currentQuestion.example1}</div>
-					<div className={styles.exampleText}>{currentQuestion.example2}</div>
+					<span className={styles.exampleTitle}>답변 예시</span>
+
+					<button
+						type="button"
+						onClick={(e) => setAnswer(e.currentTarget.textContent)}
+						className={styles.exampleText}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								e.preventDefault();
+								handleNext();
+							}
+						}}
+					>
+						{currentQuestion.example1}
+					</button>
+					<button
+						type="button"
+						onClick={(e) => setAnswer(e.currentTarget.textContent)}
+						className={styles.exampleText}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								e.preventDefault();
+								handleNext();
+							}
+						}}
+					>
+						{currentQuestion.example2}
+					</button>
 				</div>
 
 				{/* Answer Input */}
@@ -204,6 +248,12 @@ const ThemeQ = () => {
 					className={styles.answerInput}
 					value={answer}
 					onChange={handleAnswerChange}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							e.preventDefault();
+							handleNext();
+						}
+					}}
 					rows={1}
 				/>
 

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd"; // Import DndProvider
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { BiLogOut } from "react-icons/bi";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
-import apiClient from "../shared/api/index.ts";
+
 import ConfigModal from "../widgets/ConfigModal";
 import { LoginPromptModal } from "../widgets/LoginPromptModal.tsx";
 import Scene from "../widgets/Scene";
@@ -17,7 +18,7 @@ import styles from "../styles/Home.module.css";
 
 const Home = () => {
 	// TODO: Theme 수정 기능 필요
-	const { user } = useAuth();
+	const { user, logout } = useAuth();
 
 	const { sceneObjects, addModified, updateModified } = useObjects();
 
@@ -109,9 +110,7 @@ const Home = () => {
 		await updateModified(updated.id, updated);
 		setEditingObject(null);
 	};
-	/**
-	 *
-	 */
+
 	const handleClickPreview = (obj: SceneObject | BaseObject) => {
 		setViewObject(obj);
 	};
@@ -224,6 +223,18 @@ const Home = () => {
 							</div>
 						)}
 					</div>
+				</div>
+				<div className={styles.logoutRow}>
+					<button
+						type="button"
+						className={styles.btn}
+						onClick={() => {
+							logout();
+							navigate("/");
+						}}
+					>
+						<BiLogOut /> <span>로그아웃</span>
+					</button>
 				</div>
 				{/* modal for objects - renders when editingObject is present, and deletingObject is null */}
 				{editingObject && (

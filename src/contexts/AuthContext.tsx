@@ -15,8 +15,8 @@ interface User {
 	email: string;
 	theme: Theme;
 	invitation?: string;
-	objectIds: string[];
-	modifiedObjectIds: string[];
+	objectIds?: string[];
+	modifiedObjectIds?: string[];
 	createdAt: string;
 	questionIndex: number;
 }

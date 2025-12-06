@@ -130,7 +130,7 @@
 
 /* 각 줄(예시1 / 예시2) */
 .exampleText {
-	font-size: clamp(14px, 1.8vw, 18px);
+	font-size: clamp(18px, 1.8vw, 23px);
 	font-family: "LaundryGothic", sans-serif;
 	color: #000;
 	text-align: left;
@@ -152,9 +152,17 @@
 	white-space: nowrap;
 }
 
+.exampleTitle {
+	color: gray;
+	font-size: 14px;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+}
+
 /* 두 번째 줄 라벨 + 윗줄 구분선 */
 .exampleText:nth-child(2) {
 	border-top: 1px solid rgba(0, 0, 0, 0.12);
+	padding-top: 1.5rem;
 }
 .answerInput {
 	position: fixed;
@@ -180,49 +188,6 @@
 	overflow-x: hidden;
 	resize: none;
 	line-height: 1.5;
-}
-
-/* --- media queries must come AFTER --- */
-
-@media (max-height: 600px) {
-	.answerInput {
-		bottom: 1rem;
-	}
-	.nextButton {
-		bottom: 1.8rem;
-	}
-}
-
-@media (min-height: 601px) and (max-height: 700px) {
-	.answerInput {
-		bottom: 2rem;
-	}
-
-	.nextButton {
-		bottom: 2.8rem;
-	}
-
-}
-
-@media (min-height: 701px) and (max-height: 770px) {
-	.answerInput {
-		bottom: 4rem;
-	}
-	.nextButton {
-		bottom: 0rem;
-	}
-
-}
-
-.answerInput::placeholder {
-	color: rgba(255, 255, 255, 0.7);
-	font-size: clamp(14px, 1.8vw, 18px);
-}
-
-/* 입력 내용 흐릿 안내 텍스트 */
-.answerInput::placeholder {
-	color: rgba(255, 255, 255, 0.7);
-	font-size: clamp(14px, 1.8vw, 18px);
 }
 
 /* Next Button – 흰색 pill 이 바 안쪽 오른쪽에 겹쳐보이도록 */
@@ -268,6 +233,51 @@
 	background-color: #e0e0e0;
 	color: rgba(0, 0, 0, 0.5);
 }
+
+/* --- media queries must come AFTER --- */
+
+@media (max-height: 600px) {
+	.answerInput {
+		bottom: 1rem;
+	}
+	.nextButton {
+		bottom: 1.7rem;
+	}
+}
+
+@media (min-height: 601px) and (max-height: 700px) {
+	.answerInput {
+		bottom: 2rem;
+	}
+
+	.nextButton {
+		bottom: 2.8rem;
+	}
+
+}
+
+@media (min-height: 701px) and (max-height: 770px) {
+	.answerInput {
+		bottom: 4rem;
+	}
+	.nextButton {
+		bottom: 4.7rem;
+	}
+
+}
+
+.answerInput::placeholder {
+	color: rgba(255, 255, 255, 0.7);
+	font-size: clamp(14px, 1.8vw, 18px);
+}
+
+/* 입력 내용 흐릿 안내 텍스트 */
+.answerInput::placeholder {
+	color: rgba(255, 255, 255, 0.7);
+	font-size: clamp(14px, 1.8vw, 18px);
+}
+
+
 
 /* 모바일 대응 */
 @media (max-width: 768px) {
@@ -342,37 +352,27 @@
 .resultContainer {
 	position: relative;
 	width: 100%;
-	height: 100vh; /* 화면 전체 높이 사용 (필요에 따라 조절) */
-	background-color: #fffdf9; /* 이미지와 유사한 따뜻한 미색 배경 */
+	height: 100vh;
+	background-color: #FFFCF7; /* 이미지와 유사한 따뜻한 미색 배경 */
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: flex-start;
 	align-items: center;
-	overflow: hidden;
-}
+	overflow-y: auto;
 
-/* 배경 이미지 (가장 뒤로 배치) */
-.resultBackgroundImage {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover; /* 배경 꽉 채우기 */
-	z-index: 0; /* 컨텐츠보다 뒤에 위치 */
-	opacity: 0.5; /* 배경이 너무 튀지 않도록 투명도 조절 (필요시 제거) */
+	padding-top: 80px;
+	padding-bottom: 50px;
 }
 
 /* 컨텐츠 래퍼 (텍스트 + 결과 이미지) */
 .resultContentWrapper {
 	position: relative;
-	z-index: 1; /* 배경보다 위에 위치 */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 40px; /* 텍스트와 이미지 사이의 간격 */
 	padding: 0 24px; /* 좌우 여백 */
-	width: 100%;
-	max-width: 600px; /* 너무 넓어지지 않도록 제한 */
+	width: 80%;
 }
 
 /* 텍스트 영역 */
@@ -380,9 +380,77 @@
 	text-align: center;
 }
 
+.smallText {
+	font-size: 25px;
+	color: #868686;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.themeOptionImg {
+	max-width: 100px;
+}
+
+.themeListWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.themeList {
+	display: flex;
+	gap: 37px;
+	flex-direction: row;
+	flex-wrap: wrap;
+	overflow: scroll;
+	justify-content: center;
+}
+
+.themeListCard {
+	background-color: #DFF3FF;
+	border: 3px solid #cccccc;
+	border-radius: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px 15px 0 15px;
+}
+
+
+
+.themeListCard.activeCard {
+	border: 3px solid black;
+}
+
+.finishBtn {
+    position: absolute;
+    top: clamp(1rem, 3vw, 2rem);
+    right: clamp(1rem, 3vw, 2rem);
+    z-index: 10;
+    padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(13px, 2vw, 16px);
+    font-family: "LaundryGothic", sans-serif;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #000000;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.finishButton:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+
+
 .resultDescription p {
-	font-size: 22px; /* 텍스트 크기 (이미지 비율 고려) */
-	font-weight: 600; /* 굵게 */
+	font-size: 35px; /* 텍스트 크기 (이미지 비율 고려) */
+	font-weight: 300; /* 굵게 */
 	color: #111111;
 	line-height: 1.5; /* 줄간격 확보 */
 	word-break: keep-all; /* 한글 단어 단위 줄바꿈 (매우 중요) */

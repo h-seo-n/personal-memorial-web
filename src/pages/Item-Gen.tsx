@@ -78,7 +78,7 @@ const ItemGen = () => {
 				className={styles.endButton}
 				onClick={() => navigate("/home")}
 			>
-				생성 종료
+				편집 종료
 			</button>
 
 			{/* Center Container */}

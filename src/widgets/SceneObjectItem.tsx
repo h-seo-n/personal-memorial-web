@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useDrag } from "react-dnd";
-import type { DragSourceHookSpec, DragSourceMonitor } from "react-dnd";
 import type { SceneObject } from "../shared/types";
 
 const SceneObjectItem = ({
