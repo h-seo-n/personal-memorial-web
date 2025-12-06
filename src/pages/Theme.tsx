@@ -1,8 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import theme1Svg from "/images/theme1.svg";
-import theme2Svg from "/images/theme2.svg";
-import theme3Svg from "/images/theme3.svg";
+import themeSvg from "/images/theme.svg";
 import styles from "../styles/Theme.module.css";
 
 const Theme = () => {
@@ -17,32 +15,34 @@ const Theme = () => {
 		}
 	};
 
+	// 각 테마별 텍스트
+	const themeTexts = {
+		1: "만나서 반가워요!",
+		2: "이제부터, 당신이 세상을 떠난 뒤\n사람들이 찾아올 추모관을 만들 거에요.",
+		3: "몇 가지 질문으로 공간을 설정해볼게요!\n 지금 결정된 요소는 언제든 변경할 수 있어요.",
+	};
+
+	const currentText = themeTexts[currentTheme];
+
 	return (
 		<main className={styles.themeContainer}>
 			<div className={styles.contentWrapper}>
 				<img
-					src={
-						currentTheme === 1
-							? theme1Svg
-							: currentTheme === 2
-								? theme2Svg
-								: theme3Svg
-					}
-					alt={
-						currentTheme === 1
-							? "Theme 1"
-							: currentTheme === 2
-								? "Theme 2"
-								: "Theme 3"
-					}
-					className={
-						currentTheme === 1
-							? styles.theme1Image
-							: currentTheme === 2
-								? styles.theme2Image
-								: styles.theme3Image
-					}
+					src={themeSvg}
+					alt="Theme"
+					className={styles.themeImage}
 				/>
+				{/* 텍스트 구간 */}
+				<div className={styles.textSection}>
+					<p className={styles.textContent}>
+						{currentText.split('\n').map((line, index, array) => (
+							<React.Fragment key={index}>
+								{line}
+								{index < array.length - 1 && <br />}
+							</React.Fragment>
+						))}
+					</p>
+				</div>
 				<button
 					type="button"
 					className={styles.themeButton}
