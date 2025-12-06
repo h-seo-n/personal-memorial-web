@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import theme4Svg from "/images/theme4.svg";
+import themeSvg from "/images/theme.svg";
 import themeGenSvg from "/images/themeGen.svg";
 import { useAuth } from "../contexts/AuthContext";
 import { type QA, useTheme } from "../contexts/ThemeContext";
@@ -55,6 +55,7 @@ const ThemeQ = () => {
 	const [answer, setAnswer] = useState("");
 	const [answers, setAnswers] = useState<string[]>([]);
 
+	const [showTextSection, setShowTextSection] = useState(false);
 	const [showResult, setShowResult] = useState(false);
 	const [resultReason, setResultReason] = useState("");
 	const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
@@ -80,14 +81,8 @@ const ThemeQ = () => {
 			setAnswers(updatedAnswers);
 
 			if (isLastQuestion) {
-				const query: QA[] = QUESTIONS.map((q, idx) => ({
-					question: q.question,
-					answer: updatedAnswers[idx],
-				}));
-				const { themeMeta, reason } = await analyzeTheme(query);
-				setResultReason(reason);
-				setResultImageUrl(`/images/theme${themeMeta.id}.png`);
-				setShowResult(true);
+				// 마지막 질문이면 먼저 텍스트 섹션 표시
+				setShowTextSection(true);
 			} else {
 				// 다음 질문으로 이동
 				setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -95,6 +90,29 @@ const ThemeQ = () => {
 			}
 		}
 	};
+
+	// 텍스트 섹션이 표시되면 자동으로 분석 시작
+	useEffect(() => {
+		const startAnalysis = async () => {
+			if (showTextSection && answers.length === QUESTIONS.length) {
+				const query: QA[] = QUESTIONS.map((q, idx) => ({
+					question: q.question,
+					answer: answers[idx],
+				}));
+				const { themeMeta, reason } = await analyzeTheme(query);
+				setResultReason(reason);
+				setResultImageUrl(`/images/theme${themeMeta.id}.png`);
+				
+				// analyzeTheme 완료 후 3초 후에 결과 페이지로 이동
+				setTimeout(() => {
+					setShowTextSection(false);
+					setShowResult(true);
+				}, 3000);
+			}
+		};
+
+		startAnalysis();
+	}, [showTextSection, answers, analyzeTheme]);
 
 	// 결과 페이지가 표시되면 3초 후 자동으로 Home으로 이동
 	useEffect(() => {
@@ -113,6 +131,30 @@ const ThemeQ = () => {
 
 		run();
 	}, [showResult, navigate, fetchUser, user]);
+
+	// 텍스트 섹션 화면 (마지막 질문 이후)
+	if (showTextSection) {
+		return (
+			<main className={styles.textSectionContainer}>
+				{/* Background Image */}
+				<img
+					src={themeSvg}
+					alt="Theme Background"
+					className={styles.textSectionBackgroundImage}
+				/>
+
+				{/* Text Section */}
+				<div className={styles.textSectionWrapper}>
+					<div className={styles.textSectionBox}>
+						<p className={styles.textSectionContent}>
+							답변을 분석 중이에요.
+						</p>
+					</div>
+				</div>
+			</main>
+		);
+	}
+
 	// 결과 페이지
 	if (showResult) {
 		return (
@@ -150,7 +192,7 @@ const ThemeQ = () => {
 			<main className={styles.analyzingContainer}>
 				<div className={styles.analyzingWrapper}>
 					<img
-						src={theme4Svg}
+						src={themeSvg}
 						alt="loading page for analyzing theme"
 						className={styles.analyzingImage}
 					/>
@@ -222,3 +264,5 @@ const ThemeQ = () => {
 };
 
 export default ThemeQ;
+
+

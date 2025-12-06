@@ -21,8 +21,8 @@
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	width: 50%;
-	height: 70%;
+	width: 60%;
+	height: 80%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -55,17 +55,19 @@
 }
 
 .input {
-	width: 100%;
+	width: 90%;
 	padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 2vw, 1.5rem);
 	font-size: clamp(16px, 2vw, 20px);
 	font-family: "LaundryGothic", sans-serif;
 	border: 2px solid rgba(0, 0, 0, 0.2);
 	border-radius: 8px;
 	background-color: rgba(0, 0, 0, 0.2);
-	color: #000;
+	color: #ffffff;
 	outline: none;
 	transition: all 0.3s ease;
-	margin-top: 15px;
+	margin-top: 10px;
+	margin-left: 50px;
+	margin-right: 50px;
 	box-sizing: border-box;
 }
 
