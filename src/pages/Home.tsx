@@ -241,6 +241,9 @@ const Home = () => {
 						currentImageSet={viewObject.currentImageSet}
 						imageSets={viewObject.imageSets}
 						description={viewObject.description}
+						itemFunction={
+							"itemFunction" in viewObject ? viewObject.itemFunction : null
+						}
 						onClose={() => {
 							setViewObject(null);
 						}}
