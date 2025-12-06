@@ -8,6 +8,10 @@ interface ThemeMetadata {
 	name: string;
 	characteristics: string[];
 	description: string;
+	backgroundMusic: {
+		url: string;
+		name: string;
+	};
 }
 
 export interface QA {
@@ -16,6 +20,7 @@ export interface QA {
 }
 
 interface ThemeContextType {
+	themes: ThemeMetadata[];
 	themeLoading: boolean;
 	analysisLoading: boolean;
 	fetchThemeQuestions: () => Promise<QA[] | undefined>;
@@ -33,8 +38,7 @@ export const ThemeContextProvider = ({
 }: { children: React.ReactNode }) => {
 	const { handleAxiosError } = useObjects();
 
-	const [theme, setTheme] = useState<Theme | null>(null);
-
+	const [themes, setThemes] = useState<ThemeMetadata[]>([]);
 	const [analysisLoading, setAnalysisLoading] = useState<boolean>(false);
 	const [themeLoading, setThemeLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
@@ -58,6 +62,7 @@ export const ThemeContextProvider = ({
 			const response = await apiClient.get("/onboarding/themes");
 			const { themes } = response.data;
 			setThemeLoading(false);
+			setThemes(themes);
 			return themes;
 		} catch (error) {
 			handleAxiosError(error, "fetch theme list");
@@ -106,6 +111,7 @@ export const ThemeContextProvider = ({
 	return (
 		<ThemeContext.Provider
 			value={{
+				themes,
 				analysisLoading,
 				themeLoading,
 				fetchThemeQuestions,

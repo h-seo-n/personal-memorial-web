@@ -13,13 +13,14 @@ import { ViewModal } from "../widgets/ViewModal";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useObjects } from "../contexts/ObjectsContext";
+import { useTheme } from "../contexts/ThemeContext.tsx";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
 
 const Home = () => {
 	// TODO: Theme 수정 기능 필요
 	const { user, logout } = useAuth();
-
+	const { themes } = useTheme();
 	const { sceneObjects, addModified, updateModified } = useObjects();
 
 	const [mode, setMode] = useState<"Edit" | "View">(() => {
@@ -43,6 +44,13 @@ const Home = () => {
 	const [editingObject, setEditingObject] = useState<SceneObject | null>(null);
 	const [viewObject, setViewObject] = useState<SceneObject | BaseObject | null>(
 		null,
+	);
+
+	// bgm
+	const [bgm, setBgm] = useState<{ url: string; name: string }>(
+		themes.find(
+			(t) => t.backgroundMusic.name === user.theme.backgroundMusic.name,
+		).backgroundMusic,
 	);
 
 	const navigate = useNavigate();

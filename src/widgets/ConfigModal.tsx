@@ -174,7 +174,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 						<span className={styles.labelText}>기능</span>
 						<div className={styles.col}>
 							<ul className={styles.chips}>
-								{["Link", "Gallery", "Board"].map((item: ItemFunction) => (
+								{["Link", "Board"].map((item: ItemFunction) => (
 									<li key={item}>
 										<button
 											type="button"

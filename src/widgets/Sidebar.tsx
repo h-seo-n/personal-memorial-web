@@ -105,7 +105,7 @@ export const Sidebar = ({
 						</li>
 						<li className={styles.explanationBullet}>
 							{activeTab === "Inventory"
-								? "아이템을 클릭하면 변경 가능한 색상을 확인할 수 있어요."
+								? "아이템을 배치한 후 색상 수정 / 좌우 반전이 가능해요."
 								: tabMyitem === "NOW"
 									? "배치된 아이템을 모아볼 수 있어요."
 									: "내가 생성했던 아이템을 모두 모아볼 수 있어요."}
