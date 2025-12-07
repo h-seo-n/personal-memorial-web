@@ -69,6 +69,7 @@ export const End = () => {
 								saveInvite(invite);
 							}
 				}
+				disabled={!invite.trim()}
 			>
 				<FaAngleRight color="#B4B4B4" size={50} />
 			</button>
