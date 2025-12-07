@@ -7,6 +7,7 @@ import styles from "../styles/End.module.css";
 export const End = () => {
 	const [invite, setInvite] = useState("");
 	const [response, setResponse] = useState(null);
+	const [index, setIndex] = useState(0);
 	const navigate = useNavigate();
 	const saveInvite = async (invite: string | null) => {
 		const response = await apiClient.patch("/users/invitation", {
@@ -18,12 +19,23 @@ export const End = () => {
 	return (
 		<main className={styles.mainWrapper}>
 			{response ? (
-				<>
-					<div className={styles.blob} />
-					<h1 className={styles.title}>
-						또 남기고 싶은 소중한 것이 있을 때 찾아와주세요!
-					</h1>
-				</>
+				index ? (
+					<>
+						<div className={styles.blob} />
+						<h1 className={`${styles.title} ${styles.marginTitle}`}>
+							{"또 남기고 싶은 소중한 것이 있을 때\n찾아와주세요!"}{" "}
+						</h1>
+					</>
+				) : (
+					<>
+						<div className={styles.blob} />
+						<h1 className={`${styles.title} ${styles.marginTitle}`}>
+							{
+								"방금 작성한 초대장은, \n당신이 세상을 떠난 뒤에 주변인에게 발송될 거예요."
+							}
+						</h1>
+					</>
+				)
 			) : (
 				<>
 					<div className={styles.blob} />
@@ -43,10 +55,17 @@ export const End = () => {
 				className={styles.nextButton}
 				onClick={
 					response
-						? () => {
-								navigate("/");
-							}
+						? index
+							? () => {
+									// final page;
+									navigate("/");
+								}
+							: () => {
+									// explain invite meaning
+									setIndex(1);
+								}
 						: () => {
+								// input page
 								saveInvite(invite);
 							}
 				}
