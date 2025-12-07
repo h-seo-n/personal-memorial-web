@@ -15,7 +15,7 @@
 /* Floor */
 .floor {
 	position: absolute;
-	left: 50%;
+	left: 70%;
 	bottom: 108%;
 	width: 540px;
 	height: 540px;
@@ -38,7 +38,7 @@
 /* Left Wall */
 .rightWall {
 	position: absolute;
-	left: 99.5%;
+	left: 119.5%;
 	top: -20.5%;
 	width: 382px;
 	height: 330px;
@@ -58,7 +58,7 @@
 
 .leftWall {
 	position: absolute;
-	left: 0.5%;
+	left: 20.5%;
 	top: 68.1%;
 	width: 382px;
 	height: 330px;

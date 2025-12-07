@@ -20,8 +20,13 @@ import styles from "../styles/Home.module.css";
 const Home = () => {
 	// TODO: Theme 수정 기능 필요
 	const { user, logout } = useAuth();
+	const navigate = useNavigate();
 	const { themes } = useTheme();
 	const { sceneObjects, addModified, updateModified } = useObjects();
+
+	useEffect(() => {
+		if (user && !user.theme) navigate("/theme");
+	}, [user, navigate]);
 
 	const [mode, setMode] = useState<"Edit" | "View">(() => {
 		const stored = localStorage.getItem("mode");
@@ -46,15 +51,22 @@ const Home = () => {
 		null,
 	);
 
-	// bgm
-	const [bgm, setBgm] = useState<{ url: string; name: string }>(
-		themes.find(
+	// set a fallback
+	useEffect(() => {
+		if (!user?.theme) return;
+		setWeather(user.theme.weather);
+
+		const match = themes.find(
 			(t) => t.backgroundMusic.name === user.theme.backgroundMusic.name,
-		).backgroundMusic,
-	);
+		);
+		if (match) setBgm(match.backgroundMusic);
+	}, [user, themes]);
 
-	const navigate = useNavigate();
+	// weather
+	const [weather, setWeather] = useState("sunny");
 
+	// bgm
+	const [bgm, setBgm] = useState<{ url: string; name: string } | null>(null);
 	/**
 	 * when new item is drag & dropped from inventory -> scene
 	 * @param item : a dropped item
@@ -126,7 +138,7 @@ const Home = () => {
 	return (
 		// wrap the app in DnDProvider to enable drag & drop
 		<DndProvider backend={HTML5Backend}>
-			<main>
+			<main className={styles[weather]}>
 				{/* bar with all the buttons */}
 				<div className={styles.headerRow}>
 					<div className="row">
@@ -182,9 +194,7 @@ const Home = () => {
 								src="/images/Ellipse.svg"
 								alt="button to AI generation page"
 							/>
-						</div>
-						<div className={styles.balloon}>
-							어떤 아이템을 두어야 할지 고민되시나요?
+							<span>아이템 생성</span>
 						</div>
 					</div>
 
@@ -208,8 +218,8 @@ const Home = () => {
 							}}
 						>
 							<img src="/images/open-box.svg" alt="Inventory tab button" />
+							<span>인벤토리</span>
 						</button>
-						<hr />
 						<button
 							type="button"
 							className={styles.filledButton}
@@ -218,6 +228,7 @@ const Home = () => {
 							}}
 						>
 							<img src="/images/MY.svg" alt="My item tab button" />
+							<span>내 아이템</span>
 						</button>
 
 						{/* sidebar : shown only in edit mode */}
