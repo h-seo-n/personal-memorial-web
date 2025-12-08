@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import styles from "../styles/Login.module.css";
 
 const Login = () => {
-	const { login } = useAuth();
+	const { login, user } = useAuth();
 	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -15,7 +15,8 @@ const Login = () => {
 		if (isLoginDisabled) return;
 		try {
 			await login({ email: email, password });
-			navigate("/theme");
+			if (user.theme.floorColor === "#ffffff") navigate("/theme");
+			else navigate("/home");
 		} catch (error) {
 			if (isAxiosError(error)) {
 				if (error.response) {
@@ -32,8 +33,6 @@ const Login = () => {
 				} else if (error.request) {
 					alert("서버와 연결할 수 없습니다. 네트워크 연결을 확인해주세요.");
 				}
-			} else {
-				alert("오류가 발생했습니다.");
 			}
 			return;
 		}

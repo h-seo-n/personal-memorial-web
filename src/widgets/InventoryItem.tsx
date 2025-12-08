@@ -7,10 +7,8 @@ import styles from "../styles/Sidebar.module.css";
  */
 export const InventoryItem = ({
 	item,
-	onClickPreview,
 }: {
 	item: BaseObject;
-	onClickPreview: (obj: SceneObject | BaseObject) => void;
 }) => {
 	const [{ isDragging }, dragRef] = useDrag<
 		BaseObject,
@@ -30,7 +28,6 @@ export const InventoryItem = ({
 		<button
 			ref={dragSourceRef}
 			type="button"
-			onClick={() => onClickPreview(item)}
 			style={isDragging ? { opacity: 0.5 } : {}}
 			className={styles.previewItemCard}
 		>

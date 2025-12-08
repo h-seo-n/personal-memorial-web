@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import itemGen1Svg from "/images/item-gen1.svg";
 import { useAuth } from "../contexts/AuthContext";
+import { useItemGen } from "../contexts/ItemGenContext";
 import { useObjects } from "../contexts/ObjectsContext";
 import { getQuestionByIndex, getSecondQ } from "../shared/itemGeneration";
 import type { BaseObject } from "../shared/types";
@@ -23,9 +24,7 @@ const ItemGen = () => {
 	}
 
 	const { addGenerated, generateObject, generateLoading } = useObjects();
-	const [questionIndex, setQuestionIndex] = useState(
-		() => user?.questionIndex ?? 0,
-	);
+	const [questionIndex] = useState(() => user?.questionIndex ?? 0);
 	const [firstQuestion, setFirstQuestion] = useState(
 		getQuestionByIndex(questionIndex),
 	);
@@ -33,8 +32,12 @@ const ItemGen = () => {
 	const [generatedObject, setGeneratedObject] = useState<BaseObject | null>(
 		null,
 	);
+	const [questionLoading, setQuestionLoading] = useState<boolean>(false);
 
 	const textRef = useRef<HTMLTextAreaElement>(null);
+
+	// tooltip
+	const { setJustGenerated, setOntype } = useItemGen();
 
 	useEffect(() => {
 		setFirstQuestion(getQuestionByIndex(questionIndex));
@@ -42,7 +45,11 @@ const ItemGen = () => {
 
 	const handleFirstSubmit = async () => {
 		// get second question
+		setQuestionLoading(true);
+
 		const secondQ = await getSecondQ(firstAnswer, questionIndex);
+		setQuestionLoading(false);
+
 		setSecondQuestion(secondQ);
 	};
 
@@ -60,6 +67,8 @@ const ItemGen = () => {
 	const handleAddItem = async () => {
 		if (!generatedObject) return;
 		await addGenerated(generatedObject.id);
+		setJustGenerated(true);
+		setOntype(generatedObject.ontype === "Floor" ? "Floor" : "Wall");
 		navigate("/home");
 	};
 	const handleRegenerate = () => {
@@ -67,6 +76,34 @@ const ItemGen = () => {
 		setGeneratedObject(null);
 		setSecondAnswer("");
 	};
+
+	/* Random text while loading */
+	const RANDOM_TEXT = [
+		"어떤 아이템이 괜찮을까요?",
+		"당신의 추억을 가득 담고 있어요.",
+		"이런 색이 잘 어울릴 것 같아요.",
+		"따뜻했던 순간을 떠올리는 중이에요.",
+		"곧, 당신만의 이야기가 아이템으로 바뀔 거에요.",
+		"기억 속 분위기를 담아내고 있어요.",
+	];
+	const [remainingText, setRemainingText] = useState(RANDOM_TEXT);
+	const [currentRandomText, setCurrentRandomText] = useState<string | null>(
+		null,
+	);
+
+	useEffect(() => {
+		const pool = remainingText.length === 0 ? RANDOM_TEXT : remainingText;
+
+		const timer = setTimeout(() => {
+			const idx = Math.floor(Math.random() * pool.length);
+			const selected = pool[idx];
+
+			setCurrentRandomText(selected);
+			setRemainingText(pool.filter((_, i) => i !== idx));
+		}, 2500);
+
+		return () => clearTimeout(timer);
+	}, [remainingText]);
 
 	return (
 		<main className={styles.itemGenContainer}>
@@ -78,7 +115,7 @@ const ItemGen = () => {
 				className={styles.endButton}
 				onClick={() => navigate("/home")}
 			>
-				생성 종료
+				편집 종료
 			</button>
 
 			{/* Center Container */}
@@ -86,8 +123,13 @@ const ItemGen = () => {
 				<div className={styles.centerContainer}>
 					{/* Question Display Area */}
 					{generatedObject ? (
-						<div>
+						<div className={styles.resultWrapper}>
 							<h1 className={styles.titleText}>{generatedObject.name}</h1>
+							<span className={styles.randomText}>
+								{generatedObject.ontype === "Floor"
+									? "바닥에 둘 수 있어요!"
+									: "벽에 걸 수 있어요!"}
+							</span>
 							<img
 								className={styles.imgWrapper}
 								src={generatedObject.currentImageSet.src}
@@ -113,8 +155,15 @@ const ItemGen = () => {
 						</div>
 					) : (
 						<>
-							{generateLoading ? (
-								<h1 className={styles.questionText}>답변을 분석 중이에요</h1>
+							{generateLoading || questionLoading ? (
+								<div>
+									<h1 className={styles.questionText}>답변을 분석 중이에요</h1>
+									{generateLoading && (
+										<span className={styles.randomText}>
+											{currentRandomText}
+										</span>
+									)}
+								</div>
 							) : (
 								<div className={styles.questionArea}>
 									<h1 className={styles.questionText}>
@@ -123,7 +172,7 @@ const ItemGen = () => {
 								</div>
 							)}
 							{/* Answer Input Area */}
-							{!generateLoading && (
+							{!(generateLoading || questionLoading) && (
 								<div className={styles.answerArea}>
 									<textarea
 										ref={textRef}

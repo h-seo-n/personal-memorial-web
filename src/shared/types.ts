@@ -5,7 +5,7 @@
 // }
 
 // 상호작용 종류 - 넷 중 하나
-export type ItemFunction = "Gallery" | "Link" | "Board" | null;
+export type ItemFunction = "Link" | "Board" | null;
 
 export type OnType = "Floor" | "LeftWall" | "RightWall";
 
@@ -19,6 +19,10 @@ export interface Theme {
 	leftWallColor: string;
 	rightWallColor: string;
 	weather: string;
+	backgroundMusic: {
+		url: string;
+		name: string;
+	};
 }
 
 export interface ImageSet {

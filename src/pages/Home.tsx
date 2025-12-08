@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd"; // Import DndProvider
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { BiLogOut } from "react-icons/bi";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
-import apiClient from "../shared/api/index.ts";
+
+import { BgmController } from "../widgets/BgmController.tsx";
 import ConfigModal from "../widgets/ConfigModal";
 import { LoginPromptModal } from "../widgets/LoginPromptModal.tsx";
 import Scene from "../widgets/Scene";
@@ -11,15 +13,22 @@ import { ViewModal } from "../widgets/ViewModal";
 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useItemGen } from "../contexts/ItemGenContext.tsx";
 import { useObjects } from "../contexts/ObjectsContext";
+import { useTheme } from "../contexts/ThemeContext.tsx";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Home.module.css";
 
 const Home = () => {
 	// TODO: Theme 수정 기능 필요
-	const { user } = useAuth();
-
+	const { user, logout } = useAuth();
+	const navigate = useNavigate();
+	const { themes } = useTheme();
 	const { sceneObjects, addModified, updateModified } = useObjects();
+
+	useEffect(() => {
+		if (user && !user.theme) navigate("/theme");
+	}, [user, navigate]);
 
 	const [mode, setMode] = useState<"Edit" | "View">(() => {
 		const stored = localStorage.getItem("mode");
@@ -40,11 +49,19 @@ const Home = () => {
 	);
 	// editingObject ? open ConfigModal : close ConfigModal
 	const [editingObject, setEditingObject] = useState<SceneObject | null>(null);
-	const [viewObject, setViewObject] = useState<SceneObject | BaseObject | null>(
-		null,
-	);
+	const [viewObject, setViewObject] = useState<SceneObject | null>(null);
 
-	const navigate = useNavigate();
+	// set a fallback
+	useEffect(() => {
+		if (!user?.theme) return;
+		setWeather(user.theme.weather);
+	}, [user]);
+
+	// tooltip
+	const { justGenerated, setJustGenerated } = useItemGen();
+
+	// weather
+	const [weather, setWeather] = useState("sunny");
 
 	/**
 	 * when new item is drag & dropped from inventory -> scene
@@ -84,20 +101,29 @@ const Home = () => {
 	};
 
 	/**
-	 * when an existing item's 'edit button' is clicked -> open modal
+	 * when an existing item is clicked -> open modal
 	 * -> PASS ON to SceneObjectItem as prop, not direct property
 	 */
-	const handleClickEdit = (object: SceneObject) => {
+	const handleClick = (object: SceneObject) => {
 		if (mode === "Edit") {
 			setEditingObject(object);
+		} else {
+			setViewObject(object);
 		}
 	};
 
 	/**
 	 * when ConfigModal is closed - set editingObject to null
 	 */
-	const handleCloseModal = () => {
+	const handleCloseConfig = () => {
 		setEditingObject(null);
+	};
+
+	/**
+	 * when viewModal is closed - set viewObject to null
+	 */
+	const handleCloseView = () => {
+		setViewObject(null);
 	};
 
 	/**
@@ -109,17 +135,11 @@ const Home = () => {
 		await updateModified(updated.id, updated);
 		setEditingObject(null);
 	};
-	/**
-	 *
-	 */
-	const handleClickPreview = (obj: SceneObject | BaseObject) => {
-		setViewObject(obj);
-	};
 
 	return (
 		// wrap the app in DnDProvider to enable drag & drop
 		<DndProvider backend={HTML5Backend}>
-			<main>
+			<main className={styles[weather]}>
 				{/* bar with all the buttons */}
 				<div className={styles.headerRow}>
 					<div className="row">
@@ -159,26 +179,25 @@ const Home = () => {
 					</button>
 				</div>
 				<div className={styles.mainLayout}>
-					<div
-						className={styles.inventoryColumn}
-						style={mode === "View" ? { visibility: "hidden" } : {}}
-					>
-						<div
-							className={styles.promptButton}
-							onClick={() => navigate("/item-gen")}
-							onKeyUp={(e) => {
-								e.preventDefault();
-								navigate("/item/gen");
-							}}
-						>
-							<img
-								src="/images/Ellipse.svg"
-								alt="button to AI generation page"
-							/>
-						</div>
-						<div className={styles.balloon}>
-							어떤 아이템을 두어야 할지 고민되시나요?
-						</div>
+					<div className={styles.inventoryColumn}>
+						{mode === "Edit" ? (
+							<div
+								className={styles.promptButton}
+								onClick={() => navigate("/item-gen")}
+								onKeyUp={(e) => {
+									e.preventDefault();
+									navigate("/item/gen");
+								}}
+							>
+								<img
+									src="/images/Ellipse.svg"
+									alt="button to AI generation page"
+								/>
+								<span>아이템 생성</span>
+							</div>
+						) : (
+							<BgmController />
+						)}
 					</div>
 
 					<div className={styles.sceneColumn}>
@@ -186,7 +205,7 @@ const Home = () => {
 							objects={sceneObjects}
 							onDropNew={handleDropNewObject}
 							onMove={handleMoveObject}
-							onClickEdit={handleClickEdit}
+							onClick={handleClick}
 						/>
 					</div>
 					<div
@@ -201,54 +220,62 @@ const Home = () => {
 							}}
 						>
 							<img src="/images/open-box.svg" alt="Inventory tab button" />
+							<span>인벤토리</span>
 						</button>
-						<hr />
-						<button
-							type="button"
-							className={styles.filledButton}
-							onClick={() => {
-								setActiveTab("MyItem");
-							}}
-						>
-							<img src="/images/MY.svg" alt="My item tab button" />
-						</button>
-
+						<div className={styles.myItemRow}>
+							{justGenerated && (
+								<img
+									className={styles.myToolTip}
+									src="images/tooltip-right.svg"
+									alt="a tooltip, saying 'new!', pointing to 'My item' sign"
+								/>
+							)}
+							<button
+								type="button"
+								className={styles.filledButton}
+								onClick={() => {
+									if (justGenerated) {
+										setJustGenerated(false);
+									}
+									setActiveTab("MyItem");
+								}}
+							>
+								<img src="/images/MY.svg" alt="My item tab button" />
+								<span>내 아이템</span>
+							</button>
+						</div>
 						{/* sidebar : shown only in edit mode */}
 						{activeTab && (
 							<div className={styles.SidebarWrapper}>
-								<Sidebar
-									activeTab={activeTab}
-									setActiveTab={setActiveTab}
-									onClickPreview={handleClickPreview}
-								/>
+								<Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 							</div>
 						)}
 					</div>
 				</div>
+				<div className={styles.logoutRow}>
+					<button
+						type="button"
+						className={styles.btn}
+						onClick={() => {
+							logout();
+							navigate("/");
+						}}
+					>
+						<BiLogOut /> <span>로그아웃</span>
+					</button>
+				</div>
 				{/* modal for objects - renders when editingObject is present, and deletingObject is null */}
-				{editingObject && (
+				{mode === "Edit" && editingObject && (
 					<ConfigModal
 						base={editingObject}
 						onSave={handleSaveModal}
-						onClose={handleCloseModal}
+						onClose={handleCloseConfig}
 					/>
 				)}
 
-				{/* modal for viewing objects */}
-				{viewObject && (
-					<ViewModal
-						name={viewObject.name}
-						currentImageSet={viewObject.currentImageSet}
-						imageSets={viewObject.imageSets}
-						description={viewObject.description}
-						itemFunction={
-							"itemFunction" in viewObject ? viewObject.itemFunction : null
-						}
-						additionalData={(viewObject as SceneObject).additionalData}
-						onClose={() => {
-							setViewObject(null);
-						}}
-					/>
+				{/* View mode : modal for viewing objects*/}
+				{mode === "View" && viewObject && (
+					<ViewModal object={viewObject} onClose={handleCloseView} />
 				)}
 				{/* modal for prompting login */}
 				{!user && <LoginPromptModal />}

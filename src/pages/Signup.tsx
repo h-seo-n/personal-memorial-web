@@ -40,8 +40,6 @@ const Signup = () => {
 				} else if (error.request) {
 				}
 				alert("서버와 연결할 수 없습니다. 네트워크 연결을 확인해주세요.");
-			} else {
-				alert("실행 중 오류가 발생했습니다.");
 			}
 		}
 	};

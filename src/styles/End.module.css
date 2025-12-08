@@ -28,13 +28,13 @@
 }
 /* 상단 보라색 블러 효과 */
 .blob {
-	width: 120px;
-	height: 120px;
+	width: 100px;
+	height: 100px;
 	background: radial-gradient(circle, #d8b4fe 0%, #c084fc 100%);
 	border-radius: 50%;
 	filter: blur(30px); /* 흐림 효과 */
 	opacity: 0.8;
-	margin-bottom: 20px; /* 제목과의 간격 */
+	margin-bottom: 45px; /* 제목과의 간격 */
 	/* Add the animation here */
 	animation: float 3s ease-in-out infinite;
 
@@ -51,6 +51,11 @@
 	margin: 0 0 20px 0;
 	line-height: 1.4;
 	white-space: pre-wrap; /* 줄바꿈 허용 */
+}
+
+.marginTitle {
+	margin-top: 25px;
+	font-size: 2rem;
 }
 
 /* 입력창 스타일링 */

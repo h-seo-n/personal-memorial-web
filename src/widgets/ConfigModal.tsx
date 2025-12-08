@@ -133,10 +133,17 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 								}
 							}}
 						>
-							<img
-								src="/images/button-flip-horizontal.svg"
-								alt="a horizontal flip button"
-							/>
+							{isReversed ? (
+								<img
+									src="/images/button-flip-horizontal-clicked.svg"
+									alt="a horizontal flip button, clicked"
+								/>
+							) : (
+								<img
+									src="/images/button-flip-horizontal.svg"
+									alt="a horizontal flip button"
+								/>
+							)}
 						</button>
 					</div>
 					<div className={styles.row}>
@@ -174,7 +181,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 						<span className={styles.labelText}>기능</span>
 						<div className={styles.col}>
 							<ul className={styles.chips}>
-								{["Link", "Gallery", "Board"].map((item: ItemFunction) => (
+								{["Link", "Board"].map((item: ItemFunction) => (
 									<li key={item}>
 										<button
 											type="button"
@@ -189,14 +196,15 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 													: setFunc(item); // add
 											}}
 										>
-											{item}
+											{item === "Link" ? "링크" : "게시판"}
 										</button>
 									</li>
 								))}
 							</ul>
 							<input
 								type="text"
-								style={func ? {} : { visibility: "hidden" }}
+								className={styles.colTextarea}
+								style={func ? {} : { display: "none" }}
 								placeholder={
 									func === "Link"
 										? "연결할 링크 주소를 입력해주세요!"
@@ -218,7 +226,6 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 						<button
 							type="button"
 							className={styles.delBtn}
-							id={styles.delete}
 							onClick={handleSave}
 						>
 							편집 종료

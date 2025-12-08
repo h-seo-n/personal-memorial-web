@@ -70,6 +70,12 @@
 	border-bottom: 2px solid #000;
 	margin: 0 20px;
 }
+
+.title h2 {
+	font-size: 24px;
+	font-weight: 800;
+}
+
 .titleText {
 	text-align: center;
 }
@@ -175,9 +181,15 @@
 	border: 1px solid #000;
 	border-radius: 10px;
 	resize: none;
-	font-size: 14px;
+	font-size: 16px;
 	outline: none;
-	font-family: inherit;
+	font-family: sans-serif;
+	color: #555;
+}
+
+.colTextarea {
+	font-size: 16px;
+	font-family: sans-serif;
 	color: #555;
 }
 
@@ -185,11 +197,16 @@
 	color: #999;
 }
 
+.row textarea:disabled {
+	background-color: #ffffff;
+	font-family: inherit;
+}
+
 .col {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-  gap: 10px;
+	gap: 10px;
 }
 
 .chip {
@@ -197,8 +214,8 @@
 	border-radius: 20px;
 	border: 1px solid #000;
 	background: #fff;
-	font-size: 15px;
-	font-weight: 700;
+	font-size: 18px;
+	font-weight: 500;
 	cursor: pointer;
 	color: #000;
 	transition: all 0.2s;
