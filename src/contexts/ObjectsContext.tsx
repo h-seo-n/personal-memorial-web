@@ -10,6 +10,7 @@ import {
 } from "react";
 import apiClient from "../shared/api";
 import type {
+	AdditionalData,
 	BaseObject,
 	ImageSet,
 	ItemFunction,
@@ -61,7 +62,7 @@ interface ApiBaseObject {
 interface ApiSceneObject extends ApiBaseObject {
 	itemFunction: ItemFunction;
 	isReversed: boolean;
-	additionalData?: string;
+	additionalData?: AdditionalData;
 	coordinates: { x: number; y: number };
 }
 
@@ -71,7 +72,7 @@ interface ApiModifiedCreateRequest {
 	coordinates: { x: number; y: number };
 	isReversed: boolean;
 	description?: string | null;
-	additionalData?: string | null;
+	additionalData?: AdditionalData | null;
 	originalObjectId: string;
 	currentImageSetId: string;
 	onType: OnType;
@@ -80,7 +81,7 @@ interface ApiModifiedEditRequest {
 	name?: string;
 	description?: string;
 	itemFunction?: string;
-	additionalData?: string;
+	additionalData?: AdditionalData;
 	isReversed?: boolean;
 	coordinates?: { x: number; y: number };
 	currentImageSetId?: string;

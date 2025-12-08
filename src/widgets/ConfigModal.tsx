@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
 import { useObjects } from "../contexts/ObjectsContext";
-import type { ItemFunction, OnType, SceneObject } from "../shared/types";
+import type {
+	AdditionalData,
+	ItemFunction,
+	OnType,
+	SceneObject,
+} from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
 
 // works as both modifying object & creating a new one
@@ -33,9 +38,61 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 	const [ontype, setOntype] = useState<OnType>(base.ontype);
 
 	const [deleting, setDeleting] = useState<boolean>(false);
+	const [additionalDataTitle, setAdditionalDataTitle] = useState<string>(
+		base.additionalData
+			? base.itemFunction === "Link"
+				? (base.additionalData as { link: string }).link
+				: (base.additionalData as { data: { title: string } }).data.title
+			: null,
+	);
 
 	// save the new object
 	const handleSave = () => {
+		const additionalData = func
+			? func === "Link"
+				? { link: additionalDataTitle }
+				: // func = board
+					base.additionalData
+					? // there was already data
+						base.itemFunction === "Board"
+						? // it was a board data
+							{
+								data: {
+									title: additionalDataTitle,
+									description: (
+										base.additionalData as { data: { description: string } }
+									).data.description,
+									items: (
+										base.additionalData as {
+											data: {
+												items: {
+													writer: string;
+													text: string;
+													color: string;
+												}[];
+											};
+										}
+									).data.items,
+								},
+							}
+						: // it wasn't a board data - make a new data
+							{
+								data: {
+									title: additionalDataTitle,
+									description: "",
+									items: [],
+								},
+							}
+					: // there wasn't originally data - make a new data also
+						{
+							data: {
+								title: additionalDataTitle,
+								description: "",
+								items: [],
+							},
+						}
+			: null;
+
 		const updatedObject: SceneObject = {
 			id: base.id,
 			name: title,
@@ -48,6 +105,10 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 			ontype: ontype,
 			isUserMade: base.isUserMade,
 		};
+		if (additionalData) {
+			updatedObject.additionalData = additionalData;
+		}
+
 		onSave(updatedObject);
 	};
 
@@ -205,6 +266,8 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 								type="text"
 								className={styles.colTextarea}
 								style={func ? {} : { display: "none" }}
+								value={additionalDataTitle}
+								onChange={(e) => setAdditionalDataTitle(e.currentTarget.value)}
 								placeholder={
 									func === "Link"
 										? "연결할 링크 주소를 입력해주세요!"

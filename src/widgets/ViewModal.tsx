@@ -36,7 +36,17 @@ export const ViewModal = ({ object, onClose }: ViewModalProps) => {
 				</div>
 			)}
 			{object.additionalData && (
-				<button type="button" className={styles.endBtn}>
+				<button
+					type="button"
+					className={`${styles.delBtn}`}
+					style={{
+						width: "180px",
+						padding: "15px 10px",
+						alignSelf: "center",
+						fontWeight: 500,
+						fontSize: "20px",
+					}}
+				>
 					더 많은 이야기
 				</button>
 			)}
