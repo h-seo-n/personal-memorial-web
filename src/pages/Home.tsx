@@ -241,6 +241,10 @@ const Home = () => {
 						currentImageSet={viewObject.currentImageSet}
 						imageSets={viewObject.imageSets}
 						description={viewObject.description}
+						itemFunction={
+							"itemFunction" in viewObject ? viewObject.itemFunction : null
+						}
+						additionalData={(viewObject as SceneObject).additionalData}
 						onClose={() => {
 							setViewObject(null);
 						}}

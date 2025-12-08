@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { ImageSet } from "../shared/types";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
@@ -9,6 +10,8 @@ interface ViewModalProps {
 	currentImageSet: ImageSet;
 	imageSets: ImageSet[];
 	onClose: () => void;
+	itemFunction?: "Gallery" | "Link" | "Board" | null;
+	additionalData?: string;
 }
 
 export const ViewModal = ({
@@ -17,6 +20,8 @@ export const ViewModal = ({
 	imageSets,
 	description,
 	onClose,
+	itemFunction,
+	additionalData,
 }: ViewModalProps) => {
 	const [color, setColor] = useState(currentImageSet.name);
 
