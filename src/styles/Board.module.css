@@ -1,5 +1,5 @@
 main {
-	z-index: 20;
+	z-index: 10;
 }
 
 .galleryPage {
@@ -32,7 +32,7 @@ main {
 	background: transparent;
 	border: none;
 	cursor: pointer;
-	z-index: 100;
+	z-index: 20;
 }
 
 .backButtonImage {

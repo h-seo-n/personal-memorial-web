@@ -5,6 +5,9 @@
 	padding: 20px 40px;
 	width: 100%;
 	box-sizing: border-box;
+	position: relative;
+	z-index: 20000;
+	pointer-events: auto;
 }
 
 .headerRow > div {
@@ -237,6 +240,7 @@ body {
 	background: radial-gradient(circle, #ffe66d 0%, #ffd54a 55%, #ffca28 100%);
 	border-radius: 50%;
 	z-index: 2;
+	pointer-events: none;
 }
 
 /* 방사형 햇살 */
@@ -277,6 +281,7 @@ body {
 	animation: raysRotate 18s linear infinite;
 	transform-origin: center center;
 	z-index: 1;
+	pointer-events: none;
 }
 
 @keyframes raysRotate {
@@ -335,6 +340,7 @@ body {
 	mix-blend-mode: screen;
 	opacity: 0.35;
 	animation: sunsetShimmer 10s ease-in-out infinite alternate;
+	pointer-events: none;
 }
 
 @keyframes sunsetShimmer {
@@ -365,6 +371,7 @@ body {
 	mix-blend-mode: screen;
 	opacity: 0;
 	animation: horizonGlow 9s ease-in-out infinite alternate;
+	pointer-events: none;
 }
 
 @keyframes horizonGlow {
@@ -431,6 +438,8 @@ body {
 	mix-blend-mode: screen;
 	opacity: 0.4;
 	animation: cityGlow 10s ease-in-out infinite alternate;
+	pointer-events: none;
+	z-index: -1;
 }
 
 @keyframes cityGlow {
@@ -466,6 +475,7 @@ body {
 		1220px 38px rgba(255, 223, 130, 0.9);
 	animation: starsFlicker 7s linear infinite;
 	z-index: 3;
+	pointer-events: none;
 }
 
 @keyframes starsFlicker {
@@ -543,6 +553,7 @@ body {
 	animation: cloudDriftSlow 70s linear infinite;
 	pointer-events: none;
 	z-index: 1;
+	
 }
 
 @keyframes cloudDriftSlow {
@@ -606,6 +617,7 @@ body {
 	height: 18px;
 	top: -40px;
 	left: 0;
+	pointer-events: none;
 
 	background: rgba(255, 255, 255, 0.55);
 	border-radius: 1px;
@@ -691,6 +703,7 @@ body {
 
 	/* ⬇ 훨씬 느리게 (3.4초) */
 	animation: rainFallSlow 3.4s linear infinite;
+	pointer-events: none;
 }
 
 @keyframes rainFallSlow {
