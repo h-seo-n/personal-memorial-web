@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { ImageSet } from "../shared/types";
 import type { SceneObject } from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
@@ -6,6 +7,8 @@ import styles from "../styles/ConfigModal.module.css";
 interface ViewModalProps {
 	object: SceneObject;
 	onClose: () => void;
+	itemFunction?: "Gallery" | "Link" | "Board" | null;
+	additionalData?: string;
 }
 
 export const ViewModal = ({ object, onClose }: ViewModalProps) => {

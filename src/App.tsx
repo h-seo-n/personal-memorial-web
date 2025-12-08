@@ -4,6 +4,7 @@ import { ItemGenProvider } from "./contexts/ItemGenContext";
 import { ObjectsProvider } from "./contexts/ObjectsContext";
 import { ThemeContextProvider } from "./contexts/ThemeContext";
 import { End } from "./pages/End";
+import Gallery from "./pages/Gallery";
 import Home from "./pages/Home";
 import ItemGen from "./pages/Item-Gen";
 import Login from "./pages/Login";
