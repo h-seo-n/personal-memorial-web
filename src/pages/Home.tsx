@@ -22,10 +22,8 @@ import styles from "../styles/Home.module.css";
 import { Board } from "../widgets/Board.tsx";
 
 const Home = () => {
-	// TODO: Theme 수정 기능 필요
 	const { user, logout } = useAuth();
 	const navigate = useNavigate();
-	const { themes } = useTheme();
 	const { sceneObjects, addModified, updateModified } = useObjects();
 	const [board, setBoard] = useState<SceneObject | null>(null);
 
@@ -261,7 +259,6 @@ const Home = () => {
 						className={styles.btn}
 						onClick={() => {
 							logout();
-							navigate("/");
 						}}
 					>
 						<BiLogOut /> <span>로그아웃</span>
