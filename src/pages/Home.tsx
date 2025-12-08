@@ -254,17 +254,19 @@ const Home = () => {
 						)}
 					</div>
 				</div>
-				<div className={styles.logoutRow}>
-					<button
-						type="button"
-						className={styles.btn}
-						onClick={() => {
-							logout();
-						}}
-					>
-						<BiLogOut /> <span>로그아웃</span>
-					</button>
-				</div>
+				{mode === "View" && (
+					<div className={styles.logoutRow}>
+						<button
+							type="button"
+							className={styles.btn}
+							onClick={() => {
+								logout();
+							}}
+						>
+							<BiLogOut /> <span>로그아웃</span>
+						</button>
+					</div>
+				)}
 				{/* modal for objects - renders when editingObject is present, and deletingObject is null */}
 				{mode === "Edit" && editingObject && (
 					<ConfigModal

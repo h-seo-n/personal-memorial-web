@@ -40,7 +40,7 @@ export const ViewModal = ({ object, onClose, setBoard }: ViewModalProps) => {
 					<textarea value={object.description} disabled />
 				</div>
 			)}
-			{object.additionalData && (
+			{object.itemFunction && object.additionalData && (
 				<button
 					type="button"
 					className={`${styles.delBtn}`}

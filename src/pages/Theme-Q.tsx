@@ -169,12 +169,29 @@ const ThemeQ = () => {
 						alt="loading page for analyzing theme"
 						className={styles.analyzingImage}
 					/>
+					<h1 style={{ position: "relative", top: "20%", zIndex: 10 }}>
+						답변을 분석하는 중이예요.
+					</h1>
 				</div>
 			</main>
 		);
 	}
 	// 저장 중 화면
 	if (themeLoading) {
+		return (
+			<main className={styles.analyzingContainer}>
+				<div className={styles.analyzingWrapper}>
+					<img
+						src={themeSvg}
+						alt="loading page for analyzing theme"
+						className={styles.analyzingImage}
+					/>
+					<h1 style={{ position: "relative", top: "20%", zIndex: 10 }}>
+						테마를 저장하고 추모관으로 이동하고 있어요!
+					</h1>
+				</div>
+			</main>
+		);
 	}
 
 	return (

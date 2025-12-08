@@ -587,9 +587,7 @@
 	align-items: center;
 	width: 100vw;
 	height: 100vh;
-	min-width: 100vw;
-	min-height: 100vh;
-	background: linear-gradient(135deg, #030056 0%, #462855 100%);
+
 	overflow: hidden;
 	padding: 0;
 	margin: 0;
