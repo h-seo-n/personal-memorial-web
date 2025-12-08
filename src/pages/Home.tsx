@@ -17,7 +17,9 @@ import { useItemGen } from "../contexts/ItemGenContext.tsx";
 import { useObjects } from "../contexts/ObjectsContext";
 import { useTheme } from "../contexts/ThemeContext.tsx";
 import type { BaseObject, SceneObject } from "../shared/types";
+import type { BoardData } from "../shared/types";
 import styles from "../styles/Home.module.css";
+import { Board } from "../widgets/Board.tsx";
 
 const Home = () => {
 	// TODO: Theme 수정 기능 필요
@@ -25,6 +27,7 @@ const Home = () => {
 	const navigate = useNavigate();
 	const { themes } = useTheme();
 	const { sceneObjects, addModified, updateModified } = useObjects();
+	const [board, setBoard] = useState<SceneObject | null>(null);
 
 	useEffect(() => {
 		if (user && !user.theme) navigate("/theme");
@@ -275,8 +278,23 @@ const Home = () => {
 
 				{/* View mode : modal for viewing objects*/}
 				{mode === "View" && viewObject && (
-					<ViewModal object={viewObject} onClose={handleCloseView} />
+					<ViewModal
+						object={viewObject}
+						onClose={handleCloseView}
+						setBoard={() => {
+							setBoard(viewObject);
+							setViewObject(null);
+						}}
+					/>
 				)}
+				{mode === "View" && board && (
+					<Board
+						data={(board.additionalData as { data: BoardData }).data}
+						id={board.id}
+						closeBoard={() => setBoard(null)}
+					/>
+				)}
+
 				{/* modal for prompting login */}
 				{!user && <LoginPromptModal />}
 			</main>

@@ -10,7 +10,9 @@ import {
 } from "react";
 import apiClient from "../shared/api";
 import type {
+	AdditionalData,
 	BaseObject,
+	BoardData,
 	ImageSet,
 	ItemFunction,
 	OnType,
@@ -30,6 +32,7 @@ interface ObjectContextType {
 	handleAxiosError: (error: unknown, context: string) => void;
 
 	fetchModified: () => Promise<void>;
+	updateBoard: (id: string, board: BoardData) => Promise<void>;
 	updateModified: (id: string, object: SceneObject) => Promise<void>;
 	addModified: (object: SceneObject) => Promise<SceneObject>;
 
@@ -61,7 +64,7 @@ interface ApiBaseObject {
 interface ApiSceneObject extends ApiBaseObject {
 	itemFunction: ItemFunction;
 	isReversed: boolean;
-	additionalData?: string;
+	additionalData?: AdditionalData;
 	coordinates: { x: number; y: number };
 }
 
@@ -71,7 +74,7 @@ interface ApiModifiedCreateRequest {
 	coordinates: { x: number; y: number };
 	isReversed: boolean;
 	description?: string | null;
-	additionalData?: string | null;
+	additionalData?: AdditionalData | null;
 	originalObjectId: string;
 	currentImageSetId: string;
 	onType: OnType;
@@ -80,7 +83,7 @@ interface ApiModifiedEditRequest {
 	name?: string;
 	description?: string;
 	itemFunction?: string;
-	additionalData?: string;
+	additionalData?: AdditionalData;
 	isReversed?: boolean;
 	coordinates?: { x: number; y: number };
 	currentImageSetId?: string;
@@ -160,6 +163,32 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 		);
 		setSceneObjects(modified);
 	}, []);
+
+	const updateBoard = useCallback(
+		async (id: string, board: BoardData) => {
+			try {
+				const response = await apiClient.patch(`/modified/${id}`, {
+					additionalData: {
+						data: {
+							title: board.title,
+							description: board.description,
+							items: board.items,
+						},
+					},
+				});
+
+				const updatedObject = mapApiModifiedToSceneObject(response.data);
+
+				// re-write client with server response
+				setSceneObjects((prev) =>
+					prev.map((obj) => (obj.id === id ? updatedObject : obj)),
+				);
+			} catch (error) {
+				handleAxiosError(error, "update board");
+			}
+		},
+		[handleAxiosError],
+	);
 
 	const updateModified = useCallback(
 		async (id: string, object: SceneObject) => {
@@ -356,6 +385,7 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 			error,
 			handleAxiosError,
 			fetchModified,
+			updateBoard,
 			updateModified,
 			addModified,
 			generateObject,
@@ -372,6 +402,7 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 			error,
 			handleAxiosError,
 			fetchModified,
+			updateBoard,
 			updateModified,
 			addModified,
 			generateObject,

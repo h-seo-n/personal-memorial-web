@@ -7,11 +7,10 @@ import styles from "../styles/ConfigModal.module.css";
 interface ViewModalProps {
 	object: SceneObject;
 	onClose: () => void;
-	itemFunction?: "Gallery" | "Link" | "Board" | null;
-	additionalData?: string;
+	setBoard: () => void;
 }
 
-export const ViewModal = ({ object, onClose }: ViewModalProps) => {
+export const ViewModal = ({ object, onClose, setBoard }: ViewModalProps) => {
 	const [color, setColor] = useState(object.currentImageSet.name);
 
 	return (
@@ -22,6 +21,12 @@ export const ViewModal = ({ object, onClose }: ViewModalProps) => {
 			<h2 className={styles.title}>{object.name}</h2>
 			<div className={styles.imgWrapper}>
 				<img
+					style={{
+						transform: object.isReversed ? "scaleX(-1)" : "scaleX(1)",
+						transition: "transform 0.3s ease-in-out",
+						maxWidth: "100%",
+						borderRadius: "8px",
+					}}
 					src={object.imageSets.find((i) => i.name === color).src}
 					alt={
 						object.description
@@ -36,7 +41,22 @@ export const ViewModal = ({ object, onClose }: ViewModalProps) => {
 				</div>
 			)}
 			{object.additionalData && (
-				<button type="button" className={styles.endBtn}>
+				<button
+					type="button"
+					className={`${styles.delBtn}`}
+					style={{
+						width: "180px",
+						padding: "15px 10px",
+						alignSelf: "center",
+						fontWeight: 500,
+						fontSize: "20px",
+					}}
+					onClick={() => {
+						if (object.itemFunction === "Link")
+							window.open((object.additionalData as { link: string }).link);
+						else setBoard();
+					}}
+				>
 					더 많은 이야기
 				</button>
 			)}

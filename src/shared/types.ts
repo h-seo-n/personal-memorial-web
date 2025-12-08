@@ -25,6 +25,25 @@ export interface Theme {
 	};
 }
 
+export interface BoardData {
+	title: string;
+	description: string;
+	items: {
+		writer: string;
+		text: string;
+		color: string;
+	}[];
+}
+
+export type AdditionalData =
+	| null
+	| {
+			link: string;
+	  }
+	| {
+			data: BoardData;
+	  };
+
 export interface ImageSet {
 	_id: string;
 	name: string;
@@ -47,7 +66,7 @@ export interface BaseObject {
 export interface SceneObject extends BaseObject {
 	itemFunction: ItemFunction;
 	isReversed: boolean;
-	additionalData?: string;
+	additionalData?: AdditionalData;
 	coordinate: {
 		x: number;
 		y: number;
