@@ -45,6 +45,7 @@ interface AuthContextType {
 	signUp: (data: SignupData) => Promise<void>;
 	login: (data: LoginData) => Promise<void>;
 	logout: () => void;
+	updateBgm: (id: number) => Promise<void>;
 	fetchUser: () => Promise<void>;
 }
 
@@ -133,9 +134,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		setUser(null);
 	};
 
+	const updateBgm = async (id: number) => {
+		await apiClient.patch("/users/theme/music", {
+			themeId: id,
+		});
+		await fetchUser();
+	};
+
 	return (
 		<AuthContext.Provider
-			value={{ user, isLoading, signUp, login, logout, fetchUser }}
+			value={{ user, isLoading, signUp, login, logout, updateBgm, fetchUser }}
 		>
 			{children}
 		</AuthContext.Provider>

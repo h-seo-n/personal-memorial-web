@@ -6,7 +6,7 @@ import styles from "../styles/BgmController.module.css";
 
 export const BgmController = () => {
 	const { themes } = useTheme();
-	const { user } = useAuth();
+	const { user, updateBgm } = useAuth();
 
 	const [bgm, setBgm] = useState<{ url: string; name: string } | null>(null);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -150,8 +150,9 @@ export const BgmController = () => {
 							<button
 								key={theme.id}
 								type="button"
-								onClick={() => {
+								onClick={async () => {
 									setCurrentTrackId(theme.id);
+									await updateBgm(theme.id);
 								}}
 								className={
 									theme.id === currentTrackId
