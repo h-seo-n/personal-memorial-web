@@ -207,6 +207,7 @@ const Home = () => {
 							onDropNew={handleDropNewObject}
 							onMove={handleMoveObject}
 							onClick={handleClick}
+							mode={mode}
 						/>
 					</div>
 					<div

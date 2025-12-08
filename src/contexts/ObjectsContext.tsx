@@ -209,10 +209,11 @@ export const ObjectsProvider = ({ children }: { children: ReactNode }) => {
 
 				if (object.name) body.name = object.name;
 				if (object.description) body.description = object.description;
-				if (object.additionalData) body.additionalData = object.additionalData;
 
 				if (object.itemFunction !== undefined && object.itemFunction !== null) {
 					body.itemFunction = object.itemFunction;
+					if (object.additionalData)
+						body.additionalData = object.additionalData;
 				}
 				if (typeof object.isReversed === "boolean") {
 					body.isReversed = object.isReversed;
