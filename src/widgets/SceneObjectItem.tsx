@@ -5,18 +5,27 @@ import type { SceneObject } from "../shared/types";
 const SceneObjectItem = ({
 	obj,
 	onClick,
-}: { obj: SceneObject; onClick: (obj: SceneObject) => void }) => {
+	mode,
+}: {
+	obj: SceneObject;
+	onClick: (obj: SceneObject) => void;
+	mode: "View" | "Edit";
+}) => {
 	const [{ isDragging }, dragRef] = useDrag<
 		SceneObject,
 		void,
 		{ isDragging: boolean }
-	>(() => ({
-		type: "SCENE_OBJECT",
-		item: obj,
-		collect: (monitor) => ({
-			isDragging: !!monitor.isDragging(),
+	>(
+		() => ({
+			type: "SCENE_OBJECT",
+			item: obj,
+			canDrag: mode === "Edit",
+			collect: (monitor) => ({
+				isDragging: !!monitor.isDragging(),
+			}),
 		}),
-	}));
+		[mode, obj],
+	);
 
 	const SCALE_RATIO = 0.7;
 	const [imgSize, setImgSize] = useState<{ w: number; h: number } | null>(null);
