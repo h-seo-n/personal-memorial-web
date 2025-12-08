@@ -39,10 +39,12 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 
 	const [deleting, setDeleting] = useState<boolean>(false);
 	const [additionalDataTitle, setAdditionalDataTitle] = useState<string>(
-		base.additionalData
+		base.itemFunction &&
+			base.additionalData !== undefined &&
+			base.additionalData !== null
 			? base.itemFunction === "Link"
 				? (base.additionalData as { link: string }).link
-				: (base.additionalData as { data: { title: string } }).data.title
+				: (base.additionalData as { data: BoardData }).data.title
 			: null,
 	);
 

@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "../styles/Login.module.css";
@@ -11,12 +11,20 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const isLoginDisabled = !email.trim() || !password.trim();
 
+	useEffect(() => {
+		if (user) {
+			if (user.theme && user.theme.floorColor === "#ffffff") {
+				navigate("/theme");
+			} else {
+				navigate("/home");
+			}
+		}
+	}, [user, navigate]);
+
 	const handleLogin = async () => {
 		if (isLoginDisabled) return;
 		try {
 			await login({ email: email, password });
-			if (user.theme.floorColor === "#ffffff") navigate("/theme");
-			else navigate("/home");
 		} catch (error) {
 			if (isAxiosError(error)) {
 				if (error.response) {

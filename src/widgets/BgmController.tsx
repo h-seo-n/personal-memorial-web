@@ -97,7 +97,6 @@ export const BgmController = () => {
 	const [showControls, setShowControls] = useState<boolean>(true);
 	const toggleControls = () => {
 		setShowControls((prev) => !prev);
-		togglePlay();
 	};
 	const getSliderBackground = () => {
 		const percentage = volume * 100;
