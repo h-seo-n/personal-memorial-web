@@ -19,7 +19,7 @@ import { useTheme } from "../contexts/ThemeContext.tsx";
 import type { BaseObject, SceneObject } from "../shared/types";
 import type { BoardData } from "../shared/types";
 import styles from "../styles/Home.module.css";
-import { Board } from "../widgets/Board.tsx";
+import Board from "../widgets/Board.tsx";
 
 const Home = () => {
 	const { user, logout } = useAuth();
