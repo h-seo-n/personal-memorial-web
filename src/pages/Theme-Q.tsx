@@ -97,29 +97,6 @@ const ThemeQ = () => {
 		}
 	};
 
-	// 텍스트 섹션이 표시되면 자동으로 분석 시작
-	useEffect(() => {
-		const startAnalysis = async () => {
-			if (showTextSection && answers.length === QUESTIONS.length) {
-				const query: QA[] = QUESTIONS.map((q, idx) => ({
-					question: q.question,
-					answer: answers[idx],
-				}));
-				const { themeMeta, reason } = await analyzeTheme(query);
-				setResultReason(reason);
-				setResultImageUrl(`/images/theme${themeMeta.id}.png`);
-
-				// analyzeTheme 완료 후 3초 후에 결과 페이지로 이동
-				setTimeout(() => {
-					setShowTextSection(false);
-					setShowResult(true);
-				}, 3000);
-			}
-		};
-
-		startAnalysis();
-	}, [showTextSection, answers, analyzeTheme]);
-
 	const handleSave = async () => {
 		await saveTheme(theme.toString());
 		await fetchUser();

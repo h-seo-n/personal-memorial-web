@@ -23,7 +23,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center; /* 제목 중앙 정렬 */
-	margin-bottom: 24px;
+	margin-bottom: 10px;
 	height: 40px;
 }
 
@@ -61,19 +61,19 @@
 	display: flex;
 	justify-content: center; /* 탭 중앙 정렬 */
 	gap: 12px;
-	margin: 0 0 20px;
+	margin: 0 0 15px;
 	padding: 0;
 	list-style: none;
 }
 
 /* 탭 버튼 공통 스타일 */
 .tabChips {
-	padding: 8px 28px;
+	padding: 6px 24.5px;
 	border-radius: 50px; /* 캡슐 모양 */
 	border: 1px solid #000;
 	background: #fff;
 	font-size: 18px;
-	font-weight: 700;
+	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s ease;
 	min-width: 60px;
@@ -106,10 +106,6 @@
 	font-weight: 500;
 }
 
-.explanationBullet {
-	margin-bottom: 4px;
-}
-
 /* 아이템 그리드 */
 .itemGrid {
 	flex: 1;
@@ -133,14 +129,14 @@
 /* 아이템 카드 스타일 */
 .previewItemCard {
 	width: 100%;
-	aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+	aspect-ratio: 3 / 2; /* 정사각형 비율 유지 */
 	border-radius: 12px;
 	border: 1px solid #000;
 	background: #ffffff;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 10px;
+	padding: 5px;
 	cursor: pointer;
 	box-sizing: border-box;
 	transition: transform 0.1s;

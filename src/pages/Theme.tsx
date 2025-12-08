@@ -27,16 +27,12 @@ const Theme = () => {
 	return (
 		<main className={styles.themeContainer}>
 			<div className={styles.contentWrapper}>
-				<img
-					src={themeSvg}
-					alt="Theme"
-					className={styles.themeImage}
-				/>
+				<img src={themeSvg} alt="Theme" className={styles.themeImage} />
 				{/* 텍스트 구간 */}
 				<div className={styles.textSection}>
 					<p className={styles.textContent}>
-						{currentText.split('\n').map((line, index, array) => (
-							<React.Fragment key={index}>
+						{currentText.split("\n").map((line, index, array) => (
+							<React.Fragment key={line || `line-${currentTheme}`}>
 								{line}
 								{index < array.length - 1 && <br />}
 							</React.Fragment>

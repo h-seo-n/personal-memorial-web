@@ -4,8 +4,8 @@ import type { SceneObject } from "../shared/types";
 
 const SceneObjectItem = ({
 	obj,
-	onClickEdit,
-}: { obj: SceneObject; onClickEdit: (obj: SceneObject) => void }) => {
+	onClick,
+}: { obj: SceneObject; onClick: (obj: SceneObject) => void }) => {
 	const [{ isDragging }, dragRef] = useDrag<
 		SceneObject,
 		void,
@@ -40,10 +40,10 @@ const SceneObjectItem = ({
 		<img
 			src={obj.currentImageSet.src}
 			alt={obj.name}
-			onClick={() => onClickEdit(obj)} // Handle click to edit
+			onClick={() => onClick(obj)} // Handle click to edit
 			onKeyDown={(e) => {
 				e.preventDefault();
-				if (e.key === "Enter") onClickEdit(obj);
+				if (e.key === "Enter") onClick(obj);
 			}}
 			onLoad={(e) => {
 				const naturalWidth = Math.min(e.currentTarget.naturalWidth, 160);

@@ -1,59 +1,42 @@
 import { useState } from "react";
 import type { ImageSet } from "../shared/types";
-import type { BaseObject, SceneObject } from "../shared/types";
+import type { SceneObject } from "../shared/types";
 import styles from "../styles/ConfigModal.module.css";
 
 interface ViewModalProps {
-	name: string;
-	description: string | null;
-	currentImageSet: ImageSet;
-	imageSets: ImageSet[];
+	object: SceneObject;
 	onClose: () => void;
 }
 
-export const ViewModal = ({
-	name,
-	currentImageSet,
-	imageSets,
-	description,
-	onClose,
-}: ViewModalProps) => {
-	const [color, setColor] = useState(currentImageSet.name);
+export const ViewModal = ({ object, onClose }: ViewModalProps) => {
+	const [color, setColor] = useState(object.currentImageSet.name);
 
 	return (
 		<div className={styles.modalWrapper}>
 			<button type="button" className={styles.closeButton} onClick={onClose}>
 				<img src="/images/x-button.svg" alt="close button" />
 			</button>
-			<h2 className={styles.title}>{name}</h2>
+			<h2 className={styles.title}>{object.name}</h2>
 			<div className={styles.imgWrapper}>
 				<img
-					src={imageSets.find((i) => i.name === color).src}
-					alt={description ? description : `${name} with color ${color}`}
+					src={object.imageSets.find((i) => i.name === color).src}
+					alt={
+						object.description
+							? object.description
+							: `${name} with color ${color}`
+					}
 				/>
 			</div>
-			<div className={styles.row}>
-				<span className={styles.labelText}>색상</span>
-				<ul className={styles.chips}>
-					{imageSets.map((imgset) => (
-						<li key={`${name}-${imgset.name}`}>
-							<button
-								type="button"
-								id={imgset.name}
-								onClick={() => {
-									setColor(imgset.name);
-								}}
-								className={
-									color === imgset.name
-										? `${styles.colorStateChip} ${styles.active}`
-										: `${styles.colorStateChip}`
-								}
-								style={{ backgroundColor: `${imgset.color}` }}
-							/>
-						</li>
-					))}
-				</ul>
-			</div>
+			{object.description && (
+				<div className={styles.row}>
+					<textarea value={object.description} disabled />
+				</div>
+			)}
+			{object.additionalData && (
+				<button type="button" className={styles.endBtn}>
+					더 많은 이야기
+				</button>
+			)}
 		</div>
 	);
 };

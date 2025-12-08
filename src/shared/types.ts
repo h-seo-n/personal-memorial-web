@@ -14,16 +14,15 @@ export interface DropHandler {
 	onMove: (instanceId: string, newCoordinates: [number, number]) => void;
 }
 
-export interface Music {
-	url: string;
-	name: string;
-}
 export interface Theme {
 	floorColor: string;
 	leftWallColor: string;
 	rightWallColor: string;
 	weather: string;
-	backgroundMusic: Music;
+	backgroundMusic: {
+		url: string;
+		name: string;
+	};
 }
 
 export interface ImageSet {
