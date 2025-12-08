@@ -5,7 +5,10 @@ import backToSvg from "/images/back-to.svg";
 import buttonSmallWhite from "/images/button-small-white.svg";
 import styles from "../styles/Gallery.module.css";
 
-const Gallery = () => {
+const Gallery = (
+    id: string,
+    additionalData: Post
+) => {
 	const navigate = useNavigate();
 	const [title, setTitle] = useState("유저가 적은 게시판 제목");
 	const [isEditingTitle, setIsEditingTitle] = useState(false);

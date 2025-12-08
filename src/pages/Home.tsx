@@ -244,6 +244,7 @@ const Home = () => {
 						itemFunction={
 							"itemFunction" in viewObject ? viewObject.itemFunction : null
 						}
+						additionalData={(viewObject as SceneObject).additionalData}
 						onClose={() => {
 							setViewObject(null);
 						}}
