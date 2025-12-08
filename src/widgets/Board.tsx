@@ -3,7 +3,6 @@ import { FaPencilAlt } from "react-icons/fa";
 import backToSvg from "/images/back-to.svg";
 import buttonSmallWhite from "/images/button-small-white.svg";
 import { useObjects } from "../contexts/ObjectsContext";
-import apiClient from "../shared/api";
 import type { BoardData } from "../shared/types";
 import styles from "../styles/Board.module.css";
 
@@ -22,7 +21,7 @@ interface Post {
 	left: number;
 }
 
-export const Board = ({ data, id, closeBoard }: BoardProps) => {
+const Board = ({ data, id, closeBoard }: BoardProps) => {
 	const { updateBoard } = useObjects();
 
 	const [title, setTitle] = useState(
