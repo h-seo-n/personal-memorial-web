@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
 import { useObjects } from "../contexts/ObjectsContext";
 import type {
-	AdditionalData,
+	BoardData,
 	ItemFunction,
 	OnType,
 	SceneObject,
@@ -59,18 +59,11 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 							{
 								data: {
 									title: additionalDataTitle,
-									description: (
-										base.additionalData as { data: { description: string } }
-									).data.description,
+									description: (base.additionalData as { data: BoardData }).data
+										.description,
 									items: (
 										base.additionalData as {
-											data: {
-												items: {
-													writer: string;
-													text: string;
-													color: string;
-												}[];
-											};
+											data: BoardData;
 										}
 									).data.items,
 								},

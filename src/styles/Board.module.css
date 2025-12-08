@@ -1,3 +1,7 @@
+main {
+	z-index: 20;
+}
+
 .galleryPage {
 	display: flex;
 	flex-direction: column;
@@ -98,6 +102,8 @@
 .pencilIcon {
 	font-size: clamp(16px, 2vw, 20px);
 	color: #666;
+	background: none;
+	border-width: 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -158,6 +164,8 @@
 	right: 0.75rem;
 	font-size: clamp(12px, 1.5vw, 16px);
 	color: #666;
+	border-width: 0;
+	background: none;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -369,7 +377,7 @@
 	align-items: center;
 	justify-content: center;
 	z-index: 2000;
-    opacity: 0.9;
+	opacity: 0.9;
 }
 
 .popupModal {
@@ -531,4 +539,3 @@
 	transform: translate(2px, 3px);
 	box-shadow: none;
 }
-

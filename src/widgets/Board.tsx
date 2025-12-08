@@ -1,21 +1,39 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import backToSvg from "/images/back-to.svg";
 import buttonSmallWhite from "/images/button-small-white.svg";
-import styles from "../styles/Gallery.module.css";
+import { useObjects } from "../contexts/ObjectsContext";
+import apiClient from "../shared/api";
+import type { BoardData } from "../shared/types";
+import styles from "../styles/Board.module.css";
 
-const Gallery = (
-    id: string,
-    additionalData: Post
-) => {
-	const navigate = useNavigate();
-	const [title, setTitle] = useState("유저가 적은 게시판 제목");
+interface BoardProps {
+	data: BoardData;
+	id: string;
+	closeBoard: () => void;
+}
+
+interface Post {
+	id: string;
+	content: string; // mapped from 'text'
+	authorName: string; // mapped from 'writer'
+	color: string;
+	top: number;
+	left: number;
+}
+
+export const Board = ({ data, id, closeBoard }: BoardProps) => {
+	const { updateBoard } = useObjects();
+
+	const [title, setTitle] = useState(
+		data ? data.title : "게시판의 제목을 적어보세요!",
+	);
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
 	const titleInputRef = useRef<HTMLInputElement>(null);
 
 	const [description, setDescription] = useState(
-		"게시판의 설명을 작성해보세요! 이 추모관을 보러올 사람들이 어떤 메시지를 남겼으면 하나요? 예를 들어, 생전 당신의 미담을 자랑해달라고 해도 좋아요!",
+		data?.description ||
+			"게시판의 설명을 작성해보세요! 이 추모관을 보러올 사람들이 어떤 메시지를 남겼으면 하나요? 예를 들어, 생전 당신의 미담을 자랑해달라고 해도 좋아요!",
 	);
 	const [isEditingDescription, setIsEditingDescription] = useState(false);
 	const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -25,16 +43,15 @@ const Gallery = (
 	const [postContent, setPostContent] = useState("");
 	const [selectedColor, setSelectedColor] = useState("white");
 	const [authorName, setAuthorName] = useState("");
-	const [posts, setPosts] = useState<Array<{
-		id: string;
-		content: string;
-		color: string;
-		authorName: string;
-		date: string;
-		rotation: number;
-		top: number;
-		left: number;
-	}>>([]);
+
+	const [posts, setPosts] = useState<Post[]>([]);
+	const LAYOUT = {
+		WIDTH: 240,
+		HEIGHT: 220,
+		GAP: 20,
+		PADDING: 24,
+		CONTAINER_WIDTH: 800,
+	};
 
 	const colors = [
 		{ name: "white", value: "#ffffff" },
@@ -43,6 +60,33 @@ const Gallery = (
 		{ name: "lightyellow", value: "#FFFFE0" },
 		{ name: "lightgray", value: "#D3D3D3" },
 	];
+
+	useEffect(() => {
+		if (!data || !data.items) return;
+		const postsPerRow = Math.floor(
+			(LAYOUT.CONTAINER_WIDTH - LAYOUT.PADDING * 2) /
+				(LAYOUT.WIDTH + LAYOUT.GAP),
+		);
+		const initialPosts = data.items.map((item, index) => {
+			// Grid Logic: Calculate Row and Column based on Index
+			const row = Math.floor(index / postsPerRow);
+			const col = index % postsPerRow;
+
+			// Calculate exact pixel coordinates
+			const left = LAYOUT.PADDING + col * (LAYOUT.WIDTH + LAYOUT.GAP);
+			const top = LAYOUT.PADDING + row * (LAYOUT.HEIGHT + LAYOUT.GAP);
+
+			return {
+				id: `existing-${index}`,
+				content: item.text, // Map 'text' to 'content'
+				authorName: item.writer, // Map 'writer' to 'authorName'
+				color: item.color,
+				top: top,
+				left: left,
+			};
+		});
+		setPosts(initialPosts);
+	}, [data]);
 
 	const handlePencilClick = () => {
 		setIsEditingTitle(true);
@@ -84,6 +128,20 @@ const Gallery = (
 		setIsEditingDescription(false);
 	};
 
+	const handleClose = async () => {
+		await updateBoard(id, {
+			title,
+			description,
+			items: posts.map((p) => ({
+				writer: p.authorName,
+				text: p.content,
+				color: p.color,
+			})),
+		});
+
+		closeBoard();
+	};
+
 	// 편집 모드가 활성화되면 input에 포커스
 	useEffect(() => {
 		if (isEditingTitle && titleInputRef.current) {
@@ -102,11 +160,7 @@ const Gallery = (
 
 	return (
 		<main className={styles.galleryPage}>
-			<button
-				type="button"
-				className={styles.backButton}
-				onClick={() => navigate("/home")}
-			>
+			<button type="button" className={styles.backButton} onClick={handleClose}>
 				<img
 					src={backToSvg}
 					alt="추모관으로"
@@ -130,13 +184,14 @@ const Gallery = (
 						) : (
 							<h1 className={styles.titleText}>{title}</h1>
 						)}
-						<span
+						<button
+							type="button"
 							className={styles.pencilIcon}
 							onClick={handlePencilClick}
 							style={{ cursor: "pointer" }}
 						>
 							<FaPencilAlt />
-						</span>
+						</button>
 					</div>
 					<div className={styles.titleUnderline} />
 				</header>
@@ -153,28 +208,30 @@ const Gallery = (
 							/>
 						) : (
 							<p className={styles.descriptionText}>
-								{description.split("\n").map((line, index) => (
-									<React.Fragment key={index}>
+								{description.split("\n").map((line, idx, arr) => (
+									<React.Fragment key={`${line}-${line.length}-${idx * 31}`}>
 										{line}
-										{index < description.split("\n").length - 1 && <br />}
+										{idx < arr.length - 1 && <br />}
 									</React.Fragment>
 								))}
 							</p>
 						)}
-						<span
+						<button
+							type="button"
 							className={styles.smallPencil}
 							onClick={handleSmallPencilClick}
 							style={{ cursor: "pointer" }}
 						>
 							<FaPencilAlt />
-						</span>
+						</button>
 					</div>
 				</section>
 
 				<section className={styles.contentSection}>
 					<div ref={contentDivRef} className={styles.contentArea}>
 						{posts.map((post) => {
-							const colorValue = colors.find(c => c.name === post.color)?.value || "#ffffff";
+							const colorValue =
+								colors.find((c) => c.name === post.color)?.value || "#ffffff";
 							return (
 								<div
 									key={post.id}
@@ -187,7 +244,6 @@ const Gallery = (
 								>
 									<p className={styles.postItContent}>{post.content}</p>
 									<div className={styles.postItFooter}>
-										<p className={styles.postItDate}>{post.date}</p>
 										{post.authorName && (
 											<p className={styles.postItAuthor}>{post.authorName}</p>
 										)}
@@ -211,10 +267,19 @@ const Gallery = (
 			</div>
 
 			{isPopupOpen && (
-				<div className={styles.popupOverlay} onClick={() => setIsPopupOpen(false)}>
+				<div
+					className={styles.popupOverlay}
+					onClick={() => setIsPopupOpen(false)}
+					onKeyDown={(e) => {
+						if (e.key === "Enter" || e.key === " ") {
+							setIsPopupOpen(false);
+						}
+					}}
+				>
 					<div
 						className={styles.popupModal}
 						onClick={(e) => e.stopPropagation()}
+						onKeyDown={(e) => e.stopPropagation()}
 					>
 						<button
 							type="button"
@@ -240,7 +305,9 @@ const Gallery = (
 										<button
 											type="button"
 											className={`${styles.popupColorChip} ${
-												selectedColor === color.name ? styles.popupColorChipActive : ""
+												selectedColor === color.name
+													? styles.popupColorChipActive
+													: ""
 											}`}
 											style={{ backgroundColor: color.value }}
 											onClick={() => setSelectedColor(color.name)}
@@ -265,41 +332,43 @@ const Gallery = (
 							type="button"
 							className={styles.popupSubmitButton}
 							onClick={() => {
-							if (postContent.trim() === "") {
-								alert("글 내용을 입력해주세요.");
-								return;
-							}
+								if (postContent.trim() === "") {
+									alert("글 내용을 입력해주세요.");
+									return;
+								}
 
-							const now = new Date();
-							const year = now.getFullYear().toString().slice(-2);
-							const month = (now.getMonth() + 1).toString();
-							const day = now.getDate().toString();
-							const formattedDate = `${year}.${month}.${day}`;
+								const now = new Date();
+								const year = now.getFullYear().toString().slice(-2);
+								const month = (now.getMonth() + 1).toString();
+								const day = now.getDate().toString();
+								const formattedDate = `${year}.${month}.${day}`;
 
-							// 포스트잇 크기와 간격 설정
-							const postItWidth = 240;
-							const postItHeight = 220;
-							const gap = 20;
-							const padding = 24; // contentArea의 padding
+								// 포스트잇 크기와 간격 설정
+								const postItWidth = 240;
+								const postItHeight = 220;
+								const gap = 20;
+								const padding = 24; // contentArea의 padding
 
-							// 현재 포스트잇 개수로 위치 계산
-							const postsPerRow = Math.floor((800 - padding * 2) / (postItWidth + gap));
-							const row = Math.floor(posts.length / postsPerRow);
-							const col = posts.length % postsPerRow;
-							
-							const left = padding + col * (postItWidth + gap);
-							const top = padding + row * (postItHeight + gap);
+								// 현재 포스트잇 개수로 위치 계산
+								const postsPerRow = Math.floor(
+									(800 - padding * 2) / (postItWidth + gap),
+								);
+								const row = Math.floor(posts.length / postsPerRow);
+								const col = posts.length % postsPerRow;
 
-							const newPost = {
-								id: Date.now().toString(),
-								content: postContent,
-								color: selectedColor,
-								authorName: authorName || "익명",
-								date: formattedDate,
-								rotation: 0,
-								top: top,
-								left: left,
-							};
+								const left = padding + col * (postItWidth + gap);
+								const top = padding + row * (postItHeight + gap);
+
+								const newPost = {
+									id: Date.now().toString(),
+									content: postContent,
+									color: selectedColor,
+									authorName: authorName || "익명",
+									date: formattedDate,
+									rotation: 0,
+									top: top,
+									left: left,
+								};
 
 								setPosts([...posts, newPost]);
 								setIsPopupOpen(false);
@@ -317,5 +386,4 @@ const Gallery = (
 	);
 };
 
-export default Gallery;
-
+export default Board;

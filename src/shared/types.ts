@@ -25,21 +25,23 @@ export interface Theme {
 	};
 }
 
+export interface BoardData {
+	title: string;
+	description: string;
+	items: {
+		writer: string;
+		text: string;
+		color: string;
+	}[];
+}
+
 export type AdditionalData =
 	| null
 	| {
 			link: string;
 	  }
 	| {
-			data: {
-				title: string;
-				description: string;
-				items: {
-					writer: string;
-					text: string;
-					color: string;
-				}[];
-			};
+			data: BoardData;
 	  };
 
 export interface ImageSet {

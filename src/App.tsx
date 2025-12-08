@@ -4,7 +4,6 @@ import { ItemGenProvider } from "./contexts/ItemGenContext";
 import { ObjectsProvider } from "./contexts/ObjectsContext";
 import { ThemeContextProvider } from "./contexts/ThemeContext";
 import { End } from "./pages/End";
-import Gallery from "./pages/Gallery";
 import Home from "./pages/Home";
 import ItemGen from "./pages/Item-Gen";
 import Login from "./pages/Login";
@@ -26,7 +25,6 @@ const App = () => {
 							<Route path="/theme" element={<Theme />} />
 							<Route path="/theme-q" element={<ThemeQ />} />
 							<Route path="/item-gen" element={<ItemGen />} />
-							{/* <Route path="/gratitude-diary" element={<GratitudeDiary />} /> */}
 							<Route path="/signup" element={<Signup />} />
 							<Route path="/end" element={<End />} />
 						</Routes>

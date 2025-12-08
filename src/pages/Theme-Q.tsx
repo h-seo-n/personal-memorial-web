@@ -272,5 +272,3 @@ const ThemeQ = () => {
 };
 
 export default ThemeQ;
-
-
