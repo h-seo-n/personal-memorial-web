@@ -6,7 +6,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	position: relative;
-	z-index: 20000;
+	z-index: 20;
 	pointer-events: auto;
 }
 
