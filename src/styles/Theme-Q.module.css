@@ -5,7 +5,7 @@
 	height: 100vh;
 	min-width: 100vw;
 	min-height: 100vh;
-	background: #fffaf5; /* 살짝 크림색으로 */
+	background: #fffaf5;
 	overflow-y: auto;
 	overflow-x: hidden;
 	padding: 0;
@@ -17,7 +17,6 @@
 	bottom: 0;
 }
 
-/* Header Section */
 .header {
 	width: 100%;
 	padding: clamp(1rem, 3vw, 2rem);
@@ -53,7 +52,6 @@
 	font-weight: 400;
 }
 
-/* 상단 progress (어두운 보라 + 연보라 한 줄처럼 보이게) */
 .progressBar {
 	width: 100%;
 	height: 8px;
@@ -72,7 +70,6 @@
 	background: #543680;
 }
 
-/* Main Content Wrapper */
 .contentWrapper {
 	display: flex;
 	flex-direction: column;
@@ -84,12 +81,9 @@
 	padding-bottom: clamp(6rem, 10vw, 8rem);
 	box-sizing: border-box;
 	gap: 3rem;
-
-	/* ⬆️ 질문 박스가 조금 더 위로 오도록 margin-top 줄이기 */
 	margin-top: clamp(0.5rem, 5vh, 2rem);
 }
 
-/* Question Box */
 .questionBox {
 	width: 100%;
 	max-width: 760px;
@@ -111,7 +105,6 @@
 	line-height: 1.6;
 }
 
-/* 예시 박스 – 가운데 크림색 카드 하나에 줄 두 개 */
 .examplesWrapper {
 	display: flex;
 	flex-direction: column;
@@ -128,7 +121,6 @@
 	gap: 0;
 }
 
-/* 각 줄(예시1 / 예시2) */
 .exampleText {
 	font-size: clamp(18px, 1.8vw, 23px);
 	font-family: "LaundryGothic", sans-serif;
@@ -144,7 +136,6 @@
 	align-items: center;
 }
 
-/* 첫 줄 라벨 */
 .exampleText::before {
 	font-size: clamp(13px, 1.6vw, 15px);
 	color: rgba(0, 0, 0, 0.8);
@@ -159,7 +150,6 @@
 	margin-bottom: 1em;
 }
 
-/* 두 번째 줄 라벨 + 윗줄 구분선 */
 .exampleText:nth-child(2) {
 	border-top: 1px solid rgba(0, 0, 0, 0.12);
 	padding-top: 1.5rem;
@@ -169,7 +159,7 @@
 	left: 50%;
 	transform: translateX(-50%);
 
-	bottom: 8rem; /* default */
+	bottom: 8rem;
 
 	width: min(900px, 100% - 3rem);
 	padding: 1rem 1.5rem;
@@ -190,11 +180,9 @@
 	line-height: 1.5;
 }
 
-/* Next Button – 흰색 pill 이 바 안쪽 오른쪽에 겹쳐보이도록 */
 .nextButton {
 	position: fixed;
 
-	/* ✅ 인풋이랑 같이 조금 위로 */
 	bottom: 8.7rem;
 
 	right: calc(50% - min(900px, 100% - 3rem) / 2 + 0.75rem);
@@ -269,13 +257,11 @@
 	font-size: clamp(14px, 1.8vw, 18px);
 }
 
-/* 입력 내용 흐릿 안내 텍스트 */
 .answerInput::placeholder {
 	color: rgba(255, 255, 255, 0.7);
 	font-size: clamp(14px, 1.8vw, 18px);
 }
 
-/* 모바일 대응 */
 @media (max-width: 768px) {
 	.header {
 		padding: 1rem;
@@ -358,7 +344,6 @@
 	}
 }
 
-/* Text Section Screen (마지막 질문 이후) */
 .textSectionContainer {
 	display: flex;
 	justify-content: center;
@@ -458,13 +443,11 @@
 	transform: translateX(-50%) translateY(0);
 }
 
-/* Result Screen */
-/* 전체 화면 컨테이너 */
 .resultContainer {
 	position: relative;
 	width: 100%;
 	height: 100vh;
-	background-color: #fffcf7; /* 이미지와 유사한 따뜻한 미색 배경 */
+	background-color: #fffcf7;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -475,18 +458,16 @@
 	padding-bottom: 50px;
 }
 
-/* 컨텐츠 래퍼 (텍스트 + 결과 이미지) */
 .resultContentWrapper {
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 40px; /* 텍스트와 이미지 사이의 간격 */
-	padding: 0 24px; /* 좌우 여백 */
+	gap: 40px;
+	padding: 0 24px;
 	width: 80%;
 }
 
-/* 텍스트 영역 */
 .resultDescription {
 	text-align: center;
 }
@@ -556,31 +537,27 @@
 }
 
 .resultDescription p {
-	font-size: 35px; /* 텍스트 크기 (이미지 비율 고려) */
-	font-weight: 300; /* 굵게 */
+	font-size: 35px;
+	font-weight: 300;
 	color: #111111;
-	line-height: 1.5; /* 줄간격 확보 */
-	word-break: keep-all; /* 한글 단어 단위 줄바꿈 (매우 중요) */
+	line-height: 1.5;
+	word-break: keep-all;
 	margin: 0;
 }
 
-/* 결과 이미지 컨테이너 */
 .resultImageContainer {
 	width: 100%;
 	display: flex;
 	justify-content: center;
 }
 
-/* 결과 이미지 (아이소메트릭 룸) */
 .resultImage {
 	width: 100%;
-	max-width: 320px; /* 이미지의 최대 크기 설정 */
+	max-width: 320px;
 	height: auto;
 	object-fit: contain;
-	/* 그림자가 필요하다면 아래 주석 해제 */
-	/* filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.1)); */
 }
-/* Analyzing Screen - Same style as Theme.tsx */
+
 .analyzingContainer {
 	display: flex;
 	justify-content: center;

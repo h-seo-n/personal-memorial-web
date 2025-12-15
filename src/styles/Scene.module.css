@@ -35,7 +35,6 @@
 	pointer-events: none;
 }
 
-/* Left Wall */
 .rightWall {
 	position: absolute;
 	left: 119.5%;

@@ -31,7 +31,7 @@ const SceneObjectItem = ({
 	const [imgSize, setImgSize] = useState<{ w: number; h: number } | null>(null);
 
 	const getTransformStyle = () => {
-		const baseTransform = "translate(-10%, -40%)";
+		const baseTransform = "translate(-50%, -50%)";
 
 		if (obj.ontype === "Floor") {
 			return `${baseTransform} rotateZ(-45deg) rotateX(-55deg)`;
@@ -85,6 +85,7 @@ const SceneObjectItem = ({
 				transformStyle: "preserve-3d",
 				pointerEvents: "auto",
 			}}
+			crossOrigin="anonymous"
 		/>,
 	);
 };

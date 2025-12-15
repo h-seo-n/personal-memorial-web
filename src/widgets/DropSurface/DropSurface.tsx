@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import type { BaseObject, OnType, SceneObject } from "../../shared/types";
 import {
 	getIsometricCoordinates,
+	getSkewedCoordinates,
 	getStandardCoordinates,
 } from "./coordinateUtils";
 
@@ -37,46 +38,50 @@ const DropSurface = ({
 
 			drop: (item, monitor) => {
 				const dropPosition = monitor.getClientOffset();
+				const element = ref.current;
 				const surfaceBounds = ref.current?.getBoundingClientRect();
 
-				if (!dropPosition || !surfaceBounds) return;
+				if (!dropPosition || !surfaceBounds || !element) return;
 
-				let coordinates: [number, number];
+				let coordinates: [number, number] = [0, 0];
 
 				if (surfaceType === "Floor") {
-					const rawCoords = getIsometricCoordinates(
+					coordinates = getIsometricCoordinates(
 						dropPosition.x,
 						dropPosition.y,
 						surfaceBounds,
+						element.offsetWidth,
 					);
-					coordinates = [
-						Math.max(0, Math.min(1, rawCoords[0])),
-						Math.max(0, Math.min(1, rawCoords[1])),
-					];
-				} else {
-					const rawCoords = getStandardCoordinates(
+				} else if (surfaceType === "RightWall") {
+					coordinates = getSkewedCoordinates(
 						dropPosition.x,
 						dropPosition.y,
 						surfaceBounds,
+						29.8,
 					);
-					coordinates = [
-						Math.max(0, Math.min(1, rawCoords[0])),
-						Math.max(0, Math.min(1, rawCoords[1])),
-					];
+				} else if (surfaceType === "LeftWall") {
+					coordinates = getSkewedCoordinates(
+						dropPosition.x,
+						dropPosition.y,
+						surfaceBounds,
+						-29.8,
+					);
 				}
+
+				const finalCoords: [number, number] = [
+					Math.max(0, Math.min(1, coordinates[0])),
+					Math.max(0, Math.min(1, coordinates[1])),
+				];
 
 				// ------ Handle dropped item -------------------
 				const itemType = monitor.getItemType();
-
 				if (itemType === "INVENTORY_ITEM") {
 					// new item: call handler - open modal
-					onDropNew(item as BaseObject, coordinates);
+					onDropNew(item as BaseObject, finalCoords);
 				} else {
-					const sceneItem = item as SceneObject;
-					onMove(sceneItem.id, coordinates);
+					onMove((item as SceneObject).id, finalCoords);
 				}
 			},
-
 			collect: (monitor) => ({
 				isOver: monitor.isOver(),
 				canDrop: monitor.canDrop(),
@@ -106,8 +111,8 @@ const DropSurface = ({
 			ref={combinedRef}
 			className={className}
 			style={{
-				...getDropStyles(),
 				position: "relative",
+				...getDropStyles(),
 			}}
 		>
 			{children}

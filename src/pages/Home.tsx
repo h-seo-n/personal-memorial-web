@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { DndProvider } from "react-dnd"; // Import DndProvider
+import html2canvas from "html2canvas";
+import { useEffect, useRef, useState } from "react";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { BiLogOut } from "react-icons/bi";
 import { FaPenToSquare, FaRegEye, FaRegFloppyDisk } from "react-icons/fa6";
@@ -15,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useItemGen } from "../contexts/ItemGenContext.tsx";
 import { useObjects } from "../contexts/ObjectsContext";
-import { useTheme } from "../contexts/ThemeContext.tsx";
+import apiClient from "../shared/api/index.ts";
 import type { BaseObject, SceneObject } from "../shared/types";
 import type { BoardData } from "../shared/types";
 import styles from "../styles/Home.module.css";
@@ -63,6 +64,33 @@ const Home = () => {
 
 	// weather
 	const [weather, setWeather] = useState("sunny");
+
+	// capture area - home
+	const captureRef = useRef(null);
+	// capture function - trigger when '편집종료'
+	const captureFunc = async () => {
+		if (!captureRef.current) return;
+
+		try {
+			const canvas = await html2canvas(captureRef.current, {
+				scale: 2,
+				useCORS: true,
+				allowTaint: false,
+			});
+
+			const base64Image = canvas.toDataURL("image/png");
+
+			const response = await apiClient.post("/capture-and-generate-qr", {
+				captured_image_data: base64Image,
+			});
+			const qrUrl = response.data.qr_code_url;
+			navigate("/end", {
+				state: { qrUrl: qrUrl },
+			});
+		} catch (error) {
+			console.error("Error in capturing screen", error);
+		}
+	};
 
 	/**
 	 * when new item is drag & dropped from inventory -> scene
@@ -140,7 +168,7 @@ const Home = () => {
 	return (
 		// wrap the app in DnDProvider to enable drag & drop
 		<DndProvider backend={HTML5Backend}>
-			<main className={styles[weather]}>
+			<main className={styles[weather]} ref={captureRef}>
 				{/* bar with all the buttons */}
 				<div className={styles.headerRow}>
 					<div className="row">
@@ -173,7 +201,7 @@ const Home = () => {
 						type="button"
 						id={styles.endBtn}
 						className={styles.btn}
-						onClick={() => navigate("/end")}
+						onClick={captureFunc}
 					>
 						<FaRegFloppyDisk />
 						<span>편집 종료</span>

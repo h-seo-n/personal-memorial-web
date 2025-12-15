@@ -1,4 +1,3 @@
-/* 전체 컨테이너: 버튼과 패널의 위치 기준 */
 .bgmContainer {
 	position: relative;
 	display: inline-flex;
@@ -8,13 +7,12 @@
 	font-family: sans-serif;
 }
 
-/* 음표 아이콘 버튼 */
 .toggleBtn {
 	width: 40px;
 	height: 40px;
 	border-radius: 8px;
 	border: 1px solid #333;
-	background-color: #e0e0e0; /* 옅은 회색 배경 */
+	background-color: #e0e0e0; 
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -29,7 +27,6 @@
 	box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* 컨트롤 패널 (슬라이더 + 태그) */
 .controlPanel {
 	display: flex;
 	flex-direction: column;
@@ -41,7 +38,6 @@
 	box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
 	min-width: 300px;
 
-	/* 토글 애니메이션을 위한 설정 (선택사항) */
 	animation: fadeIn 0.2s ease-out;
 	z-index: 10;
 }
@@ -63,37 +59,34 @@
 	color: #5a2d82;
 }
 
-/* 슬라이더 (Input Range) 커스텀 */
 .bgmSlider {
-	-webkit-appearance: none; /* 기본 스타일 제거 */
+	-webkit-appearance: none;
+	appearance: none;
 	width: 100%;
 	height: 12px;
 	border-radius: 10px;
-	background: #999; /* 기본 회색 (JS로 그라데이션 덮어씌움) */
+	background: #999;
 	outline: none;
 	cursor: pointer;
 }
 
-/* 슬라이더 핸들 (동그라미) */
 .bgmSlider::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	appearance: none;
 	width: 18px;
 	height: 18px;
 	border-radius: 50%;
-	background: #5a2d82; /* 진한 보라색 */
+	background: #5a2d82;
 	cursor: pointer;
-	margin-top: -3px; /* 트랙 중앙 정렬 미세 조정 */
+	margin-top: -3px;
 }
 
-/* 태그들이 들어갈 영역 */
 .bgmTags {
 	display: flex;
 	justify-content: space-between;
 	gap: 8px;
 }
 
-/* 개별 태그 버튼 */
 .bgmTag {
 	flex: 1;
 	padding: 8px 0;
@@ -107,7 +100,6 @@
 	text-align: center;
 }
 
-/* 활성화된 태그 (이미지의 '동심' 상태) */
 .bgmTag.active {
 	background-color: #e0e0e0; /* 회색 배경 */
 	box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
@@ -117,7 +109,6 @@
 	background-color: #f5f5f5;
 }
 
-/* 나타나기 애니메이션 */
 @keyframes fadeIn {
 	from {
 		opacity: 0;
