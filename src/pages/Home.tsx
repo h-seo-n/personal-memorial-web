@@ -21,6 +21,7 @@ import type { BaseObject, SceneObject } from "../shared/types";
 import type { BoardData } from "../shared/types";
 import styles from "../styles/Home.module.css";
 import Board from "../widgets/Board.tsx";
+import CustomDragLayer from "../widgets/CustomDragLayer.tsx";
 
 const Home = () => {
 	const { user, logout } = useAuth();
@@ -168,6 +169,7 @@ const Home = () => {
 	return (
 		// wrap the app in DnDProvider to enable drag & drop
 		<DndProvider backend={HTML5Backend}>
+			<CustomDragLayer />
 			<main className={styles[weather]} ref={captureRef}>
 				{/* bar with all the buttons */}
 				<div className={styles.headerRow}>
