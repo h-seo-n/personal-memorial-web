@@ -10,6 +10,8 @@ interface Question {
 	example1: string;
 	example2: string;
 	headerText: string;
+	tip?: string; // 각 질문마다 다른 tip을 설정할 수 있음
+	label?: string; // 리뷰 페이지에서 표시할 짧은 라벨
 }
 
 const QUESTIONS: Question[] = [
@@ -18,30 +20,40 @@ const QUESTIONS: Question[] = [
 		example1: "일 처리 방식이 깔끔하고 멋있다.",
 		example2: "깊이가 있음.",
 		headerText: "당신에게 어울리는 벽지는 뭘까요?",
+		tip: "이 질문을 통해, {name} 님이 중요하게 생각하는 가치를 알 수 있어요.",
+		label: "기분 좋은 칭찬",
 	},
 	{
 		question: "평소에 무엇을 기대하며 살고 있나요?",
 		example1: "새로운 도전과 성취감",
 		example2: "감동적인 순간",
 		headerText: "바닥재를 고르고 있어요!",
+		tip: "이 질문을 통해, {name} 님 삶의 원동력을 파악할 수 있어요.",
+		label: "기대하며 사는 것",
 	},
 	{
 		question: "주변 사람들에게 어떻게 기억되고 싶은가요?",
 		example1: "편안하고 자연스러운 사람",
 		example2: "매력 있는 사람",
 		headerText: "당신의 공간에 딱 맞는 가구를 준비할게요!",
+		tip: "이 질문을 통해, {name} 님이 타인에게 어떤 모습을 보여주고 싶었는지 가늠할 수 있어요.",
+		label: "기억될 모습",
 	},
 	{
 		question: "나의 삶을 한 문장으로 정리하자면?",
 		example1: "과정 안에서 의미를 수집하는 삶",
 		example2: "소소한 행복을 소중히 여긴다",
 		headerText: "소품은 어떤 걸 둘까요?",
+		tip: "이 질문을 통해, {name} 님께 소중한 기억이 무엇인지 알 수 있어요.",
+		label: "나의 삶은 ...",
 	},
 	{
 		question: "당신의 장례식은 분위기가 어땠으면 하나요?",
 		example1: "나에 대한 기억을 나누는 차분한 자리",
 		example2: "숲 속 느낌",
 		headerText: "주변 풍경도 생각해볼게요!",
+		tip: "이 질문을 통해, {name} 삶과 죽음에 대한 태도를 알 수 있어요.",
+		label: "나의 장례식",
 	},
 ];
 
@@ -55,6 +67,7 @@ const ThemeQ = () => {
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [answer, setAnswer] = useState("");
 	const [answers, setAnswers] = useState<string[]>([]);
+	const [showReviewPage, setShowReviewPage] = useState(false);
 
 	// theme selection
 	const [theme, setTheme] = useState<number | null>(null);
@@ -82,19 +95,24 @@ const ThemeQ = () => {
 			setAnswers(updatedAnswers);
 
 			if (isLastQuestion) {
-				const query: QA[] = QUESTIONS.map((q, idx) => ({
-					question: q.question,
-					answer: updatedAnswers[idx],
-				}));
-				const { themeMeta, reason } = await analyzeTheme(query);
-				setResultReason(reason);
-				setTheme(themeMeta.id);
+				// 마지막 질문이면 답변 확인 페이지로 이동
+				setShowReviewPage(true);
 			} else {
 				// 다음 질문으로 이동
 				setCurrentQuestionIndex(currentQuestionIndex + 1);
 				setAnswer(""); // 답변 초기화
 			}
 		}
+	};
+
+	const handleStartAnalysis = async () => {
+		const query: QA[] = QUESTIONS.map((q, idx) => ({
+			question: q.question,
+			answer: answers[idx],
+		}));
+		const { themeMeta, reason } = await analyzeTheme(query);
+		setResultReason(reason);
+		setTheme(themeMeta.id);
 	};
 
 	const handleSave = async () => {
@@ -154,6 +172,46 @@ const ThemeQ = () => {
 							</button>
 						))}
 					</div>
+				</div>
+			</main>
+		);
+	}
+
+	// 답변 확인 페이지
+	if (showReviewPage && !analysisLoading) {
+		return (
+			<main className={styles.reviewContainer}>
+				<div className={styles.reviewBlob} />
+				<div className={styles.reviewContentWrapper}>
+					<h2 className={styles.reviewTitle}>
+						아래 답변을 기반으로 테마를 선정할게요!
+					</h2>
+
+					<div className={styles.reviewStoryBox}>
+						<h3 className={styles.reviewStoryTitle}>
+							{user?.name || "당신"} 님의 이야기
+						</h3>
+						<div className={styles.reviewList}>
+							{QUESTIONS.map((question, index) => (
+								<div key={index} className={styles.reviewItem}>
+									<span className={styles.reviewLabel}>
+										{question.label || question.question}
+									</span>
+									<p className={styles.reviewAnswer}>
+										{answers[index]}
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
+
+					<button
+						type="button"
+						className={styles.reviewButton}
+						onClick={handleStartAnalysis}
+					>
+						&gt;
+					</button>
 				</div>
 			</main>
 		);
@@ -257,6 +315,18 @@ const ThemeQ = () => {
 						{currentQuestion.example2}
 					</button>
 				</div>
+
+				{/* Tip Section */}
+				{currentQuestion.tip && (
+					<div className={styles.tipSection}>
+						<span className={styles.tipText}>
+							Tip: {currentQuestion.tip.replace(
+								"{name}",
+								user?.name || "당신"
+							)}
+						</span>
+					</div>
+				)}
 
 				{/* Answer Input */}
 				<textarea
