@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaAngleRight } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import apiClient from "../shared/api";
 import styles from "../styles/End.module.css";
 
@@ -8,6 +9,7 @@ export const End = () => {
 	const [invite, setInvite] = useState("");
 	const [response, setResponse] = useState(null);
 	const [index, setIndex] = useState(0);
+	const { user, logout } = useAuth();
 	const navigate = useNavigate();
 	const saveInvite = async (invite: string | null) => {
 		const response = await apiClient.patch("/users/invitation", {
@@ -15,6 +17,9 @@ export const End = () => {
 		});
 		setResponse(response);
 	};
+
+	const location = useLocation();
+	const qrUrl = location.state?.qrUrl;
 
 	return (
 		<main className={styles.mainWrapper}>
@@ -30,10 +35,12 @@ export const End = () => {
 					<>
 						<div className={styles.blob} />
 						<h1 className={`${styles.title} ${styles.marginTitle}`}>
-							{
-								"방금 작성한 초대장은, \n당신이 세상을 떠난 뒤에 주변인에게 발송될 거예요."
-							}
+							제작한 추모관을 간직해보세요!
 						</h1>
+						<div className={styles.imgWrapper}>
+							<img src={qrUrl} alt="추모관 사진이 담긴 qr 링크" />
+							<h3>{user.name} 님의 추모관</h3>
+						</div>
 					</>
 				)
 			) : (
@@ -58,6 +65,7 @@ export const End = () => {
 						? index
 							? () => {
 									// final page;
+									logout();
 									navigate("/");
 								}
 							: () => {

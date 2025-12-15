@@ -226,11 +226,11 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 						</ul>
 					</div>
 					<div className={styles.row}>
-						<span className={styles.labelText}>설명</span>
+						<span className={styles.labelText}>추억</span>
 						<textarea
 							value={description}
 							onChange={(e) => setDescription(e.target.value)}
-							placeholder="어떤 의미가 담긴 물건인가요?"
+							placeholder="어떤 추억이 깃든 물건인가요?"
 						/>
 					</div>
 					<div className={styles.row}>

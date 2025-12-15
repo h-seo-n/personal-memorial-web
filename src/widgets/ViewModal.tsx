@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { ImageSet } from "../shared/types";
+import { useState } from "react";
 import type { SceneObject } from "../shared/types";
-import styles from "../styles/ConfigModal.module.css";
+import styles from "../styles/ViewModal.module.css";
 
 interface ViewModalProps {
 	object: SceneObject;
@@ -11,7 +9,7 @@ interface ViewModalProps {
 }
 
 export const ViewModal = ({ object, onClose, setBoard }: ViewModalProps) => {
-	const [color, setColor] = useState(object.currentImageSet.name);
+	const [color] = useState(object.currentImageSet.name);
 
 	return (
 		<div className={styles.modalWrapper}>
@@ -21,17 +19,11 @@ export const ViewModal = ({ object, onClose, setBoard }: ViewModalProps) => {
 			<h2 className={styles.title}>{object.name}</h2>
 			<div className={styles.imgWrapper}>
 				<img
-					style={{
-						transform: object.isReversed ? "scaleX(-1)" : "scaleX(1)",
-						transition: "transform 0.3s ease-in-out",
-						maxWidth: "100%",
-						borderRadius: "8px",
-					}}
 					src={object.imageSets.find((i) => i.name === color).src}
 					alt={
 						object.description
 							? object.description
-							: `${name} with color ${color}`
+							: `${object.name} with color ${color}`
 					}
 				/>
 			</div>
@@ -43,7 +35,7 @@ export const ViewModal = ({ object, onClose, setBoard }: ViewModalProps) => {
 			{object.itemFunction && object.additionalData && (
 				<button
 					type="button"
-					className={`${styles.delBtn}`}
+					className={`${styles.moreBtn}`}
 					style={{
 						width: "180px",
 						padding: "15px 10px",
@@ -53,7 +45,10 @@ export const ViewModal = ({ object, onClose, setBoard }: ViewModalProps) => {
 					}}
 					onClick={() => {
 						if (object.itemFunction === "Link")
-							window.open((object.additionalData as { link: string }).link);
+							window.open(
+								(object.additionalData as { link: string }).link,
+								"_blank",
+							);
 						else setBoard();
 					}}
 				>

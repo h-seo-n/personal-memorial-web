@@ -27,7 +27,6 @@
 	align-items: center;
 }
 
-/* 텍스트 구간 */
 .textSection {
 	position: absolute;
 	bottom: 20%;
@@ -101,7 +100,6 @@
 	transform: translateY(0);
 }
 
-/* 모바일 및 작은 화면 대응 */
 @media (max-width: 768px) {
 	.textSection {
 		bottom: 15%;

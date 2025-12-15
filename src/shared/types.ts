@@ -73,6 +73,9 @@ export interface SceneObject extends BaseObject {
 	}; // [x, y] coordinates
 }
 
+export type DragItem = SceneObject & {
+	dragPreviewSize?: { w: number; h: number };
+};
 // // 배치한 오브젝트의 데이터
 // export interface SceneObject {
 // 	id: string; // unique id for object
