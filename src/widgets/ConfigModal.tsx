@@ -176,6 +176,7 @@ const ConfigModal = ({ base, onSave, onClose }: ConfigModalProp) => {
 								borderRadius: "8px",
 							}}
 							alt={`an ${base.name} of colorState ${colorState}`}
+							crossOrigin="anonymous"
 						/>
 						<button
 							type="button"

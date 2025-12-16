@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import type { DragItem, SceneObject } from "../shared/types";
+import styles from "../styles/SceneObjectItem.module.css";
 
 const SceneObjectItem = ({
 	obj,
@@ -62,6 +63,7 @@ const SceneObjectItem = ({
 		<img
 			src={obj.currentImageSet.src}
 			alt={obj.name}
+			className={obj.ontype === "Floor" ? "onFloor" : undefined}
 			onClick={() => onClick(obj)} // Handle click to edit
 			onKeyDown={(e) => {
 				e.preventDefault();

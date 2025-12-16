@@ -193,13 +193,11 @@ const ThemeQ = () => {
 						</h3>
 						<div className={styles.reviewList}>
 							{QUESTIONS.map((question, index) => (
-								<div key={index} className={styles.reviewItem}>
+								<div key={question.question} className={styles.reviewItem}>
 									<span className={styles.reviewLabel}>
 										{question.label || question.question}
 									</span>
-									<p className={styles.reviewAnswer}>
-										{answers[index]}
-									</p>
+									<p className={styles.reviewAnswer}>{answers[index]}</p>
 								</div>
 							))}
 						</div>
@@ -320,10 +318,7 @@ const ThemeQ = () => {
 				{currentQuestion.tip && (
 					<div className={styles.tipSection}>
 						<span className={styles.tipText}>
-							Tip: {currentQuestion.tip.replace(
-								"{name}",
-								user?.name || "당신"
-							)}
+							Tip: {currentQuestion.tip.replace("{name}", user?.name || "당신")}
 						</span>
 					</div>
 				)}

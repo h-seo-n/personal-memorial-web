@@ -66,30 +66,53 @@ const Home = () => {
 	// weather
 	const [weather, setWeather] = useState("sunny");
 
+	const nextFrame = () => new Promise(requestAnimationFrame);
 	// capture area - home
 	const captureRef = useRef(null);
 	// capture function - trigger when '편집종료'
+
 	const captureFunc = async () => {
 		if (!captureRef.current) return;
 
 		try {
-			const canvas = await html2canvas(captureRef.current, {
-				scale: 2,
-				useCORS: true,
-				allowTaint: false,
-			});
+			await nextFrame();
+			await nextFrame();
 
+			const canvas = await html2canvas(captureRef.current, {
+				scale: window.devicePixelRatio,
+				useCORS: true,
+				backgroundColor: null,
+
+				onclone: (doc) => {
+					for (const el of doc.querySelectorAll(".onFloor")) {
+						const img = el as HTMLElement;
+
+						const reversed = img.style.transform.includes("scaleX(-1)");
+						const base =
+							"translate(-50%, -50%) rotateZ(-45deg) rotateX(-55deg)";
+
+						const k = 3;
+
+						img.style.transform = reversed
+							? `${base} scaleX(-1) scaleY(${k})`
+							: `${base} scaleY(${k})`;
+
+						img.style.transformOrigin = "bottom center";
+					}
+				},
+			});
 			const base64Image = canvas.toDataURL("image/png");
 
 			const response = await apiClient.post("/capture-and-generate-qr", {
 				captured_image_data: base64Image,
 			});
-			const qrUrl = response.data.qr_code_url;
-			navigate("/end", {
-				state: { qrUrl: qrUrl },
-			});
+			const qrUrl = response.data.data.qr_code_url;
+			console.log(qrUrl);
+			navigate(`/end?qrUrl=${encodeURIComponent(qrUrl)}`);
 		} catch (error) {
 			console.error("Error in capturing screen", error);
+		} finally {
+			captureRef.current.classList.remove(styles.capturing);
 		}
 	};
 
