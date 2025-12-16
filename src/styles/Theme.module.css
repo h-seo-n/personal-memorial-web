@@ -140,3 +140,72 @@
 		padding: 0.5rem;
 	}
 }
+/* --- Tip 영역 --- */
+
+.tipWrapper {
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 12.8rem; /* answerInput(8rem)보다 살짝 위 */
+	width: min(900px, 100% - 3rem);
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	z-index: 99;
+}
+
+.tipLabel {
+	font-size: 14px;
+	font-family: "LaundryGothic", sans-serif;
+	color: #555555;
+}
+
+.tipBox {
+	width: 100%;
+	border-radius: 16px;
+	padding: 0.9rem 1.5rem;
+	box-sizing: border-box;
+	background: linear-gradient(90deg, #6b4e8e 0%, #b58ad7 100%);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.tipText {
+	font-size: 15px;
+	font-family: "LaundryGothic", sans-serif;
+	color: #ffffff;
+}
+
+/* 높이에 따라 Tip 위치도 같이 조정 */
+
+@media (max-height: 600px) {
+	.tipWrapper {
+		bottom: 5rem;
+	}
+}
+
+@media (min-height: 601px) and (max-height: 700px) {
+	.tipWrapper {
+		bottom: 6rem;
+	}
+}
+
+@media (min-height: 701px) and (max-height: 770px) {
+	.tipWrapper {
+		bottom: 8rem;
+	}
+}
+
+@media (max-width: 768px) {
+	.tipWrapper {
+		width: calc(100% - 2rem);
+	}
+}
+
+@media (max-width: 480px) {
+	.tipBox {
+		padding: 0.8rem 1.25rem;
+	}
+	.tipText {
+		font-size: 14px;
+	}
+}
