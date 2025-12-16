@@ -12,7 +12,7 @@
 
 .headerRow > div {
 	display: flex;
-	gap: 15px; 
+	gap: 15px;
 }
 
 .mainLayout {
@@ -537,7 +537,6 @@ body {
 	animation: cloudDriftSlow 70s linear infinite;
 	pointer-events: none;
 	z-index: 1;
-	
 }
 
 @keyframes cloudDriftSlow {

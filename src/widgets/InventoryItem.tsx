@@ -31,7 +31,11 @@ export const InventoryItem = ({
 			style={isDragging ? { opacity: 0.5 } : {}}
 			className={styles.previewItemCard}
 		>
-			<img src={item.currentImageSet.src} alt={item.name} />
+			<img
+				src={item.currentImageSet.src}
+				alt={item.name}
+				crossOrigin="anonymous"
+			/>
 		</button>
 	);
 };

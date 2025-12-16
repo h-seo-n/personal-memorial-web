@@ -18,8 +18,8 @@ export const End = () => {
 		setResponse(response);
 	};
 
-	const location = useLocation();
-	const qrUrl = location.state?.qrUrl;
+	const params = new URLSearchParams(location.search);
+	const qrUrl = params.get("qrUrl");
 
 	return (
 		<main className={styles.mainWrapper}>
@@ -38,7 +38,11 @@ export const End = () => {
 							제작한 추모관을 간직해보세요!
 						</h1>
 						<div className={styles.imgWrapper}>
-							<img src={qrUrl} alt="추모관 사진이 담긴 qr 링크" />
+							<img
+								src={qrUrl}
+								alt="추모관 사진이 담긴 qr 링크"
+								style={{ width: "256px", height: "256px" }}
+							/>
 							<h3>{user.name} 님의 추모관</h3>
 						</div>
 					</>

@@ -23,44 +23,42 @@ const Scene = ({ objects, onDropNew, onMove, onClick, mode }: SceneProps) => {
 	const dropHandlers = { onDropNew, onMove };
 
 	return (
-		<>
-			<div className={styles.sceneContainer}>
-				<div className={styles.room}>
-					<LeftWall {...dropHandlers}>
-						{leftWallObjects.map((obj) => (
-							<SceneObjectItem
-								key={obj.id}
-								obj={obj}
-								onClick={onClick}
-								mode={mode}
-							/>
-							// key : not a prop passed, but a key used for listing
-						))}
-					</LeftWall>
+		<div className={styles.sceneContainer}>
+			<div className={styles.room}>
+				<LeftWall {...dropHandlers}>
+					{leftWallObjects.map((obj) => (
+						<SceneObjectItem
+							key={obj.id}
+							obj={obj}
+							onClick={onClick}
+							mode={mode}
+						/>
+						// key : not a prop passed, but a key used for listing
+					))}
+				</LeftWall>
 
-					<RightWall {...dropHandlers}>
-						{rightWallObjects.map((obj) => (
-							<SceneObjectItem
-								key={obj.id}
-								obj={obj}
-								onClick={onClick}
-								mode={mode}
-							/>
-						))}
-					</RightWall>
-					<Floor {...dropHandlers}>
-						{floorObjects.map((obj) => (
-							<SceneObjectItem
-								key={obj.id}
-								obj={obj}
-								onClick={onClick}
-								mode={mode}
-							/>
-						))}
-					</Floor>
-				</div>
+				<RightWall {...dropHandlers}>
+					{rightWallObjects.map((obj) => (
+						<SceneObjectItem
+							key={obj.id}
+							obj={obj}
+							onClick={onClick}
+							mode={mode}
+						/>
+					))}
+				</RightWall>
+				<Floor {...dropHandlers}>
+					{floorObjects.map((obj) => (
+						<SceneObjectItem
+							key={obj.id}
+							obj={obj}
+							onClick={onClick}
+							mode={mode}
+						/>
+					))}
+				</Floor>
 			</div>
-		</>
+		</div>
 	);
 };
 export default Scene;

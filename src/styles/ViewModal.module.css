@@ -114,8 +114,8 @@
 	max-height: 100%;
 	max-width: 100%;
 	object-fit: contain;
-    transition: transform 0.3s ease-in-out;
-    border-radius: 8px;
+	transition: transform 0.3s ease-in-out;
+	border-radius: 8px;
 }
 
 .row {
@@ -185,9 +185,8 @@
 	box-sizing: border-box;
 }
 
-
 .moreBtn {
-    width: 180px;
+	width: 180px;
 	padding: 15px 10px;
 	align-self: center;
 	font-weight: 500;

@@ -25,6 +25,7 @@ export const ViewModal = ({ object, onClose, setBoard }: ViewModalProps) => {
 							? object.description
 							: `${object.name} with color ${color}`
 					}
+					crossOrigin="anonymous"
 				/>
 			</div>
 			{object.description && (

@@ -13,7 +13,7 @@
 }
 
 /* Floor */
-.floor:not(CustomDragLayer) {
+.floor {
 	position: absolute;
 	left: 70%;
 	bottom: 108%;
@@ -35,7 +35,7 @@
 	pointer-events: none;
 }
 
-.rightWall:not(CustomDragLayer) {
+.rightWall {
 	position: absolute;
 	left: 119.5%;
 	top: -20.5%;
@@ -55,7 +55,7 @@
 	transform-style: preserve-3d;
 }
 
-.leftWall:not(CustomDragLayer) {
+.leftWall {
 	position: absolute;
 	left: 20.5%;
 	top: 68.1%;

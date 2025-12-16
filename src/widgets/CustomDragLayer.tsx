@@ -51,6 +51,7 @@ export default function CustomDragLayer() {
 					transformStyle: "preserve-3d",
 					transform,
 				}}
+				crossOrigin="anonymous"
 			/>
 		</div>
 	);
