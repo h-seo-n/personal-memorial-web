@@ -1,7 +1,5 @@
-import { useState } from "react";
 import type { BaseObject, SceneObject } from "../shared/types";
 import styles from "../styles/Scene.module.css";
-import CustomDragLayer from "./CustomDragLayer";
 import Floor from "./Floor";
 import LeftWall from "./LeftWall";
 import RightWall from "./RightWall";

@@ -6,7 +6,8 @@ import apiClient from "../shared/api";
 import styles from "../styles/End.module.css";
 
 export const End = () => {
-	const [invite, setInvite] = useState("");
+	const [isStart, setIsStart] = useState(true);
+	const [invite, setInvite] = useState("invite");
 	const [response, setResponse] = useState(null);
 	const [index, setIndex] = useState(0);
 	const { user, logout } = useAuth();
@@ -47,6 +48,15 @@ export const End = () => {
 						</div>
 					</>
 				)
+			) : isStart ? (
+				<>
+					<div className={styles.blob} />
+					<h1 className={`${styles.title} ${styles.marginTitle}`}>
+						{
+							"이제 초대장을 작성해볼게요! \n 당신이 세상을 떠난 뒤에 주변인에게 발송될 거예요."
+						}
+					</h1>
+				</>
 			) : (
 				<>
 					<div className={styles.blob} />
@@ -76,10 +86,16 @@ export const End = () => {
 									// explain invite meaning
 									setIndex(1);
 								}
-						: () => {
-								// input page
-								saveInvite(invite);
-							}
+						: isStart
+							? () => {
+									setIsStart(false);
+									setInvite("");
+									console.log(isStart);
+								}
+							: () => {
+									// input page
+									saveInvite(invite);
+								}
 				}
 				disabled={!invite.trim()}
 			>
