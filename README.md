@@ -121,7 +121,76 @@
     </li>
 </ol>
 </details>
+
 <hr />
+
+### 편집 모드
+#### 인벤토리
+> 인벤토리에서 '바닥'과 '벽걸이' 두 카테고리의 미리 준비된 아이템들을 내 추모관으로 끌어놓을 수 있어요.
+> 아이템을 놓으면, 그 아이템이 왜 내 추모관에 있는지, 나에게 무슨 의미를 가지고 있는지 입력할 수 있는 팝업 화면이 나타나요. 이 설명은 추후 관람객들이 읽을 수 있어요.
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/53de4661-2cf8-400f-8d4b-673dafae23c8" />
+
+> 나의 선호대로 인벤토리 아이템의 스타일을 바꿀 수도 있어요. 아이템의 좌우 반전을 바꾸는 것도 가능해요.
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/c61f8340-dd72-48c7-bac4-fa92e37a43e8" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/f62fad44-67b5-45c2-8cc4-358800894cc0" />
+
+> 이미 배치된 아이템을 클릭하면 수정할 수 있어요.
+<img width="500" height="1000" alt="image" src="https://github.com/user-attachments/assets/a3c3561c-d5d2-49eb-8a4d-a47fa7f9beba" />
+<img width="500" height="1000" alt="image" src="https://github.com/user-attachments/assets/1832fb58-a0d6-4d4c-bca2-0231b841452f" />
+
+<hr />
+
+### 아이템 생성
+
+> '아이템 생성' 버튼을 클릭하면, AI를 이용해서 나만의 추억이 담긴 아이템을 만들 수 있어요.  
+> 질문에 응답하면 AI가 응답을 분석해서 더 자세한 추가 질문을 하고, 이것에 답하면 나만의 아이템을 만들 수 있어요.
+> 아이템을 생성할 수 있는 질문들은 총 5개로, 여러 개가 있어요.
+> 1. 지금 가장 생각나는 사람이 누구인가요? 그 사람과의 기억을 떠올려볼까요?
+> 2. 어릴 때부터 애착을 가지고 있던 물건이 있나요?
+> 3. 삶에서 나를 지탱해준 공간이 있다면 어디일까요? 집, 학교, 카페, 놀이터 등 .. 어떤 것이든 좋아요!
+> 4. 세상을 떠난 뒤, 당신을 찾아온 이들에게 들려주고 싶은 노래가 있나요?
+> 5. 지금 가장 듣고 싶은 말이 무엇인가요?
+> 6. 좋아하는 향이 있나요?
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/ab1be5a6-a007-4e7a-9afc-f048fd8c43d0" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/b8a8aa8a-ceb8-487e-abb3-2a259786e3ce" />  
+  
+<br />  
+<br />
+
+> 생성된 아이템이 마음에 들지 않는다면, 다시 생성할 수도 있어요.  
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/bd0caafb-57b3-49f7-986b-bd50ae4bae60" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/4e23d61e-9868-4215-ac12-4f064a4ff220" />  
+
+<br />
+<br />
+
+> 생성된 아이템은 다른 아이템들처럼 내 추모관에 비치하면 돼요. 소중한 나만의 아이템인 만큼, 제목과 설명도 마음껏 수정할 수 있어요.
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/c39e3fc7-85f3-42c8-859c-9b4bfabf0e8a" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/b6f9e2fd-1f28-41f8-9120-509c02b26710" />  
+
+<br />  
+<br />  
+  
+> '내 아이템' 목록에서 생성한 아이템 목록들을 확인하고, 인벤토리 아이템처럼 여러 개 배치할 수 있어요.
+
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/bedc665d-3588-40a8-8200-87ba3565ca3f" />
+
+
+### 관람 모드
+
+### '링크' 기능
+> 편집 모드에서 아이템에 '링크' 기능을 선택하고, 아이템과 연결시키고 싶은 URL을 입력하면 '관람 모드'에서 그 URL로 접속할 수 있어요.
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/eab36d21-0262-4f26-9ad1-c2e2f12d4b18" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/ea5e841f-d117-4c35-b168-fdcab889bd84" />
+
+### '게시판' 기능
+> 편집 모드에서 아이템에 '게시판' 기능을 선택하고, 게시판의 제목을 미리 입력해주세요. '관람 모드'에서 방문객이 방명록을 작성할 수 있어요.
+<img width="1624" height="1000" alt="image" src="https://github.com/user-attachments/assets/ee80d990-2ef4-4922-bdad-a6a0d7f9b1dd" />
+<img width="1624" height="1000" alt="image" src="https://github.com/user-attachments/assets/bea04811-9120-4aba-a555-d7b6f2df4020" />
+
+> 
 
 <hr />
 
