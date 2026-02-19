@@ -13,6 +13,8 @@
 
 > <a href="https://www.youtube.com/watch?v=GL5oCBnTaKY">시연 영상</a>
 
+> [서비스 배포 링크](https://personal-memorial-snu.vercel.app)
+
 ## ✏️ 서비스 concept
 
 > 개인이 자신의 살아생전 이야기를, 자신에게 맞는 방식으로 구현할 수 있는 웹 기반 추모공간.
@@ -144,6 +146,7 @@
 
 > '아이템 생성' 버튼을 클릭하면, AI를 이용해서 나만의 추억이 담긴 아이템을 만들 수 있어요.  
 > 질문에 응답하면 AI가 응답을 분석해서 더 자세한 추가 질문을 하고, 이것에 답하면 나만의 아이템을 만들 수 있어요.
+
 > 아이템을 생성할 수 있는 질문들은 총 5개로, 여러 개가 있어요.
 > 1. 지금 가장 생각나는 사람이 누구인가요? 그 사람과의 기억을 떠올려볼까요?
 > 2. 어릴 때부터 애착을 가지고 있던 물건이 있나요?
@@ -177,8 +180,17 @@
 
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/bedc665d-3588-40a8-8200-87ba3565ca3f" />
 
+<hr />
 
 ### 관람 모드
+
+> 관람 모드는 내 추모관을 구경할 수 있는 모드로, 아이템을 편집하는 것이 막혀 있어요.
+> * 화면 좌측 상단에는 테마에 따른 배경 음악이 선택되어 있어요. 다른 배경 음악도 선택 할 수 있으며, 재생 상태와 볼륨 조정이 가능해요.
+> * 아이템을 클릭해서 아이템의 이름과 설명을 읽을 수 있어요. 아이템에 '링크'와 '게시판' 기능이 연결되어 있을 경우, 상세 팝업에서 외부 링크 또는 게시판에 접속할 수 있어요.
+
+<img width="500" height="2002" alt="image" src="https://github.com/user-attachments/assets/6843933f-e99c-4ec8-ae5f-e326894a49c0" />
+<img width="500" height="1000" alt="image" src="https://github.com/user-attachments/assets/32170f73-f40a-4821-94d3-223201738d10" />
+
 
 ### '링크' 기능
 > 편집 모드에서 아이템에 '링크' 기능을 선택하고, 아이템과 연결시키고 싶은 URL을 입력하면 '관람 모드'에서 그 URL로 접속할 수 있어요.
@@ -187,16 +199,36 @@
 
 ### '게시판' 기능
 > 편집 모드에서 아이템에 '게시판' 기능을 선택하고, 게시판의 제목을 미리 입력해주세요. '관람 모드'에서 방문객이 방명록을 작성할 수 있어요.
-<img width="1624" height="1000" alt="image" src="https://github.com/user-attachments/assets/ee80d990-2ef4-4922-bdad-a6a0d7f9b1dd" />
-<img width="1624" height="1000" alt="image" src="https://github.com/user-attachments/assets/bea04811-9120-4aba-a555-d7b6f2df4020" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/ee80d990-2ef4-4922-bdad-a6a0d7f9b1dd" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/bea04811-9120-4aba-a555-d7b6f2df4020" />
 
-> 
+> 게시판에 무슨 내용을 남기면 좋을지, 설명을 작성할 수 있어요.
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/fb4e57a3-db81-47ae-bc75-a6c9fe33aa12" />
+
+> '+'를 입력해서 새 메모지를 남겨보세요.
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/b2749d37-7df2-4464-aba7-32a36ce95ebc" />
+<img width="500" height="1000" alt="image" src="https://github.com/user-attachments/assets/da951c68-3230-4b21-bcdd-0eb09c12fde3" />
+
+<hr />
+
+### 편집 종료
+> 추모관을 꾸미는게 완료되었으면, 화면 우측 상단의 '편집 종료' 버튼을 눌러서 추모관 초대장을 보낼 수 있어요.
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/282a8d07-5c50-45e9-aff9-21a389a87717" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/9e0c835e-6d56-41de-a722-791ee1d27f7b" />
+
+> 초대장 작성 이후, QR 코드를 통해서 내 추모관을 스크린샷으로 간직할 수 있어요. SNS에 공유하는 등, 내 추모관의 모습을 공유해보세요.
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/33fd1668-982e-4a85-b1c1-dfadb82f5c3f" />
+<img width="500" height="1002" alt="image" src="https://github.com/user-attachments/assets/2ddb3c4c-4f91-44e4-ac7a-c34b1aa7bb36" />
 
 <hr />
 
 ### 💼 팀원 및 역할
 
-* 최목원 - PM
-* 강혜나 - UI/UX
-* 장준석, Jordan - 백엔드 개발
-* 허서연, 주민겸 - 프론트엔드 개발
+* **PM** - 최목원 / <a href="https://github.com/blushedmw">@blushedmw</a> / <a href="mailto:cmw0926@snu.ac.kr">cmw0926@snu.ac.kr</a>
+* **UI/UX** - 강혜나 / <a href="https://github.com/hyena0228">@hyena0228</a> / <a href="mailto:hyena0228@snu.ac.kr">heyna0228@snu.ac.kr</a>
+* **백엔드 개발 리드** - 장준석 / <a href="https://github.com/junseok44">@junseok44</a> / <a href="mailto:newtonjjang@snu.ac.kr">newtonjjang@snu.ac.kr</a>
+* **백엔드 개발** - Jordan / <a href="https://github.com/MickFrog">@MickFrog</a> / <a href="mailto:micksayno35@snu.ac.kr">micksayno35@snu.ac.kr</a>
+* **프론트엔드 개발 리드** - 허서연 / <a href="https://github.com/h-seo-n">@h-seo-n</a> / <a href="mailto:best3487@snu.ac.kr">best3487@snu.ac.kr</a>
+*  **프론트엔드 개발** - 주민겸 /  <a href="https://github.com/topgap0613">@topgap0613</a> / <a href="mailto:chum0613@snu.ac.kr">chum0613@snu.ac.kr</a>
+
+> <내일의 나에게> 프로젝트는 서울대학교 정보문화학 전공 [웹프로그래밍개론] 에서 진행한 팀 프로젝트로, 지금은 웹의 AI 관련 기능 이용이 토큰 비용 문제로 불가합니다.
